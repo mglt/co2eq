@@ -2,8 +2,8 @@ from os import listdir
 from os.path import isdir
 
 def ietf_banner():
-  prefix = 'https://co2eq.gihub.io'
-  banner = f"[co2eq]({prefix}/index.html) - [IETF]({prefix}/ietf.html) - [MeetingsList]({prefix}/all_ietf_meetings.html)"
+  prefix = 'https://mglt.github.io/co2eq/'
+  banner = f"[co2eq]({prefix}/index.html) - [IETF]({prefix}/IETF/ietf.html) - [MeetingsList]({prefix}/IETF/all_ietf_meetings.html)"
 
   ## ordergin the files according to the number
   file_dict = {}
@@ -22,7 +22,7 @@ def ietf_banner():
   for d in file_list:
     if 'All' in d or 'IETF' not in d:
       continue
-    banner += f" - [{d}]({prefix}/{d}/{d.lower()}.html)"
+    banner += f" - [{d}]({prefix}/IETF/{d}/{d.lower()}.html)"
   return banner
 
 ietf_banner()

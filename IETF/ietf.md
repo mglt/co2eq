@@ -1,6 +1,10 @@
-[co2eq](https://co2eq.gihub.io/index.html) - [IETF](https://co2eq.gihub.io/ietf.html) - [MeetingsList](https://co2eq.gihub.io/all_ietf_meetings.html) - [IETF72](https://co2eq.gihub.io/IETF72/ietf72.html) - [IETF73](https://co2eq.gihub.io/IETF73/ietf73.html) - [IETF74](https://co2eq.gihub.io/IETF74/ietf74.html) - [IETF75](https://co2eq.gihub.io/IETF75/ietf75.html) - [IETF76](https://co2eq.gihub.io/IETF76/ietf76.html) - [IETF77](https://co2eq.gihub.io/IETF77/ietf77.html) - [IETF78](https://co2eq.gihub.io/IETF78/ietf78.html) - [IETF79](https://co2eq.gihub.io/IETF79/ietf79.html) - [IETF80](https://co2eq.gihub.io/IETF80/ietf80.html) - [IETF81](https://co2eq.gihub.io/IETF81/ietf81.html) - [IETF82](https://co2eq.gihub.io/IETF82/ietf82.html) - [IETF83](https://co2eq.gihub.io/IETF83/ietf83.html) - [IETF84](https://co2eq.gihub.io/IETF84/ietf84.html) - [IETF85](https://co2eq.gihub.io/IETF85/ietf85.html) - [IETF86](https://co2eq.gihub.io/IETF86/ietf86.html) - [IETF87](https://co2eq.gihub.io/IETF87/ietf87.html) - [IETF88](https://co2eq.gihub.io/IETF88/ietf88.html) - [IETF89](https://co2eq.gihub.io/IETF89/ietf89.html) - [IETF90](https://co2eq.gihub.io/IETF90/ietf90.html) - [IETF91](https://co2eq.gihub.io/IETF91/ietf91.html) - [IETF92](https://co2eq.gihub.io/IETF92/ietf92.html) - [IETF93](https://co2eq.gihub.io/IETF93/ietf93.html) - [IETF94](https://co2eq.gihub.io/IETF94/ietf94.html) - [IETF95](https://co2eq.gihub.io/IETF95/ietf95.html) - [IETF96](https://co2eq.gihub.io/IETF96/ietf96.html) - [IETF97](https://co2eq.gihub.io/IETF97/ietf97.html) - [IETF98](https://co2eq.gihub.io/IETF98/ietf98.html) - [IETF99](https://co2eq.gihub.io/IETF99/ietf99.html) - [IETF100](https://co2eq.gihub.io/IETF100/ietf100.html) - [IETF101](https://co2eq.gihub.io/IETF101/ietf101.html) - [IETF102](https://co2eq.gihub.io/IETF102/ietf102.html) - [IETF103](https://co2eq.gihub.io/IETF103/ietf103.html) - [IETF104](https://co2eq.gihub.io/IETF104/ietf104.html) - [IETF105](https://co2eq.gihub.io/IETF105/ietf105.html) - [IETF106](https://co2eq.gihub.io/IETF106/ietf106.html) - [IETF107](https://co2eq.gihub.io/IETF107/ietf107.html) - [IETF108](https://co2eq.gihub.io/IETF108/ietf108.html) - [IETF109](https://co2eq.gihub.io/IETF109/ietf109.html) - [IETF110](https://co2eq.gihub.io/IETF110/ietf110.html) - [IETF111](https://co2eq.gihub.io/IETF111/ietf111.html) - [IETF112](https://co2eq.gihub.io/IETF112/ietf112.html)
+[co2eq](https://mglt.github.io/co2eq/index.html) - [IETF](https://mglt.github.io/co2eq/IETF/ietf.html) - [MeetingsList](https://mglt.github.io/co2eq/IETF/all_ietf_meetings.html) - [IETF72](https://mglt.github.io/co2eq/IETF/IETF72/ietf72.html) - [IETF73](https://mglt.github.io/co2eq/IETF/IETF73/ietf73.html) - [IETF74](https://mglt.github.io/co2eq/IETF/IETF74/ietf74.html) - [IETF75](https://mglt.github.io/co2eq/IETF/IETF75/ietf75.html) - [IETF76](https://mglt.github.io/co2eq/IETF/IETF76/ietf76.html) - [IETF77](https://mglt.github.io/co2eq/IETF/IETF77/ietf77.html) - [IETF78](https://mglt.github.io/co2eq/IETF/IETF78/ietf78.html) - [IETF79](https://mglt.github.io/co2eq/IETF/IETF79/ietf79.html) - [IETF80](https://mglt.github.io/co2eq/IETF/IETF80/ietf80.html) - [IETF81](https://mglt.github.io/co2eq/IETF/IETF81/ietf81.html) - [IETF82](https://mglt.github.io/co2eq/IETF/IETF82/ietf82.html) - [IETF83](https://mglt.github.io/co2eq/IETF/IETF83/ietf83.html) - [IETF84](https://mglt.github.io/co2eq/IETF/IETF84/ietf84.html) - [IETF85](https://mglt.github.io/co2eq/IETF/IETF85/ietf85.html) - [IETF86](https://mglt.github.io/co2eq/IETF/IETF86/ietf86.html) - [IETF87](https://mglt.github.io/co2eq/IETF/IETF87/ietf87.html) - [IETF88](https://mglt.github.io/co2eq/IETF/IETF88/ietf88.html) - [IETF89](https://mglt.github.io/co2eq/IETF/IETF89/ietf89.html) - [IETF90](https://mglt.github.io/co2eq/IETF/IETF90/ietf90.html) - [IETF91](https://mglt.github.io/co2eq/IETF/IETF91/ietf91.html) - [IETF92](https://mglt.github.io/co2eq/IETF/IETF92/ietf92.html) - [IETF93](https://mglt.github.io/co2eq/IETF/IETF93/ietf93.html) - [IETF94](https://mglt.github.io/co2eq/IETF/IETF94/ietf94.html) - [IETF95](https://mglt.github.io/co2eq/IETF/IETF95/ietf95.html) - [IETF96](https://mglt.github.io/co2eq/IETF/IETF96/ietf96.html) - [IETF97](https://mglt.github.io/co2eq/IETF/IETF97/ietf97.html) - [IETF98](https://mglt.github.io/co2eq/IETF/IETF98/ietf98.html) - [IETF99](https://mglt.github.io/co2eq/IETF/IETF99/ietf99.html) - [IETF100](https://mglt.github.io/co2eq/IETF/IETF100/ietf100.html) - [IETF101](https://mglt.github.io/co2eq/IETF/IETF101/ietf101.html) - [IETF102](https://mglt.github.io/co2eq/IETF/IETF102/ietf102.html) - [IETF103](https://mglt.github.io/co2eq/IETF/IETF103/ietf103.html) - [IETF104](https://mglt.github.io/co2eq/IETF/IETF104/ietf104.html) - [IETF105](https://mglt.github.io/co2eq/IETF/IETF105/ietf105.html) - [IETF106](https://mglt.github.io/co2eq/IETF/IETF106/ietf106.html) - [IETF107](https://mglt.github.io/co2eq/IETF/IETF107/ietf107.html) - [IETF108](https://mglt.github.io/co2eq/IETF/IETF108/ietf108.html) - [IETF109](https://mglt.github.io/co2eq/IETF/IETF109/ietf109.html) - [IETF110](https://mglt.github.io/co2eq/IETF/IETF110/ietf110.html) - [IETF111](https://mglt.github.io/co2eq/IETF/IETF111/ietf111.html) - [IETF112](https://mglt.github.io/co2eq/IETF/IETF112/ietf112.html)
 
-# Case Study: \(CO_2\) emission analysis for IETF meetings
+# \(CO_2\) emission analysis for IETF meetings
+
+{:toc}
+
+
 
 This section details `CO2eq` outputs for the IETF meetings.
 Section [4.1](#sec:ietf-co2) is primarily focused on interpreting the
@@ -70,6 +74,271 @@ corresponds to the per capita emission of European counties such as
 Greece, Italy, UK. The \(CO_2\) equivalent emission associated to the
 attendance of a single IETF per year corresponds to the emission per
 capita of countries such as Venzuela, Mauritius.
+
+
+![World Map
+view<span label="fig:percapita-map"></span>](./fig/co-emissions-per-capita.pdf)
+
+  
+
+### Comparing IETF air flight traffic with envisioned scenario for aviation
+
+(Klöwer et al. 2021) suggests aviation will contribute to contribute to
+0.1 C of warming in 2050 if pre COVID-19 aviation growth would resume.
+It further analyses 4 types of scenarios to foresee the future of
+aviation with their respective responsibility and contribution to the
+increase of temperature in 2050. These scenarios assume a post-COVID-19
+recovery growth until 2024 followed by a post 2024 growth. The ’no
+pandemic’ scenario considers no pandemic occurred with air travel
+growing by 3% per year since the 1970. This scenario results in aviation
+being responsible to raise temperature by 0.1 C. The ’back to normal
+scenario’ considers a post COVID-19 growth of 16% per year and 3% per
+year thereafter. This scenario results in aviation being responsible to
+raise temperature by 0.09 C in 2050. More importantly it shows that the
+brutal and forced decrease of flights during the COVID-19 has very
+little long term impact. The ’zero long term growth’ assumes a post
+COVID-19 recovery growth of 13% followed by a 0% growth. This scenario
+is responsible to raise temperature by 0.06 . Finally the ’long term
+decline’ assumes a post COVID-19 recovery growth of 10% followed by a
+-2.5% growth, which ends up in air traffic level decreased by 50%
+compared to 2019 – that is the level during the pandemic.
+
+While these scenarios apply for the whole air traffic,
+Figure [\[fig:aviation2021\]](#fig:aviation2021) apply these scenario
+to the IETF meetings, assuming the same number of participants during
+the meetings and considering for 2021 only a 45% decrease over 2019 – as
+opposed to a 100% decrease that has been observed with IETF meetings
+being fully virtual. Another adaptation is that unlike aviation growth
+the number of meetings is not expected to be greater than 3 meetings per
+year. The dash lines shows fractions of meeting which may be useful for
+further studies considering hybrid meetings, that is when a significant
+fraction of the attendees are ’remote’. However, this is left for
+further analysis. Application of the air traffic scenarios to the IETF
+related air traffic shows that scenario ignoring the needed effort to
+fight climate change (’no pandemic’ and ’back to normal’) results in 3
+meetings a year for the IETF while other scenarios (’zero long term
+growth’ and ’long term decline’) result in respectively 2 or 1 IETF
+meeting a year.
+
+In 2015 nations agreed to limit the global warming well below 2 C.
+Current forecast based on Nationally Determined Contributions (NDC)
+established that we are heading toward 2.4 C. The IPCC Working Group I
+contribution to the Sixth Assessment Report AR6-WG1 (“Climate Change
+2021: The Physical Science Basis, Working Group I contribution to the
+Sixth Assessment Report AR6-WG1” 2021) insisted that every fraction of a
+degree of increase is important and that major effort needs to be done
+to reach the achievable 1.5 C. In such context, it seems unappropriated
+to maintain a rate of 3 IETF meeting a year by which participants
+produce as much emission as European countries using coal to generate
+their energy. A more sustainable approach is needed and the target to
+reduce by 45% emission in the Paris agreement in 2015 as well as a
+sustainable scenario for aviation suggest to limit IETF meetings to 1
+IETF meeting a year as well as huge effort to improve the remote
+participation experience.
+
+## Limiting Air Flights Connections to Limit Virus Exposure
+
+While the COVID-19 pandemic situation took us by surprise, it is likely
+that pandemic frequency increases and that more severe pandemics are to
+come - especially as the root cause of pandemic is due to the
+anthropogenic destruction of biodiversity (Daszak et al. 2020).
+
+While work remains to be done to evaluate the exact role airports are
+play in to the spreading of a pandemic, it remains plausible that
+limiting the number of transit airports reduces the risk of infection
+and consequently the wide spread of the pandemic.
+Figure [\[fig:segments\]](#fig:segments) depicts for each IETF the
+number of flight segments for each attendee – including ’on-site’,
+’remote’ and ’not-arrived’ — and
+Table [\[tab:segments\]](#tab:segments) orders the IETF meetings
+according to the average number of segments per attendee. It appears
+that places like Tokyo, Los Angeles and Bejin are the destinations that
+minimize flight connections.
+
+Of course, such findings require additional analysis to refine, for
+example, the role of airports into the widespread of a pandemic,
+refining the total number of connections to the number of connections in
+international airports, the duration of the connection, the time to
+retrieve luggage among other things. It should also consider that
+departure location has been estimated as the capital of the attendee’s
+country which may for large countries introduce a bias.
+
+| IETF Meeting         | City          | Country | Connections   |
+| :------------------- | :------------ | :------ | :------------ |
+| 77                   | Los Angeles   | US      | 2.4           |
+| 94                   | Tokyo         | JP      | 2.8           |
+| 79                   | Beijing       | CN      | 2.8           |
+| 98                   | Chicago       | US      | 3.2           |
+| 83                   | Paris         | FR      | 3.4           |
+| 89, 101              | London        | GB      | 3.5           |
+| 92                   | Dallas/Fort W | US      | 3.5           |
+| 74                   | San Francisco | US      | 3.5           |
+| 86                   | Orlando       | US      | 3.5           |
+| 85                   | Atlanta       | US      | 3.6           |
+| 78                   | Brussels      | BE      | 3.6           |
+| 76                   | Osaka         | JP      | 3.6           |
+| 111                  | San Francisco | US      | 3.7           |
+| 97                   | Seoul         | KR      | 3.8           |
+| 96, 87               | Berlin        | DE      | 3.9           |
+| 75                   | Stockholm     | SE      | 3.9           |
+| 72                   | Dublin        | IE      | 4             |
+| 90                   | Toronto       | CA      | 4.0           |
+| 108, 112             | Madrid        | ES      | 4.1           |
+| 103, 109             | Bangkok       | TH      | 4.1, 4.3      |
+| 81, 102, 105         | Montreal      | CA      | 4.1           |
+| 100, 106             | Singapore     | SG      | 4.2, 4.3      |
+| 95                   | Buenos Aires  | AR      | 4.3           |
+| 82                   | Taipei        | TW      | 4.3           |
+| 73                   | Minneapolis   | US      | 4.4           |
+| 84, 88, 107          | Vancouver     | CA      | 4.4, 4.5, 4.6 |
+| 91                   | Honolulu      | US      | 4.5           |
+| 80, 93, 99, 104, 110 | Prague        | CZ      | 4.5, 4.6, 4.7 |
+
+Ordered average flight connections per attend for each IETF meetings
+<span label="tab:segments"></span>
+
+## Measuring Growth, Diversity and Transparency
+
+\(CO_2\) equivalent emissions of an attendee can be seen as a metric
+that measures participation by attribution a cost to a given
+participation. The cost in question is obviously an environmental cost,
+but it also combines travel distance, travel expenses (air flight and
+hotel) as well as other costs such as time commitment to attend the IETF
+meeting. Overall the sum of the attendee costs may reflect the value of
+the meeting and by extension the value associated by a certain type of
+participation. More precisely, the global costs associated to the
+participants could reflect the worth of an IETF meeting, and the costs
+associated to ’on-site’ participation (respectively ’remote’,
+’not-arrived’) reflects the worth – and share – associated to each
+type of participation. The \(CO_2\) metric is very similar to the number
+of attendee number metric, however, the attendee number reflects an
+attendee decision while the cost estimation ponders attendee with the
+cost. More specifically, it provides more weight to distant
+participants, for which the participation has a higher cost. It may also
+provides a zero cost to attendee of the country when the IETF meeting is
+hosted in the country’s capital. Overall this seems to lower attendees’
+participation due to their local presence to an IETF meeting. Note that
+we are not trying to defend such the \(CO_2\) metric as opposed to the
+number of participant. Instead we are considering this metric as
+possibly providing a new angle that may be interesting.
+
+Figure [\[fig:presence\]](#fig:presence) as well as
+Figure [\[fig:presence-person\]](#fig:presence-person) respectively
+depict the \(CO_2\) emission and the number of attendees per type of
+meeting participation. All three figures tend to show a similar trend
+that is: ’on-site’ attendance is slowly declining and that ’remote’
+participation is growing. However such trends are more visible using the
+\(CO_2\) metric as opposed to the number of attendee metric. Asian and
+South American (Buenos Aires) locations present peaks with the \(CO_2\)
+metric for both ’on-site’ and ’remote’ attendees while such peaks are
+less evident with the number of attendees metric. One possible way to
+interpret these peaks is that attendees are heavily located in North
+America and Europe.
+
+Figure [\[fig:country\]](#fig:country) clusters \(CO_2\) emissions as
+well as the number of attendees per countries. Both metrics show a large
+representation from the US compared to the other countries. On the other
+hand, Asia is well represented with China, Japan and Korea being the
+second, third and tenth most represented countries and overall the Asian
+region seems to be represented similarly to Europe. As countries present
+a huge difference in term of population a representation in term of
+region might be useful. However, from the country representation, it can
+be inferred that the African, the Middle East and the South American
+regions are under-represented. Figure [\[fig:country\]](#fig:country)
+also shows that the overwhelming majority of the attendees are mostly
+representing 15 countries, which seems to indicate a reaching out
+strategies may not be limited to regions, but may consider a finer
+granularity such as countries.
+
+  
+
+  
+
+Figure [\[fig:organization\]](#fig:organization) clusters the costs and
+attendee numbers per organizations. The positive aspect is that the most
+represented organizations do represent less than 50% of the global
+attendance. On the other hand, further investigation are needed to
+understand the full ecosystem, that is whether organizations labeled as
+’Others’ are independent organizations as opposed as working for other
+declared organizations. Similarly, the most represented organization is
+the one labeled ’Not Provided’ which indicates the field organization
+has not been filled by the attendee. Further investigations are also
+needed here to clarify the reasons this field is omitted.
+
+  
+
+  
+
+# Conclusions
+
+This paper presents `CO2eq` that estimate the \(CO_2\) equivalent
+emission generated by international meetings. Currently `CO2eq-v0.0.1`
+limits its evaluation to air traffic emission – which is known to be the
+largest source of emission for such meetings. `CO2eq-v0.0.1` is an early
+version and many directions to make the tool evolve have been
+considered.
+
+IETF conferences have been the first case to be tested by `CO2eq`. The
+IPCC Working Group I contribution to the Sixth Assessment Report AR6-WG1
+urged every sectors to reduce its \(CO_2\) emissions to keep the target
+of 1.5 C. While we are currently on track to a 2.4 C increase of
+temperature, the 1.5 C remains possible to reach. `CO2eq` helps to
+estimate the IETF contribution and what effort could be considered to
+remain a responsible community.
+
+The amount of \(CO_2\) emission per attendee for 3 ’on-site’ IETF
+meeting per year corresponds to the average \(CO_2\) per capita emitted
+by European countries producing energy based on coal such as Germany or
+Poland. The amount for a 2 meeting attendance corresponds to the average
+\(CO_2\) per capita emitted by European countries such as UK, Greece or
+Italy, and the attendance to a single IETF meeting per year corresponds
+to the \(CO_2\) per capita of countries like Venezuela or Mauritius. It
+is unsure there are substantial justifications for the IETF to
+contribute to that extend to the world wide \(CO_2\) emissions and the
+limiting IETF ’on-site’ meeting to at most 1 per year should be
+considered.
+
+Such limit to 1 meeting per year is also met when considering the Paris
+agreement that required a 45% decrease, as well as a more recent studies
+evaluating the evolution of aviation in the next coming years. More
+specifically, 3 IETF meeting a year match evolution to the air traffic
+that would result in aviation being responsible to increase the
+temperature between 0.09 C and 0.1 C. 2 IETF (resp. 1 IETF) meetings a
+year match scenario where aviation would be responsible to increase the
+temperature of 0.06 C (resp. 0.04 C).
+
+The IETF has already demonstrated that remote meetings is a feasible.
+The main drawback that has been raised regarding ’remote’ meeting is
+that hallway discussions are harder to happen. This is correct with the
+current IETF setting where most people attend the meeting, and then
+disconnect themselves. The IETF has set a dedicated place for hallway
+discussion – namely Gather – but the current setting requires a specific
+connection to such place which is definitely a different concept than a
+hallway where attendees have to go through to attend their sessions.
+Time zone is also an issue, and the IETF leadership has held many
+(successful) experiments in term of agenda scheduling. Moving an
+organization from entirely ’on-site’ to entirely ’remote’ will take some
+time and while the feasibility is not anymore to prove, some work remain
+to improve the remote experience. It also appears that ’remote’
+participation is a key factor to make the IETF grow and as such seems a
+promising path.
+
+That experimentation of ’remote’ meeting – while entirely feasible –
+came so late may highlight that more effort on corporate sustainability
+to ensure IETF operates in ways that, at a minimum, meet fundamental
+responsibilities. For example, the United Nations Global
+Compact (“United Nations Global Compact” 2021) set 10 principles to
+address corporate sustainability in a broad sense, and only principles
+7-9 are related to the environment. Adherence to such program ensures
+these principles are part of the IETF strategy and culture with the
+publication of Communication on Progress. More specifically related to
+\(CO_2\) emissions, the IETF may also consider adhering to the caring
+for climate initiative (“"CARING FOR CLIMATE: THE BUSINESS LEADERSHIP
+PLATFORM” A Statement by the Business Leaders of the Caring for Climate
+Initiative” 2021) led by the Global Compact, UN Environment Program
+(UNEP) and the secretariat of the UN Framework Convention on Climate
+Change (UNFCCC).
+
 
 <div id="refs" class="references">
 
@@ -369,267 +638,4 @@ European Monitoring; Evaluation Programme (EMEP).
 </div>
 
   
-
-![World Map
-view<span label="fig:percapita-map"></span>](./fig/co-emissions-per-capita.pdf)
-
-  
-
-### Comparing IETF air flight traffic with envisioned scenario for aviation
-
-(Klöwer et al. 2021) suggests aviation will contribute to contribute to
-0.1 C of warming in 2050 if pre COVID-19 aviation growth would resume.
-It further analyses 4 types of scenarios to foresee the future of
-aviation with their respective responsibility and contribution to the
-increase of temperature in 2050. These scenarios assume a post-COVID-19
-recovery growth until 2024 followed by a post 2024 growth. The ’no
-pandemic’ scenario considers no pandemic occurred with air travel
-growing by 3% per year since the 1970. This scenario results in aviation
-being responsible to raise temperature by 0.1 C. The ’back to normal
-scenario’ considers a post COVID-19 growth of 16% per year and 3% per
-year thereafter. This scenario results in aviation being responsible to
-raise temperature by 0.09 C in 2050. More importantly it shows that the
-brutal and forced decrease of flights during the COVID-19 has very
-little long term impact. The ’zero long term growth’ assumes a post
-COVID-19 recovery growth of 13% followed by a 0% growth. This scenario
-is responsible to raise temperature by 0.06 . Finally the ’long term
-decline’ assumes a post COVID-19 recovery growth of 10% followed by a
--2.5% growth, which ends up in air traffic level decreased by 50%
-compared to 2019 – that is the level during the pandemic.
-
-While these scenarios apply for the whole air traffic,
-Figure [\[fig:aviation2021\]](#fig:aviation2021) apply these scenario
-to the IETF meetings, assuming the same number of participants during
-the meetings and considering for 2021 only a 45% decrease over 2019 – as
-opposed to a 100% decrease that has been observed with IETF meetings
-being fully virtual. Another adaptation is that unlike aviation growth
-the number of meetings is not expected to be greater than 3 meetings per
-year. The dash lines shows fractions of meeting which may be useful for
-further studies considering hybrid meetings, that is when a significant
-fraction of the attendees are ’remote’. However, this is left for
-further analysis. Application of the air traffic scenarios to the IETF
-related air traffic shows that scenario ignoring the needed effort to
-fight climate change (’no pandemic’ and ’back to normal’) results in 3
-meetings a year for the IETF while other scenarios (’zero long term
-growth’ and ’long term decline’) result in respectively 2 or 1 IETF
-meeting a year.
-
-In 2015 nations agreed to limit the global warming well below 2 C.
-Current forecast based on Nationally Determined Contributions (NDC)
-established that we are heading toward 2.4 C. The IPCC Working Group I
-contribution to the Sixth Assessment Report AR6-WG1 (“Climate Change
-2021: The Physical Science Basis, Working Group I contribution to the
-Sixth Assessment Report AR6-WG1” 2021) insisted that every fraction of a
-degree of increase is important and that major effort needs to be done
-to reach the achievable 1.5 C. In such context, it seems unappropriated
-to maintain a rate of 3 IETF meeting a year by which participants
-produce as much emission as European countries using coal to generate
-their energy. A more sustainable approach is needed and the target to
-reduce by 45% emission in the Paris agreement in 2015 as well as a
-sustainable scenario for aviation suggest to limit IETF meetings to 1
-IETF meeting a year as well as huge effort to improve the remote
-participation experience.
-
-## Limiting Air Flights Connections to Limit Virus Exposure
-
-While the COVID-19 pandemic situation took us by surprise, it is likely
-that pandemic frequency increases and that more severe pandemics are to
-come - especially as the root cause of pandemic is due to the
-anthropogenic destruction of biodiversity (Daszak et al. 2020).
-
-While work remains to be done to evaluate the exact role airports are
-play in to the spreading of a pandemic, it remains plausible that
-limiting the number of transit airports reduces the risk of infection
-and consequently the wide spread of the pandemic.
-Figure [\[fig:segments\]](#fig:segments) depicts for each IETF the
-number of flight segments for each attendee – including ’on-site’,
-’remote’ and ’not-arrived’ — and
-Table [\[tab:segments\]](#tab:segments) orders the IETF meetings
-according to the average number of segments per attendee. It appears
-that places like Tokyo, Los Angeles and Bejin are the destinations that
-minimize flight connections.
-
-Of course, such findings require additional analysis to refine, for
-example, the role of airports into the widespread of a pandemic,
-refining the total number of connections to the number of connections in
-international airports, the duration of the connection, the time to
-retrieve luggage among other things. It should also consider that
-departure location has been estimated as the capital of the attendee’s
-country which may for large countries introduce a bias.
-
-| IETF Meeting         | City          | Country | Connections   |
-| :------------------- | :------------ | :------ | :------------ |
-| 77                   | Los Angeles   | US      | 2.4           |
-| 94                   | Tokyo         | JP      | 2.8           |
-| 79                   | Beijing       | CN      | 2.8           |
-| 98                   | Chicago       | US      | 3.2           |
-| 83                   | Paris         | FR      | 3.4           |
-| 89, 101              | London        | GB      | 3.5           |
-| 92                   | Dallas/Fort W | US      | 3.5           |
-| 74                   | San Francisco | US      | 3.5           |
-| 86                   | Orlando       | US      | 3.5           |
-| 85                   | Atlanta       | US      | 3.6           |
-| 78                   | Brussels      | BE      | 3.6           |
-| 76                   | Osaka         | JP      | 3.6           |
-| 111                  | San Francisco | US      | 3.7           |
-| 97                   | Seoul         | KR      | 3.8           |
-| 96, 87               | Berlin        | DE      | 3.9           |
-| 75                   | Stockholm     | SE      | 3.9           |
-| 72                   | Dublin        | IE      | 4             |
-| 90                   | Toronto       | CA      | 4.0           |
-| 108, 112             | Madrid        | ES      | 4.1           |
-| 103, 109             | Bangkok       | TH      | 4.1, 4.3      |
-| 81, 102, 105         | Montreal      | CA      | 4.1           |
-| 100, 106             | Singapore     | SG      | 4.2, 4.3      |
-| 95                   | Buenos Aires  | AR      | 4.3           |
-| 82                   | Taipei        | TW      | 4.3           |
-| 73                   | Minneapolis   | US      | 4.4           |
-| 84, 88, 107          | Vancouver     | CA      | 4.4, 4.5, 4.6 |
-| 91                   | Honolulu      | US      | 4.5           |
-| 80, 93, 99, 104, 110 | Prague        | CZ      | 4.5, 4.6, 4.7 |
-
-Ordered average flight connections per attend for each IETF meetings
-<span label="tab:segments"></span>
-
-## Measuring Growth, Diversity and Transparency
-
-\(CO_2\) equivalent emissions of an attendee can be seen as a metric
-that measures participation by attribution a cost to a given
-participation. The cost in question is obviously an environmental cost,
-but it also combines travel distance, travel expenses (air flight and
-hotel) as well as other costs such as time commitment to attend the IETF
-meeting. Overall the sum of the attendee costs may reflect the value of
-the meeting and by extension the value associated by a certain type of
-participation. More precisely, the global costs associated to the
-participants could reflect the worth of an IETF meeting, and the costs
-associated to ’on-site’ participation (respectively ’remote’,
-’not-arrived’) reflects the worth – and share – associated to each
-type of participation. The \(CO_2\) metric is very similar to the number
-of attendee number metric, however, the attendee number reflects an
-attendee decision while the cost estimation ponders attendee with the
-cost. More specifically, it provides more weight to distant
-participants, for which the participation has a higher cost. It may also
-provides a zero cost to attendee of the country when the IETF meeting is
-hosted in the country’s capital. Overall this seems to lower attendees’
-participation due to their local presence to an IETF meeting. Note that
-we are not trying to defend such the \(CO_2\) metric as opposed to the
-number of participant. Instead we are considering this metric as
-possibly providing a new angle that may be interesting.
-
-Figure [\[fig:presence\]](#fig:presence) as well as
-Figure [\[fig:presence-person\]](#fig:presence-person) respectively
-depict the \(CO_2\) emission and the number of attendees per type of
-meeting participation. All three figures tend to show a similar trend
-that is: ’on-site’ attendance is slowly declining and that ’remote’
-participation is growing. However such trends are more visible using the
-\(CO_2\) metric as opposed to the number of attendee metric. Asian and
-South American (Buenos Aires) locations present peaks with the \(CO_2\)
-metric for both ’on-site’ and ’remote’ attendees while such peaks are
-less evident with the number of attendees metric. One possible way to
-interpret these peaks is that attendees are heavily located in North
-America and Europe.
-
-Figure [\[fig:country\]](#fig:country) clusters \(CO_2\) emissions as
-well as the number of attendees per countries. Both metrics show a large
-representation from the US compared to the other countries. On the other
-hand, Asia is well represented with China, Japan and Korea being the
-second, third and tenth most represented countries and overall the Asian
-region seems to be represented similarly to Europe. As countries present
-a huge difference in term of population a representation in term of
-region might be useful. However, from the country representation, it can
-be inferred that the African, the Middle East and the South American
-regions are under-represented. Figure [\[fig:country\]](#fig:country)
-also shows that the overwhelming majority of the attendees are mostly
-representing 15 countries, which seems to indicate a reaching out
-strategies may not be limited to regions, but may consider a finer
-granularity such as countries.
-
-  
-
-  
-
-Figure [\[fig:organization\]](#fig:organization) clusters the costs and
-attendee numbers per organizations. The positive aspect is that the most
-represented organizations do represent less than 50% of the global
-attendance. On the other hand, further investigation are needed to
-understand the full ecosystem, that is whether organizations labeled as
-’Others’ are independent organizations as opposed as working for other
-declared organizations. Similarly, the most represented organization is
-the one labeled ’Not Provided’ which indicates the field organization
-has not been filled by the attendee. Further investigations are also
-needed here to clarify the reasons this field is omitted.
-
-  
-
-  
-
-# Conclusions
-
-This paper presents `CO2eq` that estimate the \(CO_2\) equivalent
-emission generated by international meetings. Currently `CO2eq-v0.0.1`
-limits its evaluation to air traffic emission – which is known to be the
-largest source of emission for such meetings. `CO2eq-v0.0.1` is an early
-version and many directions to make the tool evolve have been
-considered.
-
-IETF conferences have been the first case to be tested by `CO2eq`. The
-IPCC Working Group I contribution to the Sixth Assessment Report AR6-WG1
-urged every sectors to reduce its \(CO_2\) emissions to keep the target
-of 1.5 C. While we are currently on track to a 2.4 C increase of
-temperature, the 1.5 C remains possible to reach. `CO2eq` helps to
-estimate the IETF contribution and what effort could be considered to
-remain a responsible community.
-
-The amount of \(CO_2\) emission per attendee for 3 ’on-site’ IETF
-meeting per year corresponds to the average \(CO_2\) per capita emitted
-by European countries producing energy based on coal such as Germany or
-Poland. The amount for a 2 meeting attendance corresponds to the average
-\(CO_2\) per capita emitted by European countries such as UK, Greece or
-Italy, and the attendance to a single IETF meeting per year corresponds
-to the \(CO_2\) per capita of countries like Venezuela or Mauritius. It
-is unsure there are substantial justifications for the IETF to
-contribute to that extend to the world wide \(CO_2\) emissions and the
-limiting IETF ’on-site’ meeting to at most 1 per year should be
-considered.
-
-Such limit to 1 meeting per year is also met when considering the Paris
-agreement that required a 45% decrease, as well as a more recent studies
-evaluating the evolution of aviation in the next coming years. More
-specifically, 3 IETF meeting a year match evolution to the air traffic
-that would result in aviation being responsible to increase the
-temperature between 0.09 C and 0.1 C. 2 IETF (resp. 1 IETF) meetings a
-year match scenario where aviation would be responsible to increase the
-temperature of 0.06 C (resp. 0.04 C).
-
-The IETF has already demonstrated that remote meetings is a feasible.
-The main drawback that has been raised regarding ’remote’ meeting is
-that hallway discussions are harder to happen. This is correct with the
-current IETF setting where most people attend the meeting, and then
-disconnect themselves. The IETF has set a dedicated place for hallway
-discussion – namely Gather – but the current setting requires a specific
-connection to such place which is definitely a different concept than a
-hallway where attendees have to go through to attend their sessions.
-Time zone is also an issue, and the IETF leadership has held many
-(successful) experiments in term of agenda scheduling. Moving an
-organization from entirely ’on-site’ to entirely ’remote’ will take some
-time and while the feasibility is not anymore to prove, some work remain
-to improve the remote experience. It also appears that ’remote’
-participation is a key factor to make the IETF grow and as such seems a
-promising path.
-
-That experimentation of ’remote’ meeting – while entirely feasible –
-came so late may highlight that more effort on corporate sustainability
-to ensure IETF operates in ways that, at a minimum, meet fundamental
-responsibilities. For example, the United Nations Global
-Compact (“United Nations Global Compact” 2021) set 10 principles to
-address corporate sustainability in a broad sense, and only principles
-7-9 are related to the environment. Adherence to such program ensures
-these principles are part of the IETF strategy and culture with the
-publication of Communication on Progress. More specifically related to
-\(CO_2\) emissions, the IETF may also consider adhering to the caring
-for climate initiative (“"CARING FOR CLIMATE: THE BUSINESS LEADERSHIP
-PLATFORM” A Statement by the Business Leaders of the Caring for Climate
-Initiative” 2021) led by the Global Compact, UN Environment Program
-(UNEP) and the secretariat of the UN Framework Convention on Climate
-Change (UNFCCC).
 

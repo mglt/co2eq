@@ -1,4 +1,5 @@
-# `CO2eq` Overview 
+# `CO2eq`  
+{:toc}
 
 ## Overview
 
@@ -205,11 +206,12 @@ while ’myclimate’ respectively uses ICAODATA 2019 and ICAO 2018. More
 considerations may be needed to check if this presents an impact.
 
 
-# Application
+# Case Studies
 
 * [IETF](./IETF/ietf.html)
 
 
+# References:
 
 <div id="refs" class="references">
 
