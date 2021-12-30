@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: co2eq
-Version: 0.0.1
+Version: 0.0.2
 Summary: "Compute CO2 equivalent emissions"
 Home-page: https://github.com/mglt/co2eq
 Author: Daniel Migault

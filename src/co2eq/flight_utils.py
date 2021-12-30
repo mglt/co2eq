@@ -2,7 +2,7 @@
 import json
 import gzip
 #from datetime import timedelta
-from os.path import join # getsize, isfile
+from os.path import join, isfile # getsize, isfile
 from statistics import median
 from random import random
 from datetime import date, timedelta, datetime
@@ -163,6 +163,92 @@ ISO3166_TO_IATA_CITY = { 'IL' : 'Tel Aviv Yafo',
                          'BR' : 'Sao Paulo'
                        }
 
+from pip._vendor import pkg_resources
+
+
+class AirportDB( OurAirports ):
+
+  def __init__( self ):
+    """ enhances OurAiports class for our purpose """
+    super().__init__( )
+    self.iata_dict  = self.init_iata_dict( )
+    self.airports = self.narrow_down_airport_list( )
+
+
+  def init_iata_dict( self ):
+    """ build a dictionary with iata code as key
+
+    The purpose of the creation of the dict is to speed up search
+    """
+
+    pkg_version = self.ourairports_version( )
+    file_name = join( DATA_DIR, f"iata_dict_airportdb_{pkg_version}.json.gz" )
+    if isfile( file_name ):
+      print( f"{file_name} found" )
+      with gzip.open( file_name, 'rt', encoding="utf8" ) as f:
+        iata_dict = json.loads( f.read() )
+    else:
+      iata_dict = {} 
+      for airport in self.airports :
+        if airport.iata != '' :
+          airport_json = { 'ident' : airport.ident, 
+                           'name' : airport.name, 
+                           'type' : airport.type, 
+                           'latitude' : airport.latitude, 
+                           'longitude' : airport.longitude, 
+                           'elevation' : airport.elevation, 
+                           'continent' : airport.continent, 
+                           'country' : airport.country, 
+                           'iata' : airport.iata, 
+                           'icao' : airport.icao }
+
+          if airport.iata in iata_dict.keys():
+            raise ValueError( f"IATA {airport.iata} assigned to multiple airports" \
+                              f"{airport_json} and { iata_dict[ airport.iata ] }" )
+          iata_dict[ airport.iata ] = airport_json 
+      with gzip.open( file_name, 'wt', encoding="utf8" ) as f:
+        f.write( json.dumps( iata_dict, indent=2 ) )
+    return iata_dict
+
+  def narrow_down_airport_list( self ):
+    """ limits the airports considered to those with IATA code """
+    airport_list = []
+    for airport in self.airports :
+      if airport.iata == '':
+        continue
+      if airport.type not in [ "large_airport", "medium_airport", "small_airport" ]:
+        continue
+      airport_list.append( airport )
+    return airport_list 
+
+  def ourairports_version( self ):
+    """ returns the version of the parent package OurAirports """
+    for p in pkg_resources.working_set:
+      if p.project_name.lower() == 'ourairports' :
+        return p.version 
+    raise ValueError( "unable to find ourairports package" )
+
+  
+  def get_airport_by_iata(self, iata):
+    """ returns the airport objects 
+    
+    Overwrite the original function to avoid list search 
+##    The creation of the Airport object in a list is only here for compatibility reason with OurAirports
+    """
+    return self.iata_dict[ iata ]
+    ### unable to import Airport class
+    ## the function below would ensure compatibility 
+##  def  getAirportsByIATA( self, iata ): 
+##    a = self.iata_dict[ iata ]
+##    return [ Airport( a.ident, a.name, a.type, a.latitude, a.longitude, \
+##                      a.elevation, a.continent, a.country, a.iata, a.icao ) ]
+
+  def is_iata_airport_code( self, iata ) -> bool:
+    """ returns true is iata is an airport IATA code """
+    if iata in self.iata_dict.keys():
+      return True
+    return False
+
 
 
 class CityDB (JCacheList):
@@ -186,7 +272,7 @@ class CityDB (JCacheList):
     super().__init__( cache_path )
     self.micro_cache = {}
     with gzip.open( join( DATA_DIR, 'iata_city_airport_map.json.gz' ), 'rt', encoding="utf8" ) as f:
-      self.iata_city_airport_map = json.loads( f.read() )
+      self.iata_city_iata_airport_list_dict = json.loads( f.read() )
 
   def citydb_txt_to_json( self, conf ):
     """ Converts the txt database of IATA cities into a json file
@@ -254,7 +340,7 @@ class CityDB (JCacheList):
     from a more recent txt file.
 
     """
-    iata_city_airport_map = {}
+    iata_city_iata_airport_list_dict = {}
     with gzip.open( join( DATA_DIR, 'iata_city_airport_map.csv.gz' ), 'rt', encoding="utf8" ) as f:
       for l in f.readlines():
         array = l.split( ',' )
@@ -263,14 +349,21 @@ class CityDB (JCacheList):
         if "Code" in array[ 0 ]: # skip header
           continue
         try:
-          iata_city_airport_map[ iata_city ].append( iata_airport )
+          iata_city_iata_airport_list_dict[ iata_city ].append( iata_airport )
         except KeyError:
-          iata_city_airport_map[ iata_city ] = [ iata_airport ]
+          iata_city_iata_airport_list_dict[ iata_city ] = [ iata_airport ]
       with gzip.open( join( DATA_DIR, 'iata_city_airport_map.json.gz' ), 'wt', encoding="utf8"  ) as out:
-        out.write( json.dumps( iata_city_airport_map, indent=2 ) )
+        out.write( json.dumps( iata_city_iata_airport_list_dict, indent=2 ) )
+
+  def is_iata_city_code( self, iata ) -> bool:
+    """ returns true is iata is an IATA city code"""
+    if iata in self.iata_city_iata_airport_list_dict.keys():
+      return True
+    return False
 
 
-  def get_iata_airport_list( self, iata_city ) -> list :
+  def get_iata_airport_list_from_iata_city( self, iata_city ) -> list :
+##  def get_iata_airport_list_from_iata_city( self, iata_city ) -> list :
     """ for a valid iata_city code, the list of mapped iata airport codes are returned
 
     Args:
@@ -287,7 +380,7 @@ class CityDB (JCacheList):
         iata code that is only an airport iata code - not a city iata code.
     """
     try:
-      iata_list = self.iata_city_airport_map[ iata_city ]
+      iata_list = self.iata_city_iata_airport_list_dict[ iata_city ]
     except KeyError:
       iata_list =  None
     return iata_list
@@ -756,7 +849,7 @@ class FlightDB(JCacheDict):
 
     Args:
       conf (dict): configuration parameters
-      airportDB: the airportDB object ( OurAirports ) or True to indicate
+      airportDB: the airportDB object ( AirportDB ) or True to indicate
         the DB is generated by FlightDB.
         By default it is set to True.
       cityDB: the cityDB object ( CityDB ) or True to indicate the DB is
@@ -775,7 +868,7 @@ class FlightDB(JCacheDict):
     self.amadeus_id = conf[ 'AMADEUS_ID' ]
     self.amadeus_secret = conf[ 'AMADEUS_SECRET' ]
     if airportDB is True:
-      self.airportDB = OurAirports()
+      self.airportDB = AirportDB()
     else:
       self.airportDB = airportDB
     if  cityDB is True:
@@ -1068,7 +1161,7 @@ class Flight:
     """ computes co2eq associated to the flight
 
       Args:
-      airportDB: the airportDB object ( OurAirports ) or True to indicate the DB is
+      airportDB: the airportDB object ( AirportDB ) or True to indicate the DB is
         generated by FlightDB.
         By default it is set to True.
       cityDB: the cityDB object ( CityDB ) or True to indicate the DB is generated
@@ -1098,7 +1191,7 @@ class Flight:
     self.flight_duration = flight_duration
     self.co2eq = co2eq
     if airportDB is True:
-      self.airportDB = OurAirports()
+      self.airportDB = AirportDB()
     else:
       self.airportDB = airportDB
     if  cityDB is True:
@@ -1126,14 +1219,13 @@ class Flight:
     coordinates = []
     for iata in [ iata_departure, iata_arrival ]:
       try:
-        airport_list = self.airportDB.getAirportsByIATA( iata )
-        if len( airport_list ) == 0:
-          raise NoMatchError( f"IATA airport code {iata}" )
-        elif len( airport_list ) > 1:
-          raise MultipleMatchError( f"IATA airport code {iata} - [{airport_list}]" )
-        airport = airport_list[ 0 ]
-        coordinates.append( ( airport.latitude, airport.longitude ) )
-      except:
+        airport = self.airportDB.get_airport_by_iata( iata )
+        coordinates.append( ( airport[ 'latitude' ], airport[ 'longitude' ] ) )
+      except KeyError:
+##        raise NoMatchError( f"IATA airport code {iata}" )
+##        elif len( airport_list ) > 1:
+##          raise MultipleMatchError( f"IATA airport code {iata} - [{airport_list}]" )
+##        airport = airport_list[ 0 ]
         try:
           city = self.cityDB.get_city_by_iata_code( iata )
           coordinates.append( ( city[ 'latitude' ], city[ 'longitude' ] ) )
@@ -1181,24 +1273,19 @@ class Flight:
     return E
 
 
-  def iata_airport( self, iata ) -> list:
-    """ returns the "closest" IATA airport code
+  def convert_to_iata_airport_list( self, iata ) -> list:
+    """ converts IATA (city or airport) codes into a list of IATA airport code
 
-    Some application require an IATA
+    Some application require airport code IATA
     """
-    if iata in [ 'ZYR' ]:
+    if iata in [ 'ZYR' ] or self.airportDB.is_iata_airport_code( iata ) == True :
       iata_list = [ iata ]
-    else:
-      airport_list = self.airportDB.getAirportsByIATA( iata )
-      if len( airport_list ) != 0: ## iata is airport iata code
-        iata_list = [ airport.iata for airport in airport_list ]
-      else:
-        ## iata is city iata code
-        iata_list = self.cityDB.get_iata_airport_list( iata )
-        if iata_list is None:
-          raise ValueError( f"Unexpected city IATA code {iata}" \
-            f"-- neither city IATA code nor airport IATA code. Consider " \
-            f"updating IATA_SWAP in iata_airport function." )
+    elif self.cityDB.is_iata_city_code( iata ):
+      iata_list = self.cityDB.get_iata_airport_list_from_iata_city( iata )
+    else : 
+      raise ValueError( f"Unexpected city IATA code {iata}" \
+        f"-- neither city IATA code nor airport IATA code. Consider " \
+        f"updating IATA_SWAP in iata_airport function." )
     return iata_list
 
   ## icao2018
@@ -1219,8 +1306,8 @@ class Flight:
         elif co2_computation == 'goclimate':
           ## goclimate only seems to take iata airport code,
           ## so this does not work for city iata codes
-          origin_list = self.iata_airport( origin )
-          destination_list = self.iata_airport( destination )
+          origin_list = self.convert_to_iata_airport_list( origin )
+          destination_list  = self.convert_to_iata_airport_list( destination )
           for origin in origin_list:
             for destination in destination_list:
               try:

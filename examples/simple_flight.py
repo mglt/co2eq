@@ -19,14 +19,3 @@ flight = get_flight( conf=CONF,  origin='PAR', destination='LAX' )
 print( "A simple way to retrieve a flight!" )
 print( flight )
 
-## Ploting a single IETF meeting
-ietf_meeting = IETFMeeting( name='IETF100', conf = CONF ) 
-for cluster_key in [ None, 'country', 'organization', 'presence', 'flight_segments' ]:
-  ietf_meeting.plot_co2eq( cluster_key=cluster_key, cluster_nbr=15)
-
-
-## Plotting all IETF meetings
-ietf_meeting_list = IETFMeetingList( conf=CONF ) 
-ietf_meeting_list.plot_all()
-
-
