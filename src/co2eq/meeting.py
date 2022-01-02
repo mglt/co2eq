@@ -10,9 +10,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 #import numpy as np
 import requests
-#from ourairports import OurAirports
+from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, Flight, logger
 
-from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, Flight
+
 
 plt.rcParams.update({'figure.max_open_warning': 0})
 
@@ -49,7 +49,7 @@ class Meeting:
     else:
       self.airportDB = airportDB
     if  cityDB is True:
-      self.cityDB = CityDB( )
+      self.cityDB = CityDB( conf, airportDB=self.airportDB )
     else:
       self.cityDB = cityDB
     if goclimateDB is True:
@@ -59,7 +59,9 @@ class Meeting:
     ## human representation IATA, (city, country)( city, state, country)
     self.location = self.get_location( )
     ## iata code for the meeting location - flightDB only consider iata code
-    self.iata_location = self.cityDB.best_guess( self.location )[ 'iata' ]
+    print( self.location )
+    print( self.cityDB.representative_city( self.location ) ) 
+    self.iata_location = self.cityDB.representative_city( self.location )[ 'iata' ]
     ## by default meetings have a common destination, so we can optimize
     ## flightDB and designate it by the destination airport
     if flightDB is True:
@@ -71,6 +73,7 @@ class Meeting:
     if isdir( self.cache_base ) is False:
       os.makedirs( self.cache_base )
     self.attendee_list = None
+    self.logger = logger( conf, __name__ )     
 
   def get_location( self ):
     pass
@@ -80,7 +83,6 @@ class Meeting:
     """ reads the json file and initializes self.attendee_list """
     with gzip.open( file_attendee_json, 'rt', encoding="utf8") as f:
       self.attendee_list = json.loads( f.read() )
-##    pass
 
   def attendee_location( self, attendee ):
     """ returns the location of the attendee
@@ -120,7 +122,6 @@ class Meeting:
       file_name += f"-{key}_{value}"
     return file_name + f".{extension}"
 
-
   def build_co2eq_data( self, mode='flight', cluster_key=None, co2eq='myclimate' ) -> dict :
     """ co2 equivalent based on real flights including multiple segments)
 
@@ -158,10 +159,13 @@ class Meeting:
     else:
       y = {} ## returns a dict { cluster_value: co2_eq }
 
+    attendee_nbr = 0
     for attendee in self.attendee_list:
-##      print( f"  - attendee: {attendee}" )
+      attendee_nbr +=1 
+      self.logger.debug( f"  - attendee {attendee_nbr}: {attendee}" )
       location = self.attendee_location( attendee )
-      attendee_iata_city = self.cityDB.best_guess( location )[ 'iata' ]
+      attendee_iata_city = self.cityDB.representative_city( location )[ 'iata' ]
+      self.logger.debug( f"  - representative city for {location}: {attendee_iata_city}" )
       if attendee_iata_city == self.iata_location:
         continue
 
@@ -169,7 +173,8 @@ class Meeting:
         if cluster_key == 'flight_segment_number':
           flight = self.flightDB.select_flight( attendee_iata_city , self.iata_location )
       elif mode in [ 'flight' ]:
-        flight = self.flightDB.select_flight( attendee_iata_city , self.iata_location )
+##        flight = self.flightDB.select_flight( attendee_iata_city , self.iata_location )
+          flight = self.flightDB.force_select_flight( attendee_iata_city , self.iata_location )
       elif mode == 'distance':
         segment_list = [ [ attendee_iata_city , self.iata_location ],  \
                          [ attendee_iata_city , self.iata_location ] ]
@@ -280,7 +285,7 @@ class Meeting:
         ax.bar( column_range,  line_data, bottom=bottom, label=stack_label[ line_index ] )
 
     if stack_label is not None and ( isinstance( stack_label, list ) and len( stack_label ) >= 2) :  
-      print( f"stack_label: {stack_label}" )
+#      print( f"stack_label: {stack_label}" )
       ax.legend( labels=stack_label )
 #    ax.set_ylabel("CO2 Equivalent (kg)" )
     ax.set_xticks( column_range )
@@ -659,7 +664,7 @@ class IETFMeeting ( Meeting ):
     return attendee[ 'country' ]
 
   def get_attendee_list_html( self ):
-    print( f"{self.name}: Getting HTML file" )
+    self.logger.info( f"{self.name}: Getting HTML file" )
     if self.ietf_nbr >= 108 :
       url = "https://registration.ietf.org/" + str( self.ietf_nbr ) + "/participants/remote/"
     else:
@@ -697,7 +702,7 @@ class IETFMeeting ( Meeting ):
           attendee[ 'organization' ] = attendee.pop( 'Organization' )
 ####          attendee[ 'presence' ] = attendee.pop( 'On-Site' )
         except:
-          print( f"Cannot create attendee: {attendee}" )
+          self.logger.info( f"Cannot create attendee: {attendee}" )
       for attendee in json_obj:
         del attendee[ 'firstname' ]
         del attendee[ 'lastname' ]
@@ -718,9 +723,9 @@ class IETFMeeting ( Meeting ):
           attendee[ 'presence' ] = attendee.pop( 'In Person Participants - Checked In OnSite' )
           attendee[ 'presence' ] = 'on-site'
         except:
-          print( f"Cannot create attendee: {attendee}" )
+          self.logger.info( f"Cannot create attendee: {attendee}" )
 
-      print( f"type json_1:{type(json_obj_1)}" )
+      self.logger.info( f"type json_1:{type(json_obj_1)}" )
       json_obj_2 = json.loads( dfs[2].to_json( orient="records" ) )
       for attendee in json_obj_2:
         try:
@@ -731,7 +736,7 @@ class IETFMeeting ( Meeting ):
           attendee[ 'presence' ] = attendee.pop( 'In Person Participants - Not Yet Arrived' )
           attendee[ 'presence' ] = 'not-arrived'
         except:
-          print( f"Cannot create attendee: {attendee}" )
+          self.logger.info( f"Cannot create attendee: {attendee}" )
       json_obj_3 = json.loads( dfs[3].to_json( orient="records" ) )
       for attendee in json_obj_3:
         try:
@@ -742,11 +747,11 @@ class IETFMeeting ( Meeting ):
           attendee[ 'presence' ] = attendee.pop( 'Remote Participants' )
           attendee[ 'presence' ] = 'remote'
         except:
-          print( f"Cannot create attendee: {attendee}" )
+          self.logger.info( f"Cannot create attendee: {attendee}" )
 
       ## header may appears in each list as an attendee
       for json_obj in [ json_obj_1, json_obj_2, json_obj_3 ] :
-        print( f"{json_obj[:5]}" )
+        self.logger.debug( f"{json_obj[:5]}" )
         if json_obj[ 0 ][ 'country' ] == 'ISO 3166 Code' :
           del json_obj[ 0 ]
 ##      header = { "country": "ISO 3166 Code",
@@ -779,6 +784,7 @@ class IETFMeeting ( Meeting ):
       else: ## IETF 72 - 73, and IETF 93 - do not have login
         table_index = 1
       json_obj = json.loads( dfs[ table_index ].to_json( orient="records" ) )
+      attendee_list = []
       for attendee in json_obj:
         try:
           ## we use pop in order to avoid creating a new filed. JSON objects
@@ -794,25 +800,30 @@ class IETFMeeting ( Meeting ):
           elif 'On-Site' in attendee.keys(): ## replaces 'Paid' for IETF >= 80
             attendee[ 'presence' ] = attendee.pop( 'On-Site' )
         except:
-          print( f"Cannot create attendee: {attendee}" )
-      for attendee in json_obj:
-        del attendee[ 'firstname' ]
-        del attendee[ 'lastname' ]
+          self.logger.info( f"Cannot create attendee: {attendee}" )
+#      for attendee in json_obj:
+#        del attendee[ 'firstname' ]
+#        del attendee[ 'lastname' ]
         presence = attendee[ 'presence' ]
         if presence in [ 'Yes', 'Comp', 'Comp - Host' ]:
-          attendee[ 'presence' ] = 'on-site'
+          presence = 'on-site'
         elif presence == 'Remote':
-          attendee[ 'presence' ] = 'remote'
+          presence  = 'remote'
         elif presence == 'No':
-          attendee[ 'presence' ] = 'not-arrived'
+          presence = 'not-arrived'
         else:
           raise ValueError( f"unexpected attendee format {attendee}." \
                             f"Expecting 'Yes', 'No' or 'Remote' for presence" )
-      return json_obj
+        organization = self.clean_org( attendee[ 'organization' ] )
+        attendee_list.append( { 'country' : attendee[ 'country' ], 
+                                'organization' : organization,
+                                'presence' : presence } )
+      return attendee_list 
+#      return json_obj
 
   def get_attendee_list_json( self ):
 
-    print( f"{self.name}: Parsing HTML file" )
+    self.logger.info( f"{self.name}: Parsing HTML file" )
     if self.ietf_nbr <= 103 :
       json_obj = self.parse_htm_72()
     elif self.ietf_nbr in [ 108, 109, 110, 111, 112 ] : #remote meetings
@@ -902,7 +913,7 @@ class IETFMeetingList(MeetingList):
   def plot_all( self ):
     for meeting_designation in self.meeting_list:
       meeting = self.get_meeting( meeting_designation )
-      print( f"{meeting.name}: Processing plot_co2eq" )
+      self.logger.info( f"{meeting.name}: Processing plot_co2eq" )
       meeting.plot_co2eq( )
       cluster_key_list = list( meeting.attendee_list[0].keys() )
       print(cluster_key_list )
@@ -916,7 +927,7 @@ class IETFMeetingList(MeetingList):
 ##      meeting.plot_co2eq( mode=None, cluster_key='presence' )
 ##      meeting.plot_co2eq( mode=None, cluster_key='country', cluster_nbr=15 )
 ##      meeting.plot_co2eq( mode=None, cluster_key='flight_segment_number',  cluster_nbr=15 )
-    print( f"\nprocessing {self.name }\n" )
+    self.logger.info( f"\nprocessing {self.name }\n" )
     if isinstance( self.meeting_list[0], int ):
       column_label = []
       for ietf_nbr in self.meeting_list:

@@ -17,7 +17,7 @@ from ourairports import OurAirports
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 from geopy.distance import great_circle
-
+import logging
 
 from climate_neutral import GoClimateNeutralAPI, Segment # Footprint
 
@@ -36,90 +36,17 @@ def cache_dir( conf ):
     cache_directory = './cache'
   return cache_directory
 
+def logger( conf, __name__ ):   
+  try: 
+    log_file = conf[ 'log' ]
+  except KeyError :
+    log_file = './co2eq.log'
+  logger = logging.getLogger(__name__)
+  FORMAT = "[%(asctime)s : %(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
+  logger.setLevel( logging.DEBUG )
+  logging.basicConfig(filename=log_file, format=FORMAT )
+  return logger
 
-class MultipleMatchError( Exception ):
-  def __init__(self, message=""):
-    """ returns a printable message with the selectors and resulting outputs """
-    self.message = f"Multiple matching locations for {message}\n." \
-                   f"Consider using IATA code instead."\
-                   f" https://www.iata.org/en/publications/directories/code-search/?airport.search=XXXX \n"
-    super().__init__(self.message)
-
-class NoMatchError( Exception ):
-  def __init__(self, message=""):
-    self.message = f"No matching location for {message}.\n" \
-                   f"Consider using IATA code instead" \
-                   f"https://www.iata.org/en/publications/directories/code-search/?airport.search=XXXX \n"
-    super().__init__(self.message)
-
-## swaps countries to a geographically most relevant to find an airport
-
-## when a country is provided as a location (origin or departure),
-## we need to find a corresponding IATA airport (from the IATA city DB)
-## and that IATA airport needs to provide flights offers amadeus databases search.
-## At the time we performed the tests (during covid19 pandemy) some
-## countries did not provide flights to expected destinations.
-## For that reasons we swap the country to another geographically relevant country.
-
-ISO3166_SWAP = { 'PS' : 'IL',
-                 'AD' : 'FR',
-                 'TF' : 'NZ',
-                 'CK' : 'NZ',
-                 'TV' : 'NZ',
-                 'TK' : 'NZ',
-                 'FJ' : 'NZ',
-                 'NR' : 'NZ',
-                 'AS' : 'NZ',
-                 'WS' : 'NZ',
-                 'TO' : 'NZ',
-                 'VU' : 'NZ',
-                 'NC' : 'AU',
-                 'BT' : 'CN',
-                 'NP' : 'CN',
-                 'BO' : 'PE',
-                 'MM' : 'TH',
-                 'SR' : 'CO',
-                 'LY' : 'TN',
-                 'YE' : 'OM',
-                 'CW' : 'LC',
-                 'SX' : 'LC',
-                 'AN' : 'LC',
-                 'MS' : 'LC',
-                 'VC' : 'LC',
-                 'BB' : 'LC',
-                 'AG' : 'LC',
-                 'VG' : 'LC',
-                 'KN' : 'LC',
-                 'LI' : 'CH',
-                 'TL' : 'ID',
-                 'CX' : 'ID',
-                 'LA' : 'TH',
-                 'VA' : 'IT',
-                 'VE' : 'CO',
-                 'HM' : 'ZA',
-                 'LS' : 'ZA',
-                 'AQ' : 'ZA',
-                 'UM' : 'JP',
-                 'HT' : 'DO',
-                 'AI' : 'DO',
-                 'VI' : 'DO',
-                 'TC' : 'DO',
-                 'CC' : 'ID',
-                 'SY' : 'LB',
-                 'BJ' : 'TG',
-                 'GA' : 'CM',
-                 'CF' : 'CM',
-                 'MG' : 'MU',
-                 'GW' : 'SN',
-                 'GG' : 'GB',
-                 'JE' : 'GB',
-                 'AX' : 'FI',
-                 'FM' : 'ID',
-                 'SC' : 'MU',
-                 'EH' : 'MR',
-                 'CD' : 'AO',
-                 'KP' : 'KR'
-                }
 
 ## Binds ISO3166 country code to a city that is in the IATA DB with the largest airport.
 
@@ -127,41 +54,64 @@ ISO3166_SWAP = { 'PS' : 'IL',
 ## In some cases this overwrite the capital to the corresponding entry in the IATA DB
 ## - typically when the entry is not the capital but the country name.
 
-ISO3166_TO_IATA_CITY = { 'IL' : 'Tel Aviv Yafo',
-                         'RS' : 'Belgrade',
-                         'ME' : 'Podgorica',
-                         'AU' : 'Sydney',
-                         'NZ' : 'Auckland',
-                         'CY' : 'Larnaca',
-                         'CH' : 'Zurich',
-                         'DO' : 'Punta Cana',
-                         'ZA' : 'Johannesburg',
-                         'CI' : 'Abidjan',
-                         'BZ' : 'Belize',
-                         'SK' : 'Kosice',
-                         'HK' : 'Hong Kong',
-                         'UG' : 'Entebbe',
-                         'BO' : 'Santa Cruz',
-                         'CA' : 'Toronto',
-                         'BJ' : 'Cotonou',
-                         'LC' : 'St Lucia',
-                         'MO' : 'Macao',
-                         'AW' : 'Aruba',
-                         'KY' : 'Grand Cayman',
-                         'BB' : 'BGI',
-                         'YT' : 'Dzaoudzi',
-                         'PY' : 'Asuncion',
-                         'KW' : 'Kuwait',
-                         'BN' : 'Bandar Seri B',
-                         'MT' : 'Malta',
-                         'CM' : 'Douala',
-                         'BM' : 'Bermuda',
-                         'TZ' : 'Dar Es Salaam',
-                         'GU' : 'Guam',
-                         'KZ' : 'Almaty',
-                         'GD' : 'Grenada',
-                         'BR' : 'Sao Paulo'
-                       }
+## we shoudl use iata code and use get_city_by_iata 
+ISO3166_REPRESENTATIVE_CITY = {
+  'IL' : "Tel Aviv Yafo",
+  'PS' : "Tel Aviv Yafo",  # no capital
+  'RS' : 'Belgrade', ## probably not needed
+  'ME' : 'Podgorica', ## probably not needed
+  'AU' : "Sydney",
+  'NZ' : "Auckland",
+  'CY' : "Larnaca",
+  'CH' : "Zurich",
+  'DO' : "Punta Cana",
+  'ZA' : "Johannesburg",
+  'CI' : "Abidjan",
+  'BZ' : "Belize",
+  'SK' : "Kosice",
+  'HK' : "Hong Kong",
+  'UG' : "Entebbe",
+  'BO' : "Santa Cruz",
+  'CA' : "Toronto",
+#  'BJ' : 'Cotonou',
+#  'LC' : 'St Lucia', ## probably not needed
+  'MO' : 'Macao',    ## probably not needed
+  'AW' : 'Aruba',
+  'KY' : 'Grand Cayman',
+#  'BB' : 'Barbados',
+  'YT' : 'Dzaoudzi',
+#  'PY' : 'Asuncion',
+#  'KW' : 'Kuwait',  ## probably not needed
+#  'BN' : 'Bandar Seri B',
+#  'MT' : 'Malta',
+  'CM' :  "Douala",
+  'BM' : 'Bermuda',
+  'TZ' : 'Dar Es Salaam',
+#  'GU' : 'Guam',
+  'KZ' : 'Almaty',
+  'GD' : 'Grenada',
+  'BR' : 'Sao Paulo', 
+  'AD' : 'Toulouse', 
+  'MM' : "Yangon", 
+  'CW' : "Curacao", 
+  'SX' : "St Maarten", 
+  'AN' : "St Maarten", 
+  'VG' : "Anegada",
+  'VA' : "Rome",
+  'HM' : "Tolanaro", 
+  'AQ' : "Invercargill", 
+  'UM' : 'Bikini Atoll', 
+  'VI' : 'Tortola',
+  'TC' : 'South Caicos', 
+  'AX' : 'Mariehamn', 
+  'PH' : 'Manila', 
+  'CL' : 'Santiago', 
+  'BT' : 'Lhasa/Lasa',
+  'NP' : 'Lhasa/Lasa', 
+  'ID' : 'Jakarta', 
+  'RO' : 'Bucharest',
+  'VU' : 'Auckland',
+}
 
 from pip._vendor import pkg_resources
 
@@ -184,7 +134,6 @@ class AirportDB( OurAirports ):
     pkg_version = self.ourairports_version( )
     file_name = join( DATA_DIR, f"iata_dict_airportdb_{pkg_version}.json.gz" )
     if isfile( file_name ):
-      print( f"{file_name} found" )
       with gzip.open( file_name, 'rt', encoding="utf8" ) as f:
         iata_dict = json.loads( f.read() )
     else:
@@ -233,15 +182,14 @@ class AirportDB( OurAirports ):
     """ returns the airport objects 
     
     Overwrite the original function to avoid list search 
-##    The creation of the Airport object in a list is only here for compatibility reason with OurAirports
     """
     return self.iata_dict[ iata ]
-    ### unable to import Airport class
-    ## the function below would ensure compatibility 
-##  def  getAirportsByIATA( self, iata ): 
-##    a = self.iata_dict[ iata ]
-##    return [ Airport( a.ident, a.name, a.type, a.latitude, a.longitude, \
-##                      a.elevation, a.continent, a.country, a.iata, a.icao ) ]
+    ## the function below would have ensured compatibility
+    ## but we our dictionary uses JSON
+    ##  def  getAirportsByIATA( self, iata ): 
+    ##    a = self.iata_dict[ iata ]
+    ##    return [ Airport( a.ident, a.name, a.type, a.latitude, a.longitude, \
+    ##                      a.elevation, a.continent, a.country, a.iata, a.icao ) ]
 
   def is_iata_airport_code( self, iata ) -> bool:
     """ returns true is iata is an airport IATA code """
@@ -251,8 +199,8 @@ class AirportDB( OurAirports ):
 
 
 
-class CityDB (JCacheList):
-  def __init__( self, cache_path= join( DATA_DIR, "iata_city_codes-2015.json.gz" ) ):
+class CityDB :
+  def __init__( self, conf, airportDB=AirportDB() ):
     """ This class contains function related to cities.
 
     The current use of this class is to retrieve the IATA associated to a
@@ -269,10 +217,36 @@ class CityDB (JCacheList):
         - iata_city_codes-2015.json.
         This file has been generated from a txt file also provided in the package).
     """
-    super().__init__( cache_path )
+
     self.micro_cache = {}
+    self.micro_cache_representative_city = {}
+    self.airportDB = airportDB
+
+    ## list of cities with iata city codes. each city is an object 
+    ## {
+    ##   "name": "Paris",
+    ##   "iata": "PAR",
+    ##   "latitude": 48.8566969,
+    ##   "longitude": 2.3514616,
+    ##   "country": "FR",
+    ##   "state": null
+    ## },
+    with gzip.open( join( DATA_DIR, 'iata_city_codes-2015.json.gz' ), 'rt', encoding="utf8" ) as f:
+      self.iata_city_list = json.loads( f.read() )
+    ## dictionary with key a iata_city_code and value being the list 
+    ## of corresponding iata airport codes
     with gzip.open( join( DATA_DIR, 'iata_city_airport_map.json.gz' ), 'rt', encoding="utf8" ) as f:
       self.iata_city_iata_airport_list_dict = json.loads( f.read() )
+
+    self.iata_airport_iata_city_dict = {}
+    for iata_city, iata_airport_list in self.iata_city_iata_airport_list_dict.items():
+      for iata_airport in iata_airport_list :
+        self.iata_airport_iata_city_dict[ iata_airport ] = iata_city 
+    self.logger = logger( conf, __name__ )   
+    self.iata_dict = {}
+    for city in self.iata_city_list:
+      self.iata_dict[ city[ 'iata' ] ] = city
+  
 
   def citydb_txt_to_json( self, conf ):
     """ Converts the txt database of IATA cities into a json file
@@ -333,7 +307,7 @@ class CityDB (JCacheList):
   def iata_city_airport_csv_to_json( self ):
     """ generates a json dictionary matching a IATA city code to a list of IATA airport code.
 
-    the cvs is built from the ICAO publication and provided into the package.
+    The cvs is built from the ICAO publication and provided into the package.
     Since the json format is provided as part of the package, this function
     is unlikely to be useful.
     Eventually, the code might be re-use if the database is regenerated
@@ -362,189 +336,108 @@ class CityDB (JCacheList):
     return False
 
 
-  def get_iata_airport_list_from_iata_city( self, iata_city ) -> list :
-##  def get_iata_airport_list_from_iata_city( self, iata_city ) -> list :
+  def airport_list_of( self, city:dict ) -> list :
     """ for a valid iata_city code, the list of mapped iata airport codes are returned
 
     Args:
-      iata_city (str) : the iata city code
+      city (dict) : the iata city code
 
     Returns:
-      iata_airport_list (list): when the iata city codes is a valid iata
+      airport_list (list): when the iata city codes is a valid iata
         code, the list of corresponding iata airport codes is returned.
         Note that the list may also contain the iata_city code.
         In the vast majority of the cases the iata city code and airport
         code is the same.
-      None: when the input does not match a iata city code, None is
-        returned. This may result from an unvalid iata code or a valid
-        iata code that is only an airport iata code - not a city iata code.
     """
     try:
-      iata_list = self.iata_city_iata_airport_list_dict[ iata_city ]
+      iata_list = self.iata_city_iata_airport_list_dict[ city[ 'iata' ] ]
     except KeyError:
-      iata_list =  None
-    return iata_list
-
-##  def iata_db_format( self, city_name ):
-  def matching_city_db_name( self, city_name ):
-    """ return a corresponding city_name that match the format of the IATA city database
-
-    This corresponds to a manual adjustment and only works for capital city name.
-    Something more generic must be provided su that we may only use the
-    get_city_list_by_name function.
-
-    Todo:
-
-    """
-
-    ## city map can be usefull to address character issue not considered
-    ## in the data base.
-    ## It can also be useful to redirect a full country to another city
-    ## by redirecting the capital.
-    ## It does not deal with country that are not part of the module iso,
-    ## nor country that have no capital, nor countries not represented
-    ## in the module.
-    city_name_map = { 'New Delhi' : 'Delhi',
-                      'Manama' : 'Bahrain',
-                      'Bern'   : 'Berne',
-                      'Port Louis': 'Mauritius',
-                      'Port of Spain': 'Port Of Spain',
-                      'Thimphu' : 'Paro',
-                      "Nuku'alofa" : 'Eua',
-                      "Saint John's" : 'Antigua',
-                      'Roseau' : 'Dominica',
-                      'Ulan Bator' : 'Ulaanbaatar',
-                      'Saint-Denis' : 'St Denis'
-                      }
-
-    letters = { 'á' : 'a', 'ă' : 'a', 'é' : 'e', 'ș' : 's', 'í' : 'i',  }
-    try:
-      return city_name_map[ city_name ]
-    except KeyError:
-      for l in letters.keys():
-        city_name = city_name.replace( l, letters[ l ] )
-      return city_name
-
-  def get_city_list_by_name( self, city_name : str ) -> list:
-    """ returns a list of cities whose name match city_name
-
-    Todo:
-      * A NoMatchError means the name has not been found in the data base.
-      However, this may be due to mispelling for example.
-      We need to be able to relax the exact match constraint and consider
-      at least different spelling, or providing the closest city based
-      on coordinates. (see matching_city_db_name ).
-
-    """
-
-    return self.get_all( name=city_name )
-
-  def get_city_list_by_iata_code( self, iata_code : str) -> list:
-    """ returns a list of cities whose name match iata_code """
-    return self.get_all( iata=iata_code )
-
-  def get_city_list_by_city_name_country( self, city_name :str ,\
-                                          country : str, state=None ) -> list:
-    """ returns a list of cities matching city_name, country and state (when provided) """
-
-    if country in [ 'RS', 'ME' , 'MM' ]: ## not in CountryInfo. Check how to update CountryInfo
-      pass
-    else:
-      country = CountryInfo( country ).iso( 2 )
-    if state is None:
-      city_list = self.get_all( name=city_name, country=country )
-    else:
-      city_list = self.get_all( name=city_name, country=country, state=state )
-    return city_list
-
-  def is_city( self, city_list : list):
-    """ returns the city object if there is a single match,
-
-    Returns:
-       city: the single city when ther eis a single match
-    Raises:
-      MultipleMatchError, NoMatchError
-    """
-
-    if len( city_list ) == 1:
-      if city_list[ 0 ] is not None:
-        return city_list[ 0 ]
-      else:
-        raise NoMatchError( )
-    elif len( city_list ) >= 2:
-      raise MultipleMatchError( city_list )
-    elif len( city_list ) == 0:
-      raise NoMatchError( )
-
-  def get_city_by_name( self, city_name : str ) -> dict :
-    """ returns a list of cities whose name match city_name
-
-
-    Args:
-      city_name (str): the name of the city
-    Raises:
-      MultipleMatchError or NoCityError
-    """
-    try:
-      city_list = self.get_city_list_by_name( city_name )
-      city = self.is_city( city_list )
-    except NoMatchError:
-      raise NoMatchError( f"unable to find city  {city_name}" )
-    return city
-
-  def get_city_by_iata_code( self, iata_code : str ) -> dict:
-    """ returns a list of cities whose name match iata_code
-
-    Raises:
-      MultipleMatchError or NoCityError
-
-
-    """
-    cities = self.get_city_list_by_iata_code( iata_code )
-    if len( cities ) >=1:
-      return cities[ 0 ]
-    raise NoMatchError( f"unable to find city with IATA code {iata_code}" )
-
-  def get_city_by_city_name_country( self, city_name, country, state=None ) -> dict:
-    """ returns the unique city (when possible) whose name match
-        city_name, country and state (when provided)
-
-    Raises:
-      MultipleMatchError or NoCityError
-    """
-    try:
-      city_list =  self.get_city_list_by_city_name_country( city_name, country, state=state )
-      city = self.is_city( city_list )
-    except NoMatchError:
-      raise NoMatchError( f"ERROR: unable to find {city_name}, {country}, {state}" )
-    return city
-
-  def get_city_by_country( self, country:str ):
-    """ returns a city from country which designates a country
-
-    Args:
-     country (str) : It has currenlty beein tested with country set
-       to ISO3166 country codes, but country is expected to be the
-       ISO code or any other country designation.
-
-
-     Todo:
-       * needs to be rewritten so it works with input that are
-         different from the ISO code. I think we should consider
-         the country, country_iso (which is a representation of
-         country ) and country_effective_iso, is the actual country
-         considered for the airport. In our case country_iso should
-         be designated as country_effective_iso.
-     """
-    if country in [ 'RS', 'ME' ]:
-      country_iso = country
-    else:
-      ## check country neeeds to be swapped
-      try :
-        country = ISO3166_SWAP[ country ]
+      iata_list =  []
+    airport_list = []
+    for iata in iata_list :
+      ## we do only have an on purpose  partial list of airport
+      ## so we only considers those we have e.g large - medium - small
+      try:
+        airport_list.append( self.airportDB.get_airport_by_iata( iata ) )
       except KeyError:
         pass
-      ## try to get country ( and country_iso) from country
+    return airport_list
+
+  def has_airports( self, city:dict, airport_type:str=None ):
+    """ checks a city has at least one airports of specified type 
+     
+    Args:
+      city (dict) a city object
+      airport_type (str): None or one of "large_airport", "medium_airport", "small_airport" 
+    Returns:
+      result (bool)
+    """
+    if airport_type not in [ None, "large_airport", "medium_airport", "small_airport" ] :
+      raise ValueError( f"Unvalid airport type {airport_type}. "\
+                        f" Expected values are None, 'large_airport', " \
+                        f"'medium_airport', 'small_airport' " )
+    result = False
+    airport_list = self.airport_list_of( city )
+    if airport_type is None :
+      if len( airport_list ) != 0:
+        result = True
+    else:
+      if airport_type == "small_airport":
+        check_type_list = [ "large_airport", "medium_airport", "small_airport" ]
+      elif airport_type == "medium_airport":
+        check_type_list = [ "large_airport", "medium_airport" ]
+      elif airport_type == "large_airport":
+        check_type_list = [ "large_airport" ]
+      for airport in airport_list:
+        if airport[ 'type' ] in check_type_list :
+          result = True
+          break
+    return result
+
+  def get_city_by_iata( self, iata ):
+
+    return self.iata_dict[ iata] 
+
+  def get_city( self,  **kwargs ) -> list :
+    """ returns cities matching keywords arguments """
+
+    city_list = []
+    for city in self.iata_city_list :
+      for k, v in kwargs.items() :
+        if city[ k ] != v :
+          break
+      else:
+        city_list.append( city )
+      continue
+    return city_list  
+
+  def country_representative_city( self, country:str ) -> dict :
+    """ returns a list of representative cities associate to the country 
+
+    The input is a country that is either a string or a country code. 
+    From that country code, a representative city is selected. 
+    That city is the largest economic city of the country - which 
+    usually is the capital of the country. 
+    For the US, the representative city is WS or LAX that is randomly chosen. 
+   
+    Nominatim is a general purpose api that matches a specific address to a geodesic point. 
+    In the case of country code, we do prefer to rely on a data base provided by country_info.
+    """ 
+    ## try a cache lookup
+    try:
+      city = self.micro_cache[ country ]
+      if len( self.micro_cache.keys() ) > 10000:
+        self.micro_cache = {}
+      return city
+    except KeyError:
+      pass
+    ## we add such rule CountryInfo in multiple cases does not recognize
+    ## the country codes.
+    ## This is caught up with ISO3166_REPRESENTATIVE_CITY
+    ## It is highly expected that we update CountryInfo
+    if len( country ) == 2:
+      country_iso = country
+    else:
       try:
         country_info = CountryInfo( country )
       except:
@@ -552,43 +445,118 @@ class CityDB (JCacheList):
       try:
         country_iso = country_info.iso( 2 )
       except:
-        raise ValueError( f"Unable to provide ISO(2) country code for {country}." )
-
-    ## get city_name
-    ## mapping to a city is usually done by mapping a country code to the largest city
-    ## designation that is in the IATA DB - to get an airport.
-    ## Note that in some case, the largest city is not in the country and is not
-    ## the largest city of that neighbor country.
-    ## For that reason a country is bound to a country (se above country swapping) and
-    ## also a country.
-    if country == 'AD': ## country = FR
-      city_name = 'Toulouse'
-    elif country == [ 'BT', 'NP' ]:
-      city_name = 'Lhasa/Lasa'
-    elif country == 'TL':
-      city_name = 'Makassar'
-    elif country_iso == 'US':
+        raise ValueError( f"Unable to provide ISO(2) country code for country {country}." )
+    ## the use of random prevents the use of the cache
+    if country_iso == 'US':
       r = random()
       if r < 0.5:
-        city_name = 'Washington D.C.'
+        city =   {
+          "name": "Washington D.C.",
+          "iata": "WAS",
+          "latitude": 38.8949924,
+          "longitude": -77.0365581,
+          "country": "US",
+          "state": None }
       else:
-        city_name = 'Los Angeles'
-    else :
-      try:
-        city_name = ISO3166_TO_IATA_CITY[ country_iso ]
-      except KeyError :
+        city =  {
+          "name": "Los Angeles",
+          "iata": "LAX",
+          "latitude": 34.0536909,
+          "longitude": -118.242766,
+          "country": "US",
+          "state": "CA"}
+    else:
+      ## check the representative city has been identified 
+      if country_iso in ISO3166_REPRESENTATIVE_CITY.keys() :
+        city_name = ISO3166_REPRESENTATIVE_CITY[ country_iso ]
+        ## try a first match between city_name, country
+        ## and a fall back to city name only 
+        city_list = self.get_city( name=city_name, country=country_iso )
+        if len( city_list ) == 0:
+          city_list = self.get_city( name=city_name )
+        if len( city_list ) != 1:
+          raise ValueError( f"Unable to return a single city from "\
+                            f"ISO3166_REPRESENTATIVE_CITY for {country_iso}."\
+                            f"city_list : {city_list[: min( 5, len( city_list ) ) ] }" )
+        city = city_list[ 0 ]
+      else :
         try:
-          city_name = self.matching_city_db_name( country_info.capital() )
-        except:
-          raise ValueError( f"Unable to find capital of country {country_iso}." )
-    return self.get_city_by_city_name_country( city_name, country_iso, state=None )
+          iata_coordinates = CountryInfo( country_iso ).capital_latlng()
+          self.logger.debug( f"{iata_coordinates} for ( {country_iso}, "\
+                             f"{CountryInfo( country_iso ).capital()} )" ) 
+        except KeyError:
+          ## For many small and recent new territories, CountryInfo 
+          ## does not know the capital but that the self.iata_city_list 
+          ## has only a single iata city for the corresponding 
+          ## country_iso code. 
+          ## 
+          print( f"CountryInfo is unable to find capital for country {country}." ) 
+          
+          city_list = self.get_city( country=country_iso )
+          if len( city_list ) != 1: 
+             raise ValueError( f"Unable to find capital for country {country}." )
+        else:   
+          iata_city  = { "latitude" : iata_coordinates[ 0 ], 
+                         "longitude" : iata_coordinates[ 1 ] }
+          city_list = self.neighboring_city_list( iata_city, list_len=1, max_dist=None)  
+        city = city_list[ 0 ]
+      self.micro_cache[ country ] = city
+    return city 
 
+  def neighboring_city_list( self, ref_city, list_len=10, \
+                             max_dist=1000, airport_type=None ) -> list :
+    """ returns a list of sure sundering iata_cities 
+     
+    Lists all cities that are within the max_dist distance from iata_city.
+    The resulting list is sorted in increasing distance and only the closest list_len are 
+    retuned.
+  
+    Args:
+      ref_city (dict): a city represented by a dictionary. 
+        Note that only the latitude and longitude parameters are used.
+      list_len (int): the maximum number of surrounding cities that are returned.
+        default list len is 10. WHen set to 1 it returns the closest iata 
+        city of self.iata_city_list.
+      max_dist (float): the distance range in km of surrounding cities to be considered. 
+    
+    """
+    city_list = []
+    for city in self.iata_city_list : 
+      ## check if the city has expected airport size
+      if self.has_airports( city, airport_type=airport_type ) is False :
+        continue
+      city[ 'distance' ] = self.dist( ref_city , city )
+      if list_len == 1: ## we are looking at the closest
+        if len( city_list ) == 0:
+          city_list = [ city ]
+        else: 
+          if city[ 'distance' ] < city_list[ 0 ][ 'distance' ]:
+            city_list = [ city ]
+        continue
+      else : ## list is != 1 and can be None
+        appened = False
+        if max_dist is None :
+          city_list.append( city )
+          appened = True
+        else :
+          if city[ 'distance' ] < max_dist :
+            city_list.append( city )
+            appened = True
+        if appened is True:
+          city_list.sort( key = lambda city : city[ 'distance' ] )
+          city_list = city_list[: list_len]
+    return city_list
 
-  def best_guess( self, location ) -> dict:
+  def closest_city( ref_city, airport_type=None ) -> dict :
+    city_list = self.neighboring_city_list( ref_city, list_len=1, max_dist=None,\
+                                            airport_type=airport_type)
+    return city_list[ 0 ]
+
+  def representative_city( self, location ) -> dict:
     """ makes its best to output a city from location
 
     Args:
-      location: may be a string that represents a IATA code, a city name,
+      location: may be a string that represents a IATA code, a country,
         a tuple (city, state, coutry) or ( city, country )
 
     Returns:
@@ -597,51 +565,25 @@ class CityDB (JCacheList):
       * micro_cache is expected handle repeated queries. It currently
         applies to all queries, though we mostly tested it for country.
     """
-
-    ## cache
-    if len( self.micro_cache.keys() ) > 10000:
-      self.micro_cache = {}
-    try: ## check value is in micro cache
-      if location == 'US':
-        r = random()
-        if r < 0.5:
-          city =   {
-            "name": "Washington D.C.",
-            "iata": "WAS",
-            "latitude": 38.8949924,
-            "longitude": -77.0365581,
-            "country": "US",
-            "state": None }
-        else:
-          city =  {
-            "name": "Los Angeles",
-            "iata": "LAX",
-            "latitude": 34.0536909,
-            "longitude": -118.242766,
-            "country": "US",
-            "state": "CA"}
-      else:
-        city = self.micro_cache[ location ]
+    ## try a cache lookup
+    try:
+      city = self.micro_cache_representative_city[ location ]
+      if len( self.micro_cache_representative_city.keys() ) > 10000:
+        self.micro_cache = {}
       return city
     except KeyError:
       pass
-##    print( f"best_guess : location: {str(location)}" )
-    if isinstance( location, str ):
-      try:
-        ## guessing a city from IATA code
-        city = self.get_city_list_by_iata_code( location )
-##        print( f"best_guess : self.get_city_list_by_iata: {city}" )
-        self.is_city( city )
-      except NoMatchError:
-        try:
-          ## guessing city from name. We pick one we have teh corresponding IATA code
-          city_name = self.matching_city_db_name( location )
-          city = self.get_city_by_name( city_name )
-          self.is_city( city )
-        except NoMatchError:
-          ## trying from a country
-          city = self.get_city_by_country( location )
-##          print( f"best_guess : self.get_city_by_country: {city}" )
+    if isinstance( location, str ) and ' ' not in location :
+      ## IATA city code
+      if location in self.iata_city_iata_airport_list_dict.keys():
+        city_list = self.get_city_by_iata( iata )
+        city = city_list[ 0 ] 
+      ## IATA airport
+      elif location in self.iata_airport_iata_city_dict.keys():
+        city = self.iata_airport_iata_city_dict[ location ]
+      ## country
+      else:
+        city = self.country_representative_city( location )
     elif isinstance( location, tuple ):
       city_name = location [ 0 ]
       if len( location ) == 2:
@@ -650,17 +592,17 @@ class CityDB (JCacheList):
       if len( location ) == 3:
         state = location[ 1 ]
         country = location[ 2 ]
-      city = self.get_city_by_city_name_country( city_name, country, state=state )
+      city_list = self.get_city( name=city_name, country=country, state=state )
+      city = city_list[ 0 ]
     else:
-      raise NoMatchError( location )
-    self.micro_cache[ location ] = city
-##    print( f"best_guess: len( micro_cache ) : {len( self.micro_cache )}" )
-    return city
+      raise ValueError( f"Unable to resolve {location}" )
+    self.micro_cache_representative_city[ location ] = city
+    return city 
 
   def dist( self, departure: dict, arrival: dict, dist_type='geodesic') :
     """ geodesic distance
 
-       dep. / arrival are city object ( -- eventually returned by best_guess )
+       dep. / arrival are city object ( -- eventually returned by representative_city )
     """
     coordinates = []
     for city in [ departure, arrival ]:
@@ -882,6 +824,9 @@ class FlightDB(JCacheDict):
     super().__init__( self.cache_flight )
     self.departure_date = self.default_date().isoformat()
     self.return_date = ( self.default_date() + timedelta( weeks=1 ) ).isoformat()
+    self.logger = logger( conf, __name__ )
+    ## non persistent micro-cache
+    self.micro_cache_force_select_flight = {}
 
   def default_date( self ):
     """ reurn next Friday next month in iso8601 format
@@ -940,8 +885,8 @@ class FlightDB(JCacheDict):
       ## https://pypi.org/project/amadeus/
       ## https://nvbn.github.io/2019/05/13/summer-trip/
       if return_date is None :
-        print( f"    - requesting amadeus single flight {origin} - {destination},"\
-               f" {departure_date} for {adults} adult(s)" )
+        self.logger.info( f"requesting amadeus single flight {origin} - {destination},"\
+                          f" {departure_date} for {adults} adult(s)" )
         response = self.amadeus.shopping.flight_offers_search.get(
           originLocationCode=origin,
           destinationLocationCode=destination,
@@ -952,8 +897,8 @@ class FlightDB(JCacheDict):
 ##        max
           adults=adults)
       else:
-        print( f"    - requesting amadeus round trip flight for {origin} " \
-               f"-{destination} - {departure_date} for {adults} adult(s)" )
+        self.logger.info( f"requesting amadeus round trip flight for {origin} " \
+                          f"-{destination} - {departure_date} for {adults} adult(s)" )
         response = self.amadeus.shopping.flight_offers_search.get(
           originLocationCode=origin,
           destinationLocationCode=destination,
@@ -965,7 +910,14 @@ class FlightDB(JCacheDict):
 ##        max
           adults=adults)
     except ResponseError as error:
-      raise ValueError( f"Unable to retrieve Amadeus response {error}" )
+      msg = f"Unable to retrieve Amadeus response {error} for "\
+            f"{origin} -{destination} - {departure_date} for {adults} adult(s)"
+      self.logger.warning( msg )
+      print( f"error: {error} / {type(error)} {error == [400] }") 
+      if error != [400]:
+        self.logger( f" {error} is a service error - probably over quotat") 
+      raise ValueError( error )
+      
     cache_resp = { 'origin' : origin,
                    'destination' : destination,
                    'departure_date' : departure_date,
@@ -1114,8 +1066,8 @@ class FlightDB(JCacheDict):
     if amadeus_offer_list != []:
       search_offer = amadeus_offer_list[ 0 ]
     else:
-      print( f"    - retrieve amadeus : {origin} - {destination} "\
-             f"(departure_date, return_date) : {str((departure_date, return_date))}" )
+#      print( f"    - retrieve amadeus : {origin} - {destination} "\
+#             f"(departure_date, return_date) : {str((departure_date, return_date))}" )
       search_offer = self.retrieve_amadeus(origin, destination, \
                        departure_date=departure_date, return_date=return_date, \
                        adults=adults )
@@ -1150,6 +1102,77 @@ class FlightDB(JCacheDict):
     return self.get_first( origin=origin, destination=destination,\
                            departure_date=departure_date, \
                            return_date=return_date, adults=adults, cabin=cabin )
+
+  def force_select_flight(self, origin, destination ):
+    """ implements multiple tries to search an acceptable flight
+
+    In some cases, flight search fails, and for the purpose of CO2 computation some arguments may be twicked.
+    This function proceeds as follows. 
+    1- the same request is retried in case the service is failing
+    2- the date are change to 5 days ahead. This only reason for taking 5 is that it is not 7.
+    3- the may try up to 3 with different cities with a large airport
+
+    The function is limited to origin destination to ease the implementation of a additional level of cache. 
+    The force function may lead to multiple amadeus request and the cache function does not perform negative caching. 
+    As a result, in case of errors the same group of requests may be performed several times. 
+    To prevent this to happen, the origin destination result is cached into the micro_cache 
+    which is destroyed  at any restart. 
+    """
+    
+    try:
+      flight = self.micro_cache_force_select_flight[ (origin, destination) ]
+      return flight 
+    except KeyError:
+      try :
+        flight = self.micro_cache_force_select_flight[ (destination, origin) ]
+        return flight 
+      except KeyError:
+        pass
+     
+    try:
+      flight = self.select_flight( origin, destination )
+    except ValueError as error :
+      self.logger.warning( f"Unable to retrieve flight from {origin} to {destination} "\
+                           f"with default dates - retrying")
+      if error != [400]:
+        raise ValueError( f" {error} is a service error - probably over quotat") 
+      try:
+        flight = self.select_flight( origin, destination )
+      except ValueError :
+        ## retry with other dates - in this case 5 days later
+        departure_date = self.departure_date
+        return_date = self.return_date
+        alt_departure = datetime.strptime( departure_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
+        alt_departure = ( alt_departure + timedelta( days=5 ) ).isoformat()
+        alt_return = datetime.strptime( return_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
+        alt_return = ( alt_return + timedelta( days=5 ) ).isoformat()
+        self.logger.warning( f"Unable to retrieve flight from {origin} to {destination} "\
+                             f"with default dates - changing dates + 5 days")
+        try:
+          flight = self.select_flight( origin, destination, departure_date=alt_departure, return_date=alt_return )
+        except ValueError :
+          ## trying with other cities
+          origin_city = self.cityDB.representative_city( origin )
+          city_list = self.cityDB.neighboring_city_list( origin_city, list_len=4, \
+                                                     max_dist=None, airport_type="large_airport" )
+          ## removing origin_city - if it already had an large airport
+          if origin_city in city_list:
+            city_list.remove( origin_city )
+          for city in city_list[ : 3 ] :
+            try:
+              self.logger.warning( f"Unable to retrieve flight from {origin} to {destination} "\
+                                   f"with changed dates - changing {origin_city} destination to {city}")
+              flight = self.select_flight( city[ 'iata' ], destination )
+            except ValueError :
+              continue
+            break
+          else:
+            msg = f"Unable to retrieve flight from {origin} to {destination} "\
+                  f"including changing dates and cities {city_list} "
+            self.logger.warning( msg )
+            raise ValueError( msg )
+    self.micro_cache_force_select_flight[ (origin, destination) ] = flight
+    return flight
 
 class Flight:
 
@@ -1222,15 +1245,12 @@ class Flight:
         airport = self.airportDB.get_airport_by_iata( iata )
         coordinates.append( ( airport[ 'latitude' ], airport[ 'longitude' ] ) )
       except KeyError:
-##        raise NoMatchError( f"IATA airport code {iata}" )
-##        elif len( airport_list ) > 1:
-##          raise MultipleMatchError( f"IATA airport code {iata} - [{airport_list}]" )
-##        airport = airport_list[ 0 ]
         try:
-          city = self.cityDB.get_city_by_iata_code( iata )
+          city = self.cityDB.get_city_by_iata( iata )
           coordinates.append( ( city[ 'latitude' ], city[ 'longitude' ] ) )
         except:
-          raise ValueError(f"{iata}: Not proper IATA airport or city code" )
+          raise ValueError(f"{city} cannot be retrieved from {iata}: "\
+                           f"Check {iata} is proper IATA airport or city code" )
     return great_circle( coordinates[0], coordinates[1] ).km
 
   ## myclimate2018_co2
@@ -1281,7 +1301,8 @@ class Flight:
     if iata in [ 'ZYR' ] or self.airportDB.is_iata_airport_code( iata ) == True :
       iata_list = [ iata ]
     elif self.cityDB.is_iata_city_code( iata ):
-      iata_list = self.cityDB.get_iata_airport_list_from_iata_city( iata )
+      airport_list = self.cityDB.airport_list_of( { 'iata': iata } )
+      iata_list = [ airport[ 'iata' ]  for airport in airport_list ]
     else : 
       raise ValueError( f"Unexpected city IATA code {iata}" \
         f"-- neither city IATA code nor airport IATA code. Consider " \
@@ -1342,67 +1363,4 @@ class Flight:
       'travel_duration' : str( self.travel_duration ),
       'flight_duration' : str( self.flight_duration ),
       'co2eq' : self.co2eq }
-
-
-
-##  methods to get Co2
-## https://api.goclimate.com/docs
-## https://applications.icao.int/icec
-## https://github.com/Alec-Stashevsky/GAP-climate-research
-
-##maybe there is a need to get a cookie by HTTP GET
-##
-##GET /icec HTTP/1.1
-##Host: applications.icao.int
-##Connection: keep-alive
-##Cache-Control: max-age=0
-##Upgrade-Insecure-Requests: 1
-##User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36
-##Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-##Sec-GPC: 1
-##Sec-Fetch-Site: none
-##Sec-Fetch-Mode: navigate
-##Sec-Fetch-User: ?1
-##Sec-Fetch-Dest: document
-##Accept-Encoding: gzip, deflate, br
-##Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
-##Cookie: ASP.NET_SessionId=lgqltsrhs3ufaezc04pyaqns; TS01e182e3=0106b70136df93a9bed7c1b6119011c900da5b0be25884683140ef886eb6436da9ada42c5dee735e72c9b3375fe8a7933be6716a1cf20f704daab30d9d0c5d9dc2c636a230
-##dnt: 1
-##
-##
-##response
-##HTTP/1.1 200 OK
-##Cache-Control: private
-##Content-Type: text/html; charset=utf-8
-##Content-Encoding: gzip
-##Vary: Accept-Encoding
-##Date: Fri, 20 Aug 2021 13:39:24 GMT
-##Content-Length: 17799
-##Strict-Transport-Security: max-age=31104000; includeSubDomains
-##Set-Cookie: TS01e182e3=0106b70136834bdbc0872e32f6f0aaa28d47fa097b620c3c673de4dcaff16c410cf8849ada23f2d9e0257a4d32e25a7e60500bde1a72e27b0d2cc1b266b272bb34e855a71a; Path=/; Domain=.applications.icao.int
-##
-##
-##
-##POST /icec/Home/getCompute HTTP/1.1
-##Host: applications.icao.int
-##Connection: keep-alive
-##Content-Length: 151
-##Accept: */*
-##X-Requested-With: XMLHttpRequest
-##User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36
-##Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-##Sec-GPC: 1
-##Origin: https://applications.icao.int
-##Sec-Fetch-Site: same-origin
-##Sec-Fetch-Mode: cors
-##Sec-Fetch-Dest: empty
-##Referer: https://applications.icao.int/icec
-##Accept-Encoding: gzip, deflate, br
-##Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
-##Cookie: ASP.NET_SessionId=lgqltsrhs3ufaezc04pyaqns; TS01e182e3=0106b70136df93a9bed7c1b6119011c900da5b0be25884683140ef886eb6436da9ada42c5dee735e72c9b3375fe8a7933be6716a1cf20f704daab30d9d0c5d9dc2c636a230
-##dnt: 1
-##
-##
-## ASP.NET_SessionId=lgqltsrhs3ufaezc04pyaqns; TS01e182e3=0106b70136df93a9bed7c1b6119011c900da5b0be25884683140ef886eb6436da9ada42c5dee735e72c9b3375fe8a7933be6716a1cf20f704daab30d9d0c5d9dc2c636a230
-
 
