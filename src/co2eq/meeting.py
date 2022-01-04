@@ -1,5 +1,6 @@
 #import inspect
 import os
+from os import listdir
 from os.path import join, isfile, isdir
 #from html.parser import HTMLParser
 import json
@@ -10,6 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 #import numpy as np
 import requests
+from math import ceil
 from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, Flight, logger
 
 
@@ -20,8 +22,8 @@ plt.rcParams.update({'figure.max_open_warning': 0})
 
 class Meeting:
 
-  def __init__( self, name:str, conf={},  airportDB=True, cityDB=True, \
-                flightDB=True, goclimateDB=True ):
+  def __init__( self, name:str, base_output_dir=None, conf={},  airportDB=True, \
+                cityDB=True, flightDB=True, goclimateDB=True ):
     """ Meeting class
 
     Since conf is used to generate some DB (goclimateDB), DB can either
@@ -69,9 +71,13 @@ class Meeting:
                            goclimateDB=self.goclimateDB)
     self.flightDB = flightDB
     # print( f"meeting iata location: {self.iata_location}" )
-    self.cache_base = join( self.conf[ 'CACHE_DIR' ], self.name )
-    if isdir( self.cache_base ) is False:
-      os.makedirs( self.cache_base )
+    if base_output_dir is None:
+      base_output_dir = self.conf[ 'OUTPUT_DIR' ]
+##      self.cache_base = join( self.conf[ 'CACHE_DIR' ], self.name )
+    self.output_dir = join( base_output_dir, self.name )
+
+    if isdir( self.output_dir ) is False:
+      os.makedirs( self.output_dir )
     self.attendee_list = None
     self.logger = logger( conf, __name__ )     
 
@@ -106,6 +112,7 @@ class Meeting:
     return mode, cluster_key, co2eq 
 
   def kwargs_to_file_name( self, suffix:str, extension:str, kwargs:dict ) -> str:
+    """ build a file name string from kwargs """
     ## output file_name
     file_name = suffix
     ## removing None values
@@ -121,6 +128,30 @@ class Meeting:
     for key, value in kwargs.items():
       file_name += f"-{key}_{value}"
     return file_name + f".{extension}"
+
+  def file_name_to_kwargs( self, file_name ): 
+    """ retrieves kwargs from a file name """
+    
+    cluster_key = None
+    co2eq = None
+    mode = None
+    for seg in file_name.split('-'):
+      if 'mode' in seg:
+        mode = seg.split( '_' )[1]
+      elif 'cluster_key' in seg:
+        cluster_key_split = seg.split( '_' )[2:]
+        if isinstance( cluster_key_split, list ) :
+          cluster_key = ""
+          for word in cluster_key_split:
+            cluster_key += f" {word}"
+        else:
+          cluster_key = cluster_key_split
+      elif 'co2eq_' in seg:
+        co2eq = seg.split( '_' )[1]
+ 
+    return { 'mode' : mode,
+             'cluster_key' : cluster_key,
+             'co2eq' : co2eq }
 
   def build_co2eq_data( self, mode='flight', cluster_key=None, co2eq='myclimate' ) -> dict :
     """ co2 equivalent based on real flights including multiple segments)
@@ -143,7 +174,7 @@ class Meeting:
                                                         cluster_key=cluster_key, co2eq=co2eq )
     kwargs = { 'mode' : mode, 'cluster_key' : cluster_key, 'co2eq' : co2eq }
 
-    data_file = join( self.cache_base, self.kwargs_to_file_name( 'co2eq', 'json.gz', kwargs ) )
+    data_file = join( self.output_dir, self.kwargs_to_file_name( 'co2eq', 'json.gz', kwargs ) )
     if isfile( data_file ) is True:
       with gzip.open( data_file, 'rt', encoding="utf8" ) as f:
         return json.loads( f.read() )
@@ -366,7 +397,7 @@ class Meeting:
     
     mode_list, cluster_key, cluster_nbr, co2eq_list, kwargs = \
       self.plot_co2eq_default_kwargs( mode, cluster_key, cluster_nbr, co2eq )
-    fig_file = join( self.cache_base, self.kwargs_to_file_name( 'co2eq', 'svg', kwargs  ) )
+    fig_file = join( self.output_dir, self.kwargs_to_file_name( 'co2eq', 'svg', kwargs  ) )
     if isfile( fig_file ) is True:
       return
 
@@ -406,11 +437,11 @@ class Meeting:
 
   def cluster_dict( self, mode='flight', cluster_key=None, co2eq=None ) -> dict:
     """ returns the dictionary associated to a cluster_key. """
-    ## we need to define a common function to retriev ethe file ( see build_co2eq_data )
+    ## we need to define a common function to retrieve the file ( see build_co2eq_data )
     mode, cluster_key, co2eq = self.sanity_check_args( mode=mode, \
                                                         cluster_key=cluster_key, co2eq=co2eq )
     kwargs = { 'mode' : mode, 'cluster_key' : cluster_key, 'co2eq' : co2eq } 
-    data_file = join( self.cache_base, self.kwargs_to_file_name( 'co2eq', 'json.gz', kwargs ) )
+    data_file = join( self.output_dir, self.kwargs_to_file_name( 'co2eq', 'json.gz', kwargs ) )
     if isfile( data_file ) is True:
       with gzip.open( data_file, 'rt', encoding="utf8" ) as f:
         json_data = json.loads( f.read() )
@@ -440,6 +471,61 @@ class Meeting:
         continue
     return attendee_list   
 
+  def md( self, banner="" , toc=True):
+    """ generates the md page with all figures"""
+
+    svg_dict = { 'flight' : "", 'distance' : "", 'attendee' : "" }
+    mode_list = []
+    cluster_key_list = []
+    fig_list = []
+    for f in listdir( self.output_dir ):
+      if 'svg' not  in f:
+        continue
+      arg_dict = self.file_name_to_kwargs( f )
+      if arg_dict[ 'mode' ] is None: ## only mandatory parameter
+        continue
+      arg_dict[ 'md_text' ] =  f"![]({f})\n"
+      if arg_dict[ 'mode' ] not in mode_list:
+        mode_list.append( arg_dict[ 'mode' ] )
+      elif arg_dict[ 'cluster_key' ]  not in cluster_key_list:
+        cluster_key_list.append( arg_dict[ 'cluster_key' ] )
+      fig_list.append( arg_dict )
+    if None in cluster_key_list:
+      cluster_key_list.remove( None )
+      cluster_key_list.insert( 0, None )
+
+    toc_md = "Table of Contents\n\n"
+    md = ""
+    for mode in [ 'flight', 'distance', 'attendee' ]: ## mode
+      if mode not in mode_list:
+        continue
+      title = f"CO2 Estimation in {mode} mode"
+      toc_md += f"* [{title}](#{mode})\n"
+      md += f"<div id=\"{mode}\"></div>\n## {title}\n\n"
+      for cluster_key in cluster_key_list:
+        if cluster_key not in cluster_key_list :
+          continue
+        if cluster_key is None:
+          title = f"No Clustering"
+        else:
+          title = f"Clustering by key {cluster_key}"
+        toc_md += f"  * [{title}](#{mode}-{cluster_key})\n"
+        md += f"<div id=\"{mode}-{cluster_key}\"></div>\n### {title}\n\n"
+        for fig in fig_list:
+          if fig[ 'mode' ] == mode and fig[ 'cluster_key' ] == cluster_key:
+            md += fig[ 'md_text' ]
+        md += "\n"
+
+    with open( join( self.output_dir, "index.md"), 'wt', encoding='utf8' ) as f:
+      header = f"# {self.name} Data\n\n"
+      if toc is False:
+        f.write( f"\n{banner}\n\n{header}\n{md}" )
+      else: 
+        f.write( f"\n{banner}\n\n{header}\n{toc_md}\n{md}" )
+
+
+
+
 ## inherite from Meeting
 class MeetingList(Meeting):
 
@@ -447,14 +533,14 @@ class MeetingList(Meeting):
     self.name = name
     self.conf = conf
     self.meeting_list = meeting_list
-    self.cache_base = join( conf[ 'CACHE_DIR' ], self.name )
-    if isdir( self.cache_base ) is False:
-      os.makedirs( self.cache_base )
+    self.output_dir = join( conf[ 'OUTPUT_DIR' ], self.name )
+    if isdir( self.output_dir ) is False:
+      os.makedirs( self.output_dir )
     if airportDB is True:
       airportDB = AirportDB()
       self.airportDB = airportDB
     if  cityDB is True:
-      cityDB = CityDB( )
+      cityDB = CityDB( conf, airportDB=self.airportDB )
     self.cityDB = cityDB
     if goclimateDB is True:
       goclimateDB=GoClimateDB( conf )
@@ -463,6 +549,7 @@ class MeetingList(Meeting):
       flightDB = FlightDB( conf, cityDB=self.cityDB, airportDB=self.airportDB, \
                            goclimateDB=self.goclimateDB)
     self.flightDB = flightDB
+    self.logger = logger( conf, __name__ )     
 
   def get_meeting( self, meeting ):
     """ return a meetin object from the content of meeting_list
@@ -474,8 +561,7 @@ class MeetingList(Meeting):
     if isinstance( meeting, Meeting ):
       return meeting
     else:
-      return Meeting( name=meeting )
-      raise ValueError("Unable to return meeting object from meeting_list" )
+      return Meeting( meeting, conf=conf, flightDB=self.flightDB, airportDB=self.airportDB, cityDB=self.cityDB, goclimateDB=self.goclimateDB )
 
   def plot_co2eq( self, mode=None, cluster_key=None, cluster_nbr=None, \
                   co2eq=None, figsize=(10,4), column_label=None, \
@@ -497,7 +583,7 @@ class MeetingList(Meeting):
     if kwargs[ 'cluster_nbr' ] is not None and not isinstance( kwargs[ 'cluster_nbr' ], int ):
       raise ValueError( f"Unacceptable arguments. cluster_nbr must be int or None. {kwargs}" )
 
-    fig_file = join( self.cache_base, self.kwargs_to_file_name( 'co2eq', 'svg', kwargs  ) )
+    fig_file = join( self.output_dir, self.kwargs_to_file_name( 'co2eq', 'svg', kwargs  ) )
     if isfile( fig_file ) is True:
       return
 
@@ -525,51 +611,110 @@ class MeetingList(Meeting):
 #    plt.show()
 
 
+  def banner_cell( self, meeting_list_url, meeting_name ):
+    if meeting_list_url[ -1 ] != '/' :
+      meeting_list_url += '/'
+    meeting_url = meeting_list_url + meeting_name
+##   return f"[{meeting_name}]({meeting_url})"
+    return f"<a href='{meeting_url}'>{meeting_name}</a>"
 
+## in meetingList
+## meeting_list is in the object
+  def banner_md( self, meeting_list_url, col_nbr=10):
+    row_nbr = ceil( ( len( self.meeting_list ) + 1 ) / col_nbr )
+    ## meeting list including meetingList
+    meeting_list = [ self.banner_cell( meeting_list_url, m ) for m in self.meeting_list ]
+    meeting_list.insert( 0, self.banner_cell( meeting_list_url, self.name ) )
+
+    ## note that modifying the indentiation of the html block makes it 
+    ## mis-interpreted by jekyl and so produces a bad html rendering. 
+    begin_table = \
+    """
+  <html>
+  <style>
+  table, th, td {
+    border: 0px none;
+    padding: 0px;
+  }
+  </style>
+  <body>
+    <table style="width:100%">
+    """
+    end_table = \
+    """
+    </table>
+  </body>
+  </html>
+    """
+    banner = begin_table
+    for row in range( row_nbr ):
+      banner += "      <tr>\n"
+      for col in range( col_nbr ):
+        try:
+          banner += f"<td>{meeting_list[ row * col_nbr + col ]}</td>\n"
+        except IndexError:
+          banner += f"<td> </td>\n"
+      banner += "      </tr>\n"
+ 
+    banner += end_table
+    return banner
+
+  def www_md( self, meeting_list_url, col_nbr=10, toc=True):
+    """ generates all md pages for the IETF meetings """
+    banner = self.banner_md( meeting_list_url, col_nbr=col_nbr )
+    # self.md( banner ) 
+    self.md( banner )
+    for meeting_name in self.meeting_list:
+      meeting = self.get_meeting( meeting_name )
+      meeting.md( banner, toc=toc ) 
 
 ## We may need to specify the remote nature of the meeting and the name when
 ## it differs from teh closest airport
-IETF_LOCATION = {  72 : ( 'Dublin',        'IE' ),
-                   73 : ( 'Minneapolis',   'US' ),
-                   74 : ( 'San Francisco', 'US' ),
-                   75 : ( 'Stockholm',     'SE' ),
-                   76 : ( 'Osaka',         'JP' ),
-                   77 : ( 'Los Angeles',   'US' ),
-                   78 : ( 'Brussels',      'BE' ),
-                   79 : ( 'Beijing',       'CN' ),
-                   80 : ( 'Prague',        'CZ' ),
-                   81 : ( 'Montreal',      'CA' ),
-                   82 : ( 'Taipei',        'TW' ),
-                   83 : ( 'Paris',         'FR' ),
-                   84 : ( 'Vancouver',     'CA' ),
-                   85 : ( 'Atlanta',       'US' ),
-                   86 : ( 'Orlando',       'US' ),
-                   87 : ( 'Berlin',        'DE' ),
-                   88 : ( 'Vancouver',     'CA' ),
-                   89 : ( 'London',        'GB' ),
-                   90 : ( 'Toronto',       'CA' ),
-                   91 : ( 'Honolulu',      'US' ),
-                   92 : ( 'Dallas/Fort W', 'US' ),
-                   93 : ( 'Prague',        'CZ' ),
-                   94 : ( 'Tokyo',         'JP' ),
-                   95 : ( 'Buenos Aires',  'AR' ),
-                   96 : ( 'Berlin',        'DE' ),
-                   97 : ( 'Seoul',         'KR' ),
-                   98 : ( 'Chicago',       'US' ),
-                   99 : ( 'Prague',        'CZ' ),
-                  100 : ( 'Singapore',     'SG' ),
-                  101 : ( 'London',        'GB' ),
-                  102 : ( 'Montreal',      'CA' ),
-                  103 : ( 'Bangkok',       'TH' ),
-                  104 : ( 'Prague',        'CZ' ),
-                  105 : ( 'Montreal',      'CA' ),
-                  106 : ( 'Singapore',     'SG' ),
-                  107 : ( 'Vancouver',     'CA' ),
-                  108 : ( 'Madrid',        'ES' ),
-                  109 : ( 'Bangkok',       'TH' ),
-                  110 : ( 'Prague',        'CZ' ),
-                  111 : ( 'San Francisco', 'US' ),
-                  112 : ( 'Madrid', 'ES' )
+##                 meeting name meeting location
+
+## should be a list [ { name : , human man : , iata } ]
+IETF_LOCATION = {
+   'IETF72' : ( 'Dublin',        'IE' ),
+   'IETF73' : ( 'Minneapolis',   'US' ),
+   'IETF74' : ( 'San Francisco', 'US' ),
+   'IETF75' : ( 'Stockholm',     'SE' ),
+   'IETF76' : ( 'Osaka',         'JP' ),
+   'IETF77' : ( 'Los Angeles',   'US' ),
+   'IETF78' : ( 'Brussels',      'BE' ),
+   'IETF79' : ( 'Beijing',       'CN' ),
+   'IETF80' : ( 'Prague',        'CZ' ),
+   'IETF81' : ( 'Montreal',      'CA' ),
+   'IETF82' : ( 'Taipei',        'TW' ),
+   'IETF83' : ( 'Paris',         'FR' ),
+   'IETF84' : ( 'Vancouver',     'CA' ),
+   'IETF85' : ( 'Atlanta',       'US' ),
+   'IETF86' : ( 'Orlando',       'US' ),
+   'IETF87' : ( 'Berlin',        'DE' ),
+   'IETF88' : ( 'Vancouver',     'CA' ),
+   'IETF89' : ( 'London',        'GB' ),
+   'IETF90' : ( 'Toronto',       'CA' ),
+   'IETF91' : ( 'Honolulu',      'US' ),
+   'IETF92' : ( 'Dallas/Fort W', 'US' ),
+   'IETF93' : ( 'Prague',        'CZ' ),
+   'IETF94' : ( 'Tokyo',         'JP' ),
+   'IETF95' : ( 'Buenos Aires',  'AR' ),
+   'IETF96' : ( 'Berlin',        'DE' ),
+   'IETF97' : ( 'Seoul',         'KR' ),
+   'IETF98' : ( 'Chicago',       'US' ),
+   'IETF99' : ( 'Prague',        'CZ' ),
+  'IETF100' : ( 'Singapore',     'SG' ),
+  'IETF101' : ( 'London',        'GB' ),
+  'IETF102' : ( 'Montreal',      'CA' ),
+  'IETF103' : ( 'Bangkok',       'TH' ),
+  'IETF104' : ( 'Prague',        'CZ' ),
+  'IETF105' : ( 'Montreal',      'CA' ),
+  'IETF106' : ( 'Singapore',     'SG' ),
+  'IETF107' : ( 'Vancouver',     'CA' ),
+  'IETF108' : ( 'Madrid',        'ES' ),
+  'IETF109' : ( 'Bangkok',       'TH' ),
+  'IETF110' : ( 'Prague',        'CZ' ),
+  'IETF111' : ( 'San Francisco', 'US' ),
+  'IETF112' : ( 'Madrid', 'ES' )
                   }
 
 ORGANIZATION_MATCH = { 'huaw' : "Huawei",
@@ -653,12 +798,12 @@ class IETFMeeting ( Meeting ):
                 flightDB=True, goclimateDB=True ):
     self.ietf_nbr = int( name[4:] )
     super().__init__( name, conf=conf, cityDB=cityDB, flightDB=flightDB, airportDB=airportDB )
-    self.attendee_list_html = join( self.cache_base,  'attendee_list.html.gz' )
-    self.attendee_list_json = join( self.cache_base,  'attendee_list.json.gz' )
+    self.attendee_list_html = join( self.output_dir,  'attendee_list.html.gz' )
+    self.attendee_list_json = join( self.output_dir,  'attendee_list.json.gz' )
     self.attendee_list = self.get_attendee_list()
 
   def get_location( self ):
-    return IETF_LOCATION[ self.ietf_nbr ]
+    return IETF_LOCATION[ self.name ]
 
   def attendee_location( self, attendee ):
     return attendee[ 'country' ]
@@ -890,25 +1035,24 @@ class IETFMeeting ( Meeting ):
 
 class IETFMeetingList(MeetingList):
 
-  def __init__( self, name="All_IETF_Meetings", conf={}, meeting_list=None, \
+  def __init__( self, name="IETF", conf={}, meeting_list=None, \
                  airportDB=True, cityDB=True, flightDB=True, goclimateDB=True ):
     super().__init__( name, conf=conf, meeting_list=meeting_list )
     if self.meeting_list is None:
-      min_ietf_nbr =  min( IETF_LOCATION.keys() )
-      max_ietf_nbr = max( IETF_LOCATION.keys() )
-      self.meeting_list = [ min_ietf_nbr + i for i in  range( max_ietf_nbr - min_ietf_nbr + 1 ) ]
+#      min_ietf_nbr =  min( IETF_LOCATION.keys() )
+#      max_ietf_nbr = max( IETF_LOCATION.keys() )
+#      self.meeting_list = [ min_ietf_nbr + i for i in  range( max_ietf_nbr - min_ietf_nbr + 1 ) ]
+      self.meeting_list = list( IETF_LOCATION.keys() )
+      self.meeting_list.sort( key = lambda meeting_name: int( meeting_name[4:] ) )
 
-  def get_meeting( self, meeting_designation ):
+  def get_meeting( self, meeting_name ):
     """ returns a meeting object from various representation used to designate that object """
     
-    if isinstance( meeting_designation, int ) :
-      return IETFMeeting( 'IETF' + str( meeting_designation ), conf=self.conf, \
-                          airportDB=self.airportDB, cityDB=self.cityDB, flightDB=self.flightDB,\
+    if isinstance( meeting_name, str ) :
+      return IETFMeeting( meeting_name, conf=self.conf, airportDB=self.airportDB, \
+                          cityDB=self.cityDB, flightDB=self.flightDB,\
                           goclimateDB=self.goclimateDB )
-    elif isinstance( meeting, IETFMeeting ) :
-      return meeting
-    else:
-      raise ValueError("Unable to return meeting object from meeting_list" )
+    raise ValueError("Unable to return meeting object from meeting_list" )
 
   def plot_all( self ):
     for meeting_designation in self.meeting_list:
@@ -928,10 +1072,11 @@ class IETFMeetingList(MeetingList):
 ##      meeting.plot_co2eq( mode=None, cluster_key='country', cluster_nbr=15 )
 ##      meeting.plot_co2eq( mode=None, cluster_key='flight_segment_number',  cluster_nbr=15 )
     self.logger.info( f"\nprocessing {self.name }\n" )
-    if isinstance( self.meeting_list[0], int ):
+    if isinstance( self.meeting_list[0], str ):
       column_label = []
-      for ietf_nbr in self.meeting_list:
-        label = f"{IETF_LOCATION[ ietf_nbr ][ 0 ]}  {ietf_nbr}"
+      for meeting in self.meeting_list:
+#        label = f"{IETF_LOCATION[ meeting ][ 0 ]}  {ietf_nbr}"
+        label = f"{IETF_LOCATION[ meeting ][ 0 ]}  {meeting}"
         label = label.replace( 'Osaka', 'Hiroshima' )
         label = label.replace( 'Dallas/Fort W', 'Dallas' )
         column_label.append( label )
@@ -964,7 +1109,7 @@ def get_flight( conf, origin, destination ):
   offer is provided performs another lookup with different dates.
   In our cases, the dates are 5 days latter.
   """
-  cityDB = CityDB( )
+  cityDB = CityDB( conf, airportDB=airportDB )
   airportDB = AirportDB()
   goclimateDB = GoClimateDB( conf )
   flightDB = FlightDB( conf, cityDB=cityDB, airportDB=airportDB, goclimateDB=goclimateDB)

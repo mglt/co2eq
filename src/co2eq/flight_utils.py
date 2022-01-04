@@ -589,10 +589,13 @@ class CityDB :
       if len( location ) == 2:
         country = location[ 1 ]
         state = None
-      if len( location ) == 3:
+        city_list = self.get_city( name=city_name, country=country  )
+      elif len( location ) == 3:
         state = location[ 1 ]
         country = location[ 2 ]
-      city_list = self.get_city( name=city_name, country=country, state=state )
+        city_list = self.get_city( name=city_name, country=country, state=state )
+      if len( city_list ) == 0:
+        raise ValueError( f"Unable to resolve {location}" )
       city = city_list[ 0 ]
     else:
       raise ValueError( f"Unable to resolve {location}" )
