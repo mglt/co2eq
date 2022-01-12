@@ -10,6 +10,7 @@
   <body>
     <table style="width:100%">
           <tr>
+<td><a href='https://mglt.github.io/co2eq' style='font-size: 30px; text-decoration: none' >⌂</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF'>IETF</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF72'>IETF72</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF73'>IETF73</a></td>
@@ -19,9 +20,9 @@
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF77'>IETF77</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF78'>IETF78</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF79'>IETF79</a></td>
-<td><a href='https://mglt.github.io/co2eq/IETF/IETF80'>IETF80</a></td>
       </tr>
       <tr>
+<td><a href='https://mglt.github.io/co2eq/IETF/IETF80'>IETF80</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF81'>IETF81</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF82'>IETF82</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF83'>IETF83</a></td>
@@ -31,9 +32,9 @@
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF87'>IETF87</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF88'>IETF88</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF89'>IETF89</a></td>
-<td><a href='https://mglt.github.io/co2eq/IETF/IETF90'>IETF90</a></td>
       </tr>
       <tr>
+<td><a href='https://mglt.github.io/co2eq/IETF/IETF90'>IETF90</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF91'>IETF91</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF92'>IETF92</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF93'>IETF93</a></td>
@@ -43,9 +44,9 @@
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF97'>IETF97</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF98'>IETF98</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF99'>IETF99</a></td>
-<td><a href='https://mglt.github.io/co2eq/IETF/IETF100'>IETF100</a></td>
       </tr>
       <tr>
+<td><a href='https://mglt.github.io/co2eq/IETF/IETF100'>IETF100</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF101'>IETF101</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF102'>IETF102</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF103'>IETF103</a></td>
@@ -55,12 +56,11 @@
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF107'>IETF107</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF108'>IETF108</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF109'>IETF109</a></td>
-<td><a href='https://mglt.github.io/co2eq/IETF/IETF110'>IETF110</a></td>
       </tr>
       <tr>
+<td><a href='https://mglt.github.io/co2eq/IETF/IETF110'>IETF110</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF111'>IETF111</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF112'>IETF112</a></td>
-<td> </td>
 <td> </td>
 <td> </td>
 <td> </td>
@@ -77,21 +77,6 @@
 
 # IETF Data
 
-
-Table of Contents
-
-* [CO2 Estimation in flight mode](#flight)
-  * [No Clustering](#flight-None)
-  * [Clustering by key  country](#flight- country)
-  * [Clustering by key  presence](#flight- presence)
-  * [Clustering by key  organization](#flight- organization)
-  * [Clustering by key  flight segment number](#flight- flight segment number)
-* [CO2 Estimation in attendee mode](#attendee)
-  * [No Clustering](#attendee-None)
-  * [Clustering by key  country](#attendee- country)
-  * [Clustering by key  presence](#attendee- presence)
-  * [Clustering by key  organization](#attendee- organization)
-  * [Clustering by key  flight segment number](#attendee- flight segment number)
 
 <div id="flight"></div>
 ## CO2 Estimation in flight mode
