@@ -611,7 +611,9 @@ class MeetingList(Meeting):
 #    plt.show()
 
 
-  def banner_cell( self, meeting_list_url, meeting_name ):
+  def banner_cell( self, meeting_list_url:str, meeting_name:str ) -> str :
+    """ returns the cell of the banner """
+
     if meeting_list_url[ -1 ] != '/' :
       meeting_list_url += '/'
     meeting_url = meeting_list_url + meeting_name
@@ -620,11 +622,35 @@ class MeetingList(Meeting):
 
 ## in meetingList
 ## meeting_list is in the object
-  def banner_md( self, meeting_list_url, col_nbr=10):
-    row_nbr = ceil( ( len( self.meeting_list ) + 1 ) / col_nbr )
+  def banner_md( self, meeting_list_url:str, col_nbr:int =10, home_url:str =None ) -> str :
+    """ returns the banner for a md page - though html is used. 
+
+    The banner contains a link to the main meeting list page as well as 
+    every individual meetings. 
+    Optionally, another home url may be added, for example when the meeting 
+    list pages are part of another web site.  
+
+    Args:
+      meeting_list_url (str) : the url associated to the meeting list. The pages
+        urls are derived as follows: the meetinglist name is appened to 
+        form the meeting list url. Each meeting names are appended to the url. 
+        For the IETF it is like if we had the following subdirectories: 
+        IETF and IETF99, IETF100, ...
+      col_nbr (int) : the number of meeting names that can be shown on the web page. 
+        When multiple meetings are considered, these may b eprinted on multiple lines.
+        To be aligned these are placed in a table of col_nbr columns.
+    """
+    if home_url != None:
+      add_cell = 2
+    else :
+      add_cell = 1
+    
+    row_nbr = ceil( ( len( self.meeting_list ) + add_cell ) / col_nbr )
     ## meeting list including meetingList
     meeting_list = [ self.banner_cell( meeting_list_url, m ) for m in self.meeting_list ]
     meeting_list.insert( 0, self.banner_cell( meeting_list_url, self.name ) )
+    if home_url != None:
+      meeting_list.insert( 0, f"<a href='{home_url}' style='font-size: 30px; text-decoration: none' >⌂</a>" )
 
     ## note that modifying the indentiation of the html block makes it 
     ## mis-interpreted by jekyl and so produces a bad html rendering. 
@@ -659,11 +685,10 @@ class MeetingList(Meeting):
     banner += end_table
     return banner
 
-  def www_md( self, meeting_list_url, col_nbr=10, toc=True):
+  def www_md( self, meeting_list_url, col_nbr=10, toc=True, home_url=None):
     """ generates all md pages for the IETF meetings """
-    banner = self.banner_md( meeting_list_url, col_nbr=col_nbr )
-    # self.md( banner ) 
-    self.md( banner )
+    banner = self.banner_md( meeting_list_url, col_nbr=col_nbr, home_url=home_url )
+    self.md( banner, toc=toc )
     for meeting_name in self.meeting_list:
       meeting = self.get_meeting( meeting_name )
       meeting.md( banner, toc=toc ) 
@@ -672,7 +697,15 @@ class MeetingList(Meeting):
 ## it differs from teh closest airport
 ##                 meeting name meeting location
 
-## should be a list [ { name : , human man : , iata } ]
+## should be a list [ 
+## { name : , 
+##   location : { 
+##     city: 
+##     country : 
+##     iata } 
+##   }
+## }
+## ]
 IETF_LOCATION = {
    'IETF72' : ( 'Dublin',        'IE' ),
    'IETF73' : ( 'Minneapolis',   'US' ),
