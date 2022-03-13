@@ -2,7 +2,8 @@
 import json
 import gzip
 #from datetime import timedelta
-from os.path import join, isfile # getsize, isfile
+from glob import glob
+from os.path import join, isfile, realpath, dirname # getsize, isfile
 from statistics import median
 from random import random
 from datetime import date, timedelta, datetime
@@ -12,6 +13,7 @@ from pkg_resources import resource_filename
 from amadeus import Client, ResponseError
 from isodate import parse_duration
 import iso8601
+import countryinfo ## to get __file__
 from countryinfo import CountryInfo
 from ourairports import OurAirports
 from geopy.geocoders import Nominatim
@@ -56,61 +58,88 @@ def logger( conf, __name__ ):
 
 ## we shoudl use iata code and use get_city_by_iata 
 ISO3166_REPRESENTATIVE_CITY = {
-  'IL' : "Tel Aviv Yafo",
-  'PS' : "Tel Aviv Yafo",  # no capital
-  'RS' : 'Belgrade', ## probably not needed
-  'ME' : 'Podgorica', ## probably not needed
-  'AU' : "Sydney",
-  'NZ' : "Auckland",
-  'CY' : "Larnaca",
-  'CH' : "Zurich",
-  'DO' : "Punta Cana",
-  'ZA' : "Johannesburg",
-  'CI' : "Abidjan",
-  'BZ' : "Belize",
-  'SK' : "Kosice",
-  'HK' : "Hong Kong",
-  'UG' : "Entebbe",
-  'BO' : "Santa Cruz",
-  'CA' : "Toronto",
+  'IL' : { 'name' : "Tel Aviv Yafo", 'iata' : 'TLV' },
+  'PS' : { 'name' : "Tel Aviv Yafo", 'iata' : 'TLV' }, # no capital
+  'AU' : { 'name' : "Sydney", 'iata' : 'YQY' },
+  'NZ' : { 'name' : "Auckland", 'iata' : 'AKL' },
+  'CY' : { 'name' : "Larnaca", 'iata' : 'LCA' },
+  'CH' : { 'name' : "Zurich", 'iata' : 'ZRH' },
+  'ZA' : { 'name' : "Johannesburg", 'iata' : 'JNB' },
+  'CI' : { 'name' : "Abidjan", 'iata' : 'ABJ' },
+  'SK' : { 'name' : "Kosice", 'iata' : 'KSC' },
+#  'BO' : { 'name' : "Santa Cruz", 'iata' : 'SRZ' }, 
+  'BO' : { 'name' : 'Sao Paulo', 'iata' : 'SAO' },
+  'CA' : { 'name' : "Toronto", 'iata' : 'YTO' },
 #  'BJ' : 'Cotonou',
-#  'LC' : 'St Lucia', ## probably not needed
-  'MO' : 'Macao',    ## probably not needed
-  'AW' : 'Aruba',
-  'KY' : 'Grand Cayman',
-#  'BB' : 'Barbados',
-  'YT' : 'Dzaoudzi',
 #  'PY' : 'Asuncion',
-#  'KW' : 'Kuwait',  ## probably not needed
 #  'BN' : 'Bandar Seri B',
-#  'MT' : 'Malta',
-  'CM' :  "Douala",
-  'BM' : 'Bermuda',
-  'TZ' : 'Dar Es Salaam',
+  'CM' :  { 'name' : "Douala", 'iata' : 'DLA' },
+  'NG' :  { 'name' : "Lagos", 'iata' : 'LOS' },
+##  'BM' : 'Bermuda',
+  'TZ' : { 'name' : "Dar Es Salaam", 'iata' : 'DAR' },
 #  'GU' : 'Guam',
-  'KZ' : 'Almaty',
-  'GD' : 'Grenada',
-  'BR' : 'Sao Paulo', 
-  'AD' : 'Toulouse', 
-  'MM' : "Yangon", 
-  'CW' : "Curacao", 
-  'SX' : "St Maarten", 
-  'AN' : "St Maarten", 
-  'VG' : "Anegada",
-  'VA' : "Rome",
-  'HM' : "Tolanaro", 
-  'AQ' : "Invercargill", 
-  'UM' : 'Bikini Atoll', 
-  'VI' : 'Tortola',
-  'TC' : 'South Caicos', 
-  'AX' : 'Mariehamn', 
-  'PH' : 'Manila', 
-  'CL' : 'Santiago', 
-  'BT' : 'Lhasa/Lasa',
-  'NP' : 'Lhasa/Lasa', 
-  'ID' : 'Jakarta', 
-  'RO' : 'Bucharest',
-  'VU' : 'Auckland',
+  'KZ' : { 'name' : "Almaty", 'iata' : 'ALA' },
+###  'GD' : 'Grenada',
+  'BR' : { 'name' : 'Sao Paulo', 'iata' : 'SAO' },
+  'AD' : { 'name' : 'Toulouse', 'iata' : 'TLS' },
+  'AD' : { 'name' : 'Toulouse', 'iata' : 'TLS' },
+  'VN' : { 'name' : 'Ho Chi Minh', 'iata' : 'SGN' },
+#  'TG' : { 'name' : 'Abidjan', 'iata': 'ABJ' }, ## Lome has the largest airport of TG but a very limited number of flights
+  'MM' : { 'name' : "Yangon", 'iata' : 'RGN' },
+   ### The following redirections happens as AMADEUX is not able to retrieve an itinerary 
+   ## from these airport.
+  'KY' : { 'name' : "Kingston", 'iata' : 'KIN'},  ##  few routes redirection to Jamaica
+  'TC' : { 'name' : 'Santo Domingo', 'iata' : 'SDQ' }, 
+  'HT' : { 'name' : 'Santo Domingo', 'iata' : 'SDQ' }, 
+  'LC' : { 'name' : "San Juan", 'iata' : 'SJU' },
+  'BB' : { 'name' : "San Juan", 'iata' : 'SJU' },
+  'VC' : { 'name' : "San Juan", 'iata' : 'SJU' },
+  'GY' : { 'name' : "San Juan", 'iata' : 'SJU' },
+  'KN' : { 'name' : "San Juan", 'iata' : 'SJU' },
+  'GD' : { 'name' : "San Juan", 'iata' : 'SJU' },
+  'VI' : { 'name' : "San Juan", 'iata' : 'SJU' },
+  'DM' : { 'name' : "San Juan", 'iata' : 'SJU' },
+  'CU' : { 'name' : "Miami", 'iata' : 'MIA' }, 
+  'HN' : { 'name' : "Miami", 'iata' : 'MIA' },
+  'BZ' : { 'name' : "Mexico City", 'iata' : 'MEX' }, 
+  'GT' : { 'name' : "Mexico City", 'iata' : 'MEX' }, 
+  'VE' : { 'name' : "Panama City", 'iata' : 'PTY' }, 
+  'CW' : { 'name' : "Panama City", 'iata' : 'PTY' }, 
+  'EC' : { 'name' : "Panama City", 'iata' : 'PTY' }, 
+#
+  'AS' : { 'name' : "Auckland", 'iata' : 'AKL' },
+  'FJ' : { 'name' : "Auckland", 'iata' : 'AKL' },
+  'NU' : { 'name' : "Auckland", 'iata' : 'AKL' },
+  'CK' : { 'name' : "Auckland", 'iata' : 'AKL' },
+  'TV' : { 'name' : "Auckland", 'iata' : 'AKL' },
+  'KI' : { 'name' : "Auckland", 'iata' : 'AKL' },
+  'AQ' : { 'name' : "Auckland", 'iata' : 'AKL' }, ## likely to be an error as none lives in AQ, redirected to New Zealand
+#  'PG' : { 'name' : "Jayapura", 'iata' : 'DJJ' }
+  'PG' : { 'name' : "Brisbane", 'iata' : 'BNE' },
+  'NR' : { 'name' : "Brisbane", 'iata' : 'BNE' },
+  'VU' : { 'name' : "Sydney", 'iata' : 'YQY' }, 
+#
+  'GG' : { 'name' : "Paris", 'iata' : 'PAR' }, ## closest airport is too small and Paris is well connected by train 
+  'KM' : { 'name' : "Dar Es Salaam", 'iata' : 'DAR' },
+  'GI' : { 'name' : "Malaga", 'iata' : 'AGP' },
+#  'GW' : { 'name' : "Conakry", 'iata' : 'CKY' },
+  'GW' : { 'name' : "Dakar", 'iata' : 'DKR' },
+  'GN' : { 'name' : "Dakar", 'iata' : 'DKR' },
+  'SL' : { 'name' : "Dakar", 'iata' : 'DKR' },
+  'TD' : { 'name' : "Lagos", 'iata' : 'LOS' },
+  'BI' : { 'name' : "Nairobi", 'iata' : 'NBO' },
+  'LY' : { 'name' : "Tunis", 'iata' : 'TUN' }, 
+  'SZ' : { 'name' : "Johannesburg", 'iata' : 'JNB' },
+  'ST' : { 'name' : "Abidjan", 'iata' : 'ABJ' }, ## few routes redirecting to Cote d'Ivoire
+  'MG' : { 'name' : "Mauritius", 'iata' : 'MRU' },
+  'LU' : { 'name' : "Brussels", 'iata' : 'BRU' },
+  'SI' : { 'name' : "Vienna", 'iata' : 'VIE' },
+  'FO' : { 'name' : "Oslo", 'iata' : 'OSL' },
+#### For San Juan
+##'CN' : { 'name' : "Shanghai", 'iata' : 'SHA' },  ## no connection to San Juan from Beijn
+  'DE' : { 'name' : "Frankfurt", 'iata' : 'FRA' },
+  'PF' : { 'name' : "Tahiti", 'iata' : 'PPT' },
+  'NP' : { 'name' : "Patna", 'iata' : 'PAT' },
 }
 
 from pip._vendor import pkg_resources
@@ -198,6 +227,72 @@ class AirportDB( OurAirports ):
     return False
 
 
+class MyCountryInfo( CountryInfo ) :
+
+  def __init__( self, json_dictionary ):
+    self._CountryInfo__country_name = json_dictionary[ 'name' ]
+    self._CountryInfo__countries = {}
+    self._CountryInfo__countries[ self._CountryInfo__country_name ] = json_dictionary
+
+
+class CountryDB :
+
+  def __init__( self ):
+    __file_dir_path = dirname( realpath( countryinfo.__file__ ) )
+    __country_files = __file_dir_path + '/data/'
+    __files_path = [files for files in glob( __country_files + '*.json' ) ]
+    self.countryDB = {}
+    for file_path in __files_path:
+      if isfile(file_path):
+        with open(file_path, encoding='utf-8') as f:
+#          print( f"file_path : {file_path}" )
+          country_info = json.load( f )
+        key_list = [ country_info[ 'name' ].lower() ]
+        if 'altSpellings' in country_info.keys() :
+          for k in country_info[ 'altSpellings' ]:
+            key_list.append( k.lower() )
+        for k in key_list :
+          self.countryDB[ k ] = country_info
+#    self.country_info = CountryInfo()  
+
+  def input_clean_up( self, country_name ):
+    """ common rules that apply to country_name """
+
+    country_name = country_name.strip()
+    if ' (' in country_name.lower() and ')' in country_name.lower():
+      country_name = country_name.replace( ' (', ', ' )
+      country_name = country_name.replace( ')', '' )
+    if 'ivoire' in country_name.lower() :
+      country_name = "C\u00f4te d'Ivoire"
+    elif country_name.lower() == 'curacao' :
+      country_name = "Curaçao"
+    elif 'holy see' in country_name.lower() or \
+         'vatican' in country_name.lower():
+      country_name = "Holy See (Vatican City State)"
+    elif 'hong kong' in country_name.lower():
+      country_name = "Hong Kong"
+    elif 'taipei' in country_name.lower():
+      country_name = "Taiwan"
+    ## korea is usually understood as replublic of korea
+    elif country_name.lower().strip() == 'korea' :
+##     ( 'korea' in country_name.lower() and 'republic' in country_name.lower()) :
+      country_name = "Republic of Korea"
+    elif 'northern' in country_name.lower() and 'ireland' in country_name.lower() :
+      country_name = "United Kingdom of Great Britain and Northern Ireland"
+    elif 'scotland' in country_name.lower() :
+      country_name = "United Kingdom of Great Britain and Northern Ireland"
+    elif country_name in [ 'no country given', 'No Country Given', 'Global', \
+                           'Multiple Countries' ]:
+      return None
+    return country_name.strip()
+
+  def get_country_info( self, country:str ):
+    """ return the country_info object """
+    country_key = self.input_clean_up( country ).lower()
+#    self.country_info._CountryInfo__countries = self.countryDB[ country_key ]
+#    self.country_info._CountryInfo__country_name = country_key
+    return MyCountryInfo( self.countryDB[ country_key ] )
+  
 
 class CityDB :
   def __init__( self, conf, airportDB=AirportDB() ):
@@ -221,7 +316,7 @@ class CityDB :
     self.micro_cache = {}
     self.micro_cache_representative_city = {}
     self.airportDB = airportDB
-
+    self.countryDB = CountryDB()
     ## list of cities with iata city codes. each city is an object 
     ## {
     ##   "name": "Paris",
@@ -248,93 +343,11 @@ class CityDB :
       self.iata_dict[ city[ 'iata' ] ] = city
   
 
-  def citydb_txt_to_json( self, conf ):
-    """ Converts the txt database of IATA cities into a json file
-
-    Since the json format is provided as part of the package, this function
-    is unlikely to be useful.
-    Eventually, the code might be re-use if the database is regenerated
-    from a more recent txt file.
-
-    """
-    city_db = []
-    geolocator = Nominatim( user_agent=conf[ 'NOMINATIM_ID' ] )
-    with open( join( DATA_DIR, "iata_city_codes-2015.txt.gz"), 'r', encoding="utf8" ) as f:
-      for line in f:
-        if line[0] == '#' or len(line) == 1: # skip commented line or empty line
-          continue
-        line = line.split()
-        iata = line[0]
-        country = line[ -1 ]
-        state = line[ -2 ]
-        if state.isupper() and len( state ) == 2:
-          tmp_name = line[1:-2]
-        else:
-          state = None
-          tmp_name = line[1:-1]
-        name = tmp_name[0]
-
-        for n in tmp_name[1:]:
-          name += ' ' + n
-        sleep(2)
-        try:
-          location  = geolocator.geocode( country + ' ' + name )
-          if location: ## a location is returned
-            latitude =  location.latitude
-            longitude = location.longitude
-          else: ## no location is returned
-            ## we will assume that location is not returned by the
-            ## API for cities we do not need.... let's keep finger crossed.
-            latitude =  None
-            longitude = None
-          city_db.append({
-            'name' : name,
-            'iata' : iata,
-            'latitude' : latitude,
-            'longitude' : longitude,
-            'country' : country,
-            'state' : state })
-          ## entering table after each new entry
-          ## this is to avoid to replay the full cities when an error occurs
-          with gzip.open( join( DATA_DIR, "iata_city_codes-2015.tmp.gz"), 'w', encoding="utf8" ) as f:
-            f.write( json.dumps( city_db, indent=2 ) )
-        except:
-          with gzip.open( join( DATA_DIR, "iata_city_codes-2015.log.gz"), 'a', encoding="utf8" ) as f:
-            f.write( f"ERROR: {ctime()} cannot find localisation for {country} - {name}\n" )
-    with gzip.open( join( DATA_DIR, "iata_city_codes-2015.json.gz"), 'wt', encoding="utf8" ) as f:
-      f.write( json.dumps( self.cache, indent=2 ) )
-
-  def iata_city_airport_csv_to_json( self ):
-    """ generates a json dictionary matching a IATA city code to a list of IATA airport code.
-
-    The cvs is built from the ICAO publication and provided into the package.
-    Since the json format is provided as part of the package, this function
-    is unlikely to be useful.
-    Eventually, the code might be re-use if the database is regenerated
-    from a more recent txt file.
-
-    """
-    iata_city_iata_airport_list_dict = {}
-    with gzip.open( join( DATA_DIR, 'iata_city_airport_map.csv.gz' ), 'rt', encoding="utf8" ) as f:
-      for l in f.readlines():
-        array = l.split( ',' )
-        iata_airport = array[ 0 ].strip()
-        iata_city = array[ 1 ].strip()
-        if "Code" in array[ 0 ]: # skip header
-          continue
-        try:
-          iata_city_iata_airport_list_dict[ iata_city ].append( iata_airport )
-        except KeyError:
-          iata_city_iata_airport_list_dict[ iata_city ] = [ iata_airport ]
-      with gzip.open( join( DATA_DIR, 'iata_city_airport_map.json.gz' ), 'wt', encoding="utf8"  ) as out:
-        out.write( json.dumps( iata_city_iata_airport_list_dict, indent=2 ) )
-
   def is_iata_city_code( self, iata ) -> bool:
     """ returns true is iata is an IATA city code"""
     if iata in self.iata_city_iata_airport_list_dict.keys():
       return True
     return False
-
 
   def airport_list_of( self, city:dict ) -> list :
     """ for a valid iata_city code, the list of mapped iata airport codes are returned
@@ -378,6 +391,7 @@ class CityDB :
                         f"'medium_airport', 'small_airport' " )
     result = False
     airport_list = self.airport_list_of( city )
+
     if airport_type is None :
       if len( airport_list ) != 0:
         result = True
@@ -400,7 +414,22 @@ class CityDB :
 
   def get_city( self,  **kwargs ) -> list :
     """ returns cities matching keywords arguments """
-
+    ## the key associated to city_name is 'name' while we frequently
+    ## use the key 'city'
+    if 'city' in kwargs.keys() :
+      kwargs[ 'name' ] = kwargs[ 'city' ]
+      del kwargs[ 'city' ]
+    ## checking keys matching the iata_city_codes-2015 database
+    removed_keys = []
+    for k in kwargs.keys() :
+      if k not in [ 'name', 'iata', 'latitude', 'longitude', 'country', 'state' ] :
+        removed_keys.append( k )
+        del kwargs[ k ]
+    self.logger.debug( f"The {removed_keys} have been ignored" ) 
+    ## country field of iata_city_list is using iso(2)
+    if 'country' in kwargs.keys() : 
+      country_info = self.countryDB.get_country_info( kwargs[ 'country' ] )
+      kwargs[ 'country' ] = country_info.iso( 2 )
     city_list = []
     for city in self.iata_city_list :
       for k, v in kwargs.items() :
@@ -410,6 +439,7 @@ class CityDB :
         city_list.append( city )
       continue
     return city_list  
+
 
   def country_representative_city( self, country:str ) -> dict :
     """ returns a list of representative cities associate to the country 
@@ -431,78 +461,36 @@ class CityDB :
       return city
     except KeyError:
       pass
-    ## we add such rule CountryInfo in multiple cases does not recognize
-    ## the country codes.
-    ## This is caught up with ISO3166_REPRESENTATIVE_CITY
-    ## It is highly expected that we update CountryInfo
-    if len( country ) == 2:
-      country_iso = country
-    else:
-      try:
-        country_info = CountryInfo( country )
-      except:
-        raise ValueError( f"Unable to recognize {country} as a country." )
-      try:
-        country_iso = country_info.iso( 2 )
-      except:
-        raise ValueError( f"Unable to provide ISO(2) country code for country {country}." )
+    try:
+      country_info = self.countryDB.get_country_info( country )
+    except:
+      raise ValueError( f"Unable to retrieve country_info from {country}." )
+    try:
+      country_iso = country_info.iso( 2 )
+    except:
+      raise ValueError( f"Unable to provide ISO(2) for {country}." )
+    
     ## the use of random prevents the use of the cache
     if country_iso == 'US':
       r = random()
       if r < 0.5:
-        city =   {
-          "name": "Washington D.C.",
-          "iata": "WAS",
-          "latitude": 38.8949924,
-          "longitude": -77.0365581,
-          "country": "US",
-          "state": None }
+        iata_city = 'WAS' ## "Washington D.C."
       else:
-        city =  {
-          "name": "Los Angeles",
-          "iata": "LAX",
-          "latitude": 34.0536909,
-          "longitude": -118.242766,
-          "country": "US",
-          "state": "CA"}
-    else:
-      ## check the representative city has been identified 
-      if country_iso in ISO3166_REPRESENTATIVE_CITY.keys() :
-        city_name = ISO3166_REPRESENTATIVE_CITY[ country_iso ]
-        ## try a first match between city_name, country
-        ## and a fall back to city name only 
-        city_list = self.get_city( name=city_name, country=country_iso )
-        if len( city_list ) == 0:
-          city_list = self.get_city( name=city_name )
-        if len( city_list ) != 1:
-          raise ValueError( f"Unable to return a single city from "\
-                            f"ISO3166_REPRESENTATIVE_CITY for {country_iso}."\
-                            f"city_list : {city_list[: min( 5, len( city_list ) ) ] }" )
-        city = city_list[ 0 ]
-      else :
-        try:
-          iata_coordinates = CountryInfo( country_iso ).capital_latlng()
-          self.logger.debug( f"{iata_coordinates} for ( {country_iso}, "\
-                             f"{CountryInfo( country_iso ).capital()} )" ) 
-        except KeyError:
-          ## For many small and recent new territories, CountryInfo 
-          ## does not know the capital but that the self.iata_city_list 
-          ## has only a single iata city for the corresponding 
-          ## country_iso code. 
-          ## 
-          print( f"CountryInfo is unable to find capital for country {country}." ) 
-          
-          city_list = self.get_city( country=country_iso )
-          if len( city_list ) != 1: 
-             raise ValueError( f"Unable to find capital for country {country}." )
-        else:   
-          iata_city  = { "latitude" : iata_coordinates[ 0 ], 
-                         "longitude" : iata_coordinates[ 1 ] }
-          city_list = self.neighboring_city_list( iata_city, list_len=1, max_dist=None)  
-        city = city_list[ 0 ]
-      self.micro_cache[ country ] = city
+        iata_city = 'LAX'
+      city = self.get_city_by_iata( iata_city )
+    elif country_iso in ISO3166_REPRESENTATIVE_CITY.keys() :
+      city = self.get_city_by_iata( ISO3166_REPRESENTATIVE_CITY[ country_iso ][ 'iata' ] )
+    else: 
+      iata_coordinates = country_info.capital_latlng()
+      self.logger.debug( f"{iata_coordinates} for ( {country_iso}, "\
+                         f"{CountryInfo( country_iso ).capital()} )" )
+      iata_city  = { "latitude" : iata_coordinates[ 0 ], 
+                     "longitude" : iata_coordinates[ 1 ] }
+      city_list = self.neighboring_city_list( iata_city, list_len=1, max_dist=None)  
+      city = city_list[ 0 ]
+    self.micro_cache[ country ] = city
     return city 
-
+      
   def neighboring_city_list( self, ref_city, list_len=10, \
                              max_dist=1000, airport_type=None ) -> list :
     """ returns a list of sure sundering iata_cities 
@@ -522,7 +510,6 @@ class CityDB :
     """
     city_list = []
     for city in self.iata_city_list : 
-      ## check if the city has expected airport size
       if self.has_airports( city, airport_type=airport_type ) is False :
         continue
       city[ 'distance' ] = self.dist( ref_city , city )
@@ -532,7 +519,6 @@ class CityDB :
         else: 
           if city[ 'distance' ] < city_list[ 0 ][ 'distance' ]:
             city_list = [ city ]
-        continue
       else : ## list is != 1 and can be None
         appened = False
         if max_dist is None :
@@ -545,6 +531,7 @@ class CityDB :
         if appened is True:
           city_list.sort( key = lambda city : city[ 'distance' ] )
           city_list = city_list[: list_len]
+#      print( f" city_list : {city_list[:]}" ) 
     return city_list
 
   def closest_city( ref_city, airport_type=None ) -> dict :
@@ -552,12 +539,10 @@ class CityDB :
                                             airport_type=airport_type)
     return city_list[ 0 ]
 
-  def representative_city( self, location ) -> dict:
+  def representative_city( self, location:dict ) -> dict:
     """ makes its best to output a city from location
 
     Args:
-      location: may be a string that represents a IATA code, a country,
-        a tuple (city, state, coutry) or ( city, country )
 
     Returns:
       city (dict) : a JSON object that represents the city
@@ -565,57 +550,47 @@ class CityDB :
       * micro_cache is expected handle repeated queries. It currently
         applies to all queries, though we mostly tested it for country.
     """
-    ## try a cache lookup
-    try:
-      city = self.micro_cache_representative_city[ location ]
-      if len( self.micro_cache_representative_city.keys() ) > 10000:
-        self.micro_cache = {}
-      return city
-    except KeyError:
-      pass
-    if isinstance( location, str ) and ' ' not in location :
-      ## IATA city code
-      if location in self.iata_city_iata_airport_list_dict.keys():
-        city_list = self.get_city_by_iata( iata )
-        city = city_list[ 0 ] 
-      ## IATA airport
-      elif location in self.iata_airport_iata_city_dict.keys():
-        city = self.iata_airport_iata_city_dict[ location ]
-      ## country
+
+    if 'iata' in location.keys() :
+      iata = location[ 'iata' ]
+      ## if IATA airport return IATA city
+      if iata in self.iata_airport_iata_city_dict.keys():
+        iata = self.iata_airport_iata_city_dict[ iata ]
+      ## return city from IATA city code
+      if iata in self.iata_city_iata_airport_list_dict.keys():
+        city = self.get_city_by_iata( iata )
       else:
-        city = self.country_representative_city( location )
-    elif isinstance( location, tuple ):
-      city_name = location [ 0 ]
-      if len( location ) == 2:
-        country = location[ 1 ]
-        state = None
-        city_list = self.get_city( name=city_name, country=country  )
-      elif len( location ) == 3:
-        state = location[ 1 ]
-        country = location[ 2 ]
-        city_list = self.get_city( name=city_name, country=country, state=state )
-      if len( city_list ) == 0:
-        raise ValueError( f"Unable to resolve {location}" )
-      city = city_list[ 0 ]
-    else:
-      raise ValueError( f"Unable to resolve {location}" )
-    self.micro_cache_representative_city[ location ] = city
-    return city 
+        raise ValueError( f"IATA {iata} not recognized as IATA code "\
+                          f" error happening with {location}" ) 
+    elif 'country' in location.keys() and 'state' in location.keys() and\
+       'city' in location.keys():
+      city_list = self.get_city( name=location[ 'city' ], \
+                                 country=location[ 'country' ], 
+                                 state=location[ 'state' ] )
+      city = city_list[ 0 ] 
+    elif 'country' in location.keys() and 'city' in location.keys():
+      city_list = self.get_city( name=location[ 'city' ], \
+                                 country=location[ 'country' ] )
+      print( f"city_list : {city_list}" )
+      city = city_list[ 0 ] 
+    elif 'country' in location.keys() :
+      city = self.country_representative_city( location[ 'country' ] )
+    return city
 
   def dist( self, departure: dict, arrival: dict, dist_type='geodesic') :
     """ geodesic distance
 
        dep. / arrival are city object ( -- eventually returned by representative_city )
     """
+
     coordinates = []
     for city in [ departure, arrival ]:
       coordinates.append( ( city[ 'latitude' ], city[ 'longitude' ] ) )
     if dist_type == 'geodesic':
-      distance = geodesic( coordinates[0], coordinates[1] ).km
+        distance = geodesic( coordinates[0], coordinates[1] ).km
     elif dist_type == 'great_circle':
       distance = great_circle( coordinates[0], coordinates[1] ).km
     return distance
-
 
 class GoClimateDB (JCacheDict):
   def __init__( self, conf ):

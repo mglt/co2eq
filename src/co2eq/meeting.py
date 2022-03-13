@@ -22,7 +22,8 @@ plt.rcParams.update({'figure.max_open_warning': 0})
 
 class Meeting:
 
-  def __init__( self, name:str, base_output_dir=None, conf={},  airportDB=True, \
+  def __init__( self, name:str, location:dict, attendee_list:str = None, \
+                base_output_dir=None, conf={},  airportDB=True, \
                 cityDB=True, flightDB=True, goclimateDB=True ):
     """ Meeting class
 
@@ -58,13 +59,8 @@ class Meeting:
       self.goclimateDB=GoClimateDB( conf )
     else:
       self.goclimateDB = goclimateDB
-    ## human representation IATA, (city, country)( city, state, country)
-    self.location = self.get_location( )
-    ## iata code for the meeting location - flightDB only consider iata code
-    print( self.location )
-    print( self.cityDB.representative_city( self.location ) ) 
-    self.iata_location = self.cityDB.representative_city( self.location )[ 'iata' ]
-    ## by default meetings have a common destination, so we can optimize
+    ## location is a dictionary with keys iata, city, state, country)
+    self.location = location
     ## flightDB and designate it by the destination airport
     if flightDB is True:
       flightDB = FlightDB( conf, cityDB=self.cityDB, airportDB=self.airportDB, \
@@ -78,27 +74,66 @@ class Meeting:
 
     if isdir( self.output_dir ) is False:
       os.makedirs( self.output_dir )
-    self.attendee_list = None
+#    self.attendee_list = None
     self.logger = logger( conf, __name__ )     
+    self.attendee_list = attendee_list
+#  def get_location( self ):
+#    pass
+#    return None
 
-  def get_location( self ):
-    pass
-    return None
+  def get_attendee_list( self ):
+    """ return a python list of attendees """
+    if isinstance( self.attendee_list, list ):
+      attendee_list = self.attendee_list
+    elif isfile( self.attendee_list ) is True:
+      try:
+        with gzip.open( self.attendee_list, 'rt', encoding="utf8") as f:
+          attendee_list = json.loads( f.read() )
+      except: 
+        with open( self.attendee_list, 'rt', encoding="utf8") as f:
+          attendee_list = json.loads( f.read() )
+    else:
+      raise ValueError( f"Unable to generate attendee_list from {self.attendee_list}" )
+    return attendee_list 
 
-  def get_attendee_list( self, file_attendee_json ):
-    """ reads the json file and initializes self.attendee_list """
-    with gzip.open( file_attendee_json, 'rt', encoding="utf8") as f:
-      self.attendee_list = json.loads( f.read() )
+#  def attendee_location( self, attendee ):
+#    """ returns the location of the attendee
+#
+#    This function is specific to the format of the attendees.
+#    The location can be expressed as ( city_name, country),
+#    (city_name, state, country), city_name where city_name can be a
+#    designation or a iata code.
+#    """
+#    pass
 
-  def attendee_location( self, attendee ):
-    """ returns the location of the attendee
-
-    This function is specific to the format of the attendees.
-    The location can be expressed as ( city_name, country),
-    (city_name, state, country), city_name where city_name can be a
-    designation or a iata code.
-    """
-    pass
+###  def get_location( self, location_dict, transport='flight' ):
+###    """ returns useful information from the location_dict 
+###
+###    Args: 
+###      - location_dict (dict) 
+###
+###    Returns:
+###      - (for transport set to flight), iata code of the most representative city.
+###
+###    Currenlty we only work with iata or country alone from which we derive a iata code.
+###    """    
+###    if transport != 'flight':
+###      raise ValueError( f"Only flight mode is implemented - not {transport}" )
+###    return self.cityDB.representative_city( location_dict )[ 'iata' ]
+######    if 'iata' in location_dict.keys():
+######      return location_dict[ 'iata' ]
+####    elif 'city' in location_dict.keys() and 'state' in location_dict.keys() \
+####      and 'country' in location_dict.keys():
+####      loc = ( location_dict[ 'city' ], location_dict[ 'state' ], location_dict[ 'country' ] )
+####    elif 'city' in location_dict.keys() and 'country' in location_dict.keys():
+####      loc = ( location_dict[ 'city' ], location_dict[ 'country' ] )
+#####    elif 'country' in location_dict.keys() and 'city' in location_dict.keys():
+###    ## we are currenlty restricted to 'country' but 
+###    ## representative city should integrate this search
+######    elif 'country' in location_dict.keys():
+######      loc = self.cityDB.representative_city( location_dict[ 'country' ] )[ 'iata' ]
+###    else: 
+###      raise ValueError( f"Unable to provide location from {location_dict}" )
 
 
   def sanity_check_args( self, mode=None, cluster_key=None, co2eq=None  ):
@@ -191,24 +226,42 @@ class Meeting:
       y = {} ## returns a dict { cluster_value: co2_eq }
 
     attendee_nbr = 0
-    for attendee in self.attendee_list:
+#    for attendee in self.attendee_list:
+    for attendee in self.get_attendee_list( ):
       attendee_nbr +=1 
       self.logger.debug( f"  - attendee {attendee_nbr}: {attendee}" )
-      location = self.attendee_location( attendee )
-      attendee_iata_city = self.cityDB.representative_city( location )[ 'iata' ]
-      self.logger.debug( f"  - representative city for {location}: {attendee_iata_city}" )
-      if attendee_iata_city == self.iata_location:
+#      location = self.attendee_location( attendee )
+#      attendee_iata_city = self.cityDB.representative_city( location )[ 'iata' ]
+      attendee_iata_city = self.cityDB.representative_city( attendee )[ 'iata' ]
+#      print( f" self.location : {self.location}" )
+#      print( f" output : {self.cityDB.representative_city( self.location )}" )
+      meeting_iata_city = self.cityDB.representative_city( self.location )[ 'iata' ]
+###      meeting_iata_city = self.get_location( self.location )
+      self.logger.debug( f"  - Flight from {attendee_iata_city} to  {meeting_iata_city}" )
+      if attendee_iata_city == meeting_iata_city :
+        continue
+      if attendee_iata_city in [ '', None ]:
+        self.logger.debug( "Unable to find city for {attendee}" )
         continue
 
       if mode == 'attendee' :
         if cluster_key == 'flight_segment_number':
-          flight = self.flightDB.select_flight( attendee_iata_city , self.iata_location )
+          flight = self.flightDB.select_flight( attendee_iata_city , meeting_iata_city  )
       elif mode in [ 'flight' ]:
-##        flight = self.flightDB.select_flight( attendee_iata_city , self.iata_location )
-          flight = self.flightDB.force_select_flight( attendee_iata_city , self.iata_location )
+##        flight = self.flightDB.select_flight( attendee_iata_city , self.location[ 'iata' ] )
+        try: 
+          flight = self.flightDB.force_select_flight( attendee_iata_city , meeting_iata_city  )
+        except :
+          ## if country is the only location argument
+          if 'country' in attendee.keys() and 'city' not in attendee.keys() and 'state' not in attendee.keys() :
+            print( f"\n-----------------------------\n"\
+                   f"Unable to retrieve flight: FROM: {attendee_iata_city}"\
+                   f"TO: {meeting_iata_city}\n" ) 
+            self.debug_country_info( attendee[ 'country' ] )
+          raise ValueError( "unable top retrive flight") 
       elif mode == 'distance':
-        segment_list = [ [ attendee_iata_city , self.iata_location ],  \
-                         [ attendee_iata_city , self.iata_location ] ]
+        segment_list = [ [ attendee_iata_city , meeting_iata_city  ],  \
+                         [ attendee_iata_city , meeting_iata_city  ] ]
         ## co2_eq is computed at instantiation
         flight = Flight( segment_list=segment_list, cityDB=self.cityDB, \
                          airportDB=self.airportDB, goclimateDB=self.goclimateDB)
@@ -239,7 +292,7 @@ class Meeting:
           y [ key ] = flight[ 'co2eq' ][ co2eq ]
 
     with gzip.open( data_file, 'wt', encoding="utf8" ) as f:
-      f.write( json.dumps( y, indent=2) )
+      f.write( json.dumps( y, indent=2 ) )
     return y
 
   def reduce_and_transpose( self, column_dict, column_keys ):
@@ -423,7 +476,7 @@ class Meeting:
     line_list, stack_label = self.reduce_and_transpose( col_dict, cluster_nbr )
 
     title, y_label = self.plot_title( mode_list[0], cluster_key )
-    title = title + f" for {self.name} ({len(self.attendee_list)} participants)"
+    title = title + f" for {self.name} ({len( self.get_attendee_list( ) )} participants)"
 
     fig, ax = self.plot_stack( line_list, stack_label=stack_label, \
                                column_label=col_label, title=title )
@@ -433,6 +486,75 @@ class Meeting:
       plt.legend(bbox_to_anchor=(1, 1.1), loc='upper left')
     plt.tight_layout()
     plt.savefig( fig_file, bbox_inches='tight' )
+
+
+  def debug_country_info( self, country ):
+    """ provides information to understand why a flight cannot be retrived 
+
+    The ability to retrieve a flight depends on:
+      1) the correctness and coherence of the iata_city_codes-2015.json, iata_city_airport_map.json and countryinfo
+      2) the ability of Amadeus to retrieve an itinerary
+      3) Many other reasons...
+    This function helps to find why a flight cannot be retrieved. 
+    It is limited to the case where only the country has been provided.
+    """
+##    countryDB = CountryDB()
+    ## Step 1: checking the capital returned by country info
+    country_info = self.cityDB.countryDB.get_country_info( country )
+    print( f"-- step 1: Capital of {country_info.name()} ({country}) is "\
+           f"{country_info.capital()}\n"\
+           f"           coordinates of the capital are {country_info.capital_latlng()}\n"\
+           f"           Please check capital and coordinates are correct.\n"\
+           f"           If these information are not correct update the\n"\
+           f"           countryinfo data.")
+ 
+    ## Step 2: checking the the matching cities from the IATA city code DB
+    iata_capital_list = self.cityDB.get_city( country=country, name=country_info.capital() )
+    if len( iata_capital_list ) > 0:
+      iata_capital = iata_capital_list[ 0 ]
+    else:
+      iata_capital = None
+    print( f"-- step 2: Searching IATA city by matching the capital\n"\
+           f"           name returns: the following city {iata_capital}.\n"\
+           f"           A response is only expected when there is a match\n"\
+           f"           Between names. It may not happen. In case a match is\n"\
+           f"           expected, please consider carefully changing the\n"\
+           f"           'capital' in the countryinfo data or the 'name'\n"\
+           f"           in the iata_city_codes-2015.json file." )
+    ## Step 3: checking the city returned by evaluating the distances
+    iata_rep_city = self.cityDB.country_representative_city( country )
+    print( f"-- step 3: Searching capital via distance returns {iata_rep_city}\n"\
+           f"           There cases where the capital has been overwritten \n"\
+           f"           by a larger city (see ISO3166_REPRESENTATIVE_CITY).\n"\
+           f"           If the result is surprising  here are possible\n"\
+           f"           reasons:\n"\
+           f"             a) Coordinate of the expected city in the file\n"\
+           f"                iata_city_codes-2015.json are not correct.\n"\
+           f"                In this case, upadte the coordinates in \n"\
+           f"                iata_city_codes-2015.json\n"\
+           f"             b) The distance method only considers cities with airports\n"\
+           f"                The city in question is not associated to sufficiently\n"\
+           f"                large airports. This could be that the IATA city airport\n"\
+           f"                In iata_city_codes-2015.json does not corresponds to the\n"\
+           f"                IATA city airport of iata_city_airport_map.\n"\
+           f"             c) Amadeux is unable to retrieve flights itinerary from that airport" )
+ 
+    coordinates = country_info.capital_latlng()
+    capital = { 'latitude' : coordinates[ 0 ], 'longitude' : coordinates[ 1 ] }
+    if iata_capital is not None:
+      print( f"Distance from {country_info.capital()} of IATA city found by name matching\n"\
+             f"(step 2 ) : {self.cityDB.dist( capital, iata_capital )}\n" )
+    print( f"Distance from {country_info.capital()} of IATA city found by shortest distance\n"\
+           f"(step 3) : {self.cityDB.dist( capital, iata_rep_city )}\n" )
+    ## Step3.5 checking airports associated to the IATA 
+    if iata_capital is not None:
+      print( f"-- step 4: Does the IATA city (matching capital name) has airports ?\n"\
+             f"           {self.cityDB.has_airports( iata_capital ) }\n"\
+             f"           False may indicate the IATA code of the city is not\n"\
+             f"           recognized by the iata_city_airport_map.\n"\
+             f"           True may indicate everything is correct but Amadeux is unable\n"\
+             f"           to retrieve an itinerary. If that is the case, this may be adjusted\n"\
+             f"           by updating ISO3166_REPRESENTATIVE_CITY.")
 
 
   def cluster_dict( self, mode='flight', cluster_key=None, co2eq=None ) -> dict:
@@ -499,7 +621,10 @@ class Meeting:
     for mode in [ 'flight', 'distance', 'attendee' ]: ## mode
       if mode not in mode_list:
         continue
-      title = f"CO2 Estimation in {mode} mode"
+      if mode in [ 'flight', 'distance' ]:
+        title = f"CO2 Estimation in {mode} mode"
+      elif mode == 'attendee':
+        title = f"Number of Attendees"
       toc_md += f"* [{title}](#{mode})\n"
       md += f"<div id=\"{mode}\"></div>\n## {title}\n\n"
       for cluster_key in cluster_key_list:
@@ -508,7 +633,7 @@ class Meeting:
         if cluster_key is None:
           title = f"No Clustering"
         else:
-          title = f"Clustering by key {cluster_key}"
+          title = f"Clustering by {cluster_key}"
         toc_md += f"  * [{title}](#{mode}-{cluster_key})\n"
         md += f"<div id=\"{mode}-{cluster_key}\"></div>\n### {title}\n\n"
         for fig in fig_list:
@@ -519,9 +644,9 @@ class Meeting:
     with open( join( self.output_dir, "index.md"), 'wt', encoding='utf8' ) as f:
       header = f"# {self.name} Data\n\n"
       if toc is False:
-        f.write( f"\n{banner}\n\n{header}\n{md}" )
+        f.write( f"{header}\n{banner}\n{md}" )
       else: 
-        f.write( f"\n{banner}\n\n{header}\n{toc_md}\n{md}" )
+        f.write( f"{header}\n{banner}\n{toc_md}\n{md}" )
 
 
 
@@ -530,6 +655,20 @@ class Meeting:
 class MeetingList(Meeting):
 
   def __init__( self, name, conf={}, meeting_list=None, flightDB=True, airportDB=True, cityDB=True, goclimateDB=True  ):
+    """ instantiates a MeetingList object 
+
+    Args: 
+      meeting_list (list): a list of meeting dictionary
+        { 'name' : meeting_name, 
+          'location' : { 
+            'country' : meeting_country, 
+            'city' : meeting_city,
+            'iata' : the meeting iata_airport # especially useful when city has a small airport
+           }                                  # and we prefer to select a larger airport      
+        }
+        meeting_list could also be a list of Meeting objects, but this use is not the prefrred way.
+    """ 
+
     self.name = name
     self.conf = conf
     self.meeting_list = meeting_list
@@ -554,14 +693,22 @@ class MeetingList(Meeting):
   def get_meeting( self, meeting ):
     """ return a meetin object from the content of meeting_list
 
-    Meeting Object may be quite heavy and as such the meeting_list may not
-    contain the object but instead the meeting name for example.
-    In that case function generates the meeting object from the name
+    Args:
+      meeting (dict) : a meeting_dict object (see meeting_list). Eventually a Meeting object.
     """
     if isinstance( meeting, Meeting ):
       return meeting
     else:
-      return Meeting( meeting, conf=conf, flightDB=self.flightDB, airportDB=self.airportDB, cityDB=self.cityDB, goclimateDB=self.goclimateDB )
+      name = meeting[ 'name' ]
+      location = meeting[ 'location' ]
+      if 'attendee_list' in meeting.keys():
+        attendee_list = meeting[ 'attendee_list' ]
+      else: 
+        attendee_list = None
+      return Meeting( name, location, attendee_list=attendee_list, \
+                      conf=self.conf, flightDB=self.flightDB, \
+                      airportDB=self.airportDB, cityDB=self.cityDB, \
+                      goclimateDB=self.goclimateDB )
 
   def plot_co2eq( self, mode=None, cluster_key=None, cluster_nbr=None, \
                   co2eq=None, figsize=(10,4), column_label=None, \
@@ -610,6 +757,54 @@ class MeetingList(Meeting):
     plt.savefig( fig_file, bbox_inches='tight' )
 #    plt.show()
 
+  def plot_all( self ):
+    for meeting in self.meeting_list:
+      meeting = self.get_meeting( meeting )
+      self.logger.info( f"{meeting.name}: Processing plot_co2eq" )
+      meeting.plot_co2eq( )
+      ## evaluation the cluster_keys by reading those of the first 
+      ## attendee
+      cluster_key_list = list( meeting.get_attendee_list()[0].keys() )
+      cluster_key_list.append( 'flight_segment_number' )
+      cluster_key_list.append( None )
+      for cluster_key in  cluster_key_list :
+        meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+##      meeting.plot_co2eq( mode=None, cluster_key='organization', cluster_nbr=15)
+##      meeting.plot_co2eq( mode=None, cluster_key='presence' )
+##      meeting.plot_co2eq( mode=None, cluster_key='country', cluster_nbr=15 )
+##      meeting.plot_co2eq( mode=None, cluster_key='flight_segment_number',  cluster_nbr=15 )
+    self.logger.info( f"\nprocessing {self.name }\n" )
+    if isinstance( self.meeting_list[0], dict ):
+      column_label = []
+      for meeting in self.meeting_list:
+        label = ""
+        try :
+          label = f"{meeting[ 'location' ][ 'city' ]} "
+        except KeyError:
+          pass
+        label = f"{label}{meeting[ 'name' ]}"
+        column_label.append( label )
+    else:
+      column_label = None
+    figsize=(10,4) ## width, heigh (inch) of the figure
+    adjust_bottom = 0.4 ## make sure we have enough space to read the xticks
+    xticks_rotation='vertical' ## xticks orientation
+    plot_kwargs = { 'cluster_nbr' : 15, 'figsize' : figsize, 'column_label' : column_label, \
+                    'adjust_bottom' : adjust_bottom, 'xticks_rotation' : xticks_rotation }
+    for mode in [ 'flight' ]:
+      for co2eq in [ 'myclimate', 'goclimate' ]:
+         for cluster_key in  cluster_key_list :
+           self.plot_co2eq( mode=mode, cluster_key=cluster_key, co2eq=co2eq, **plot_kwargs )
+    for mode in [ 'attendee' ]:
+       for cluster_key in  cluster_key_list :
+         self.plot_co2eq( mode=mode, cluster_key=cluster_key, **plot_kwargs )
+##        self.plot_co2eq( cluster_key=None, co2eq=co2eq, **plot_kwargs )
+##        self.plot_co2eq( cluster_key='organization', cluster_nbr=15, co2eq=co2eq, **plot_kwargs )
+##        self.plot_co2eq( cluster_key='presence', co2eq=co2eq, **plot_kwargs )
+##        self.plot_co2eq( cluster_key='country', cluster_nbr=15, co2eq=co2eq, **plot_kwargs )
+##        self.plot_co2eq( cluster_key='flight_segment_number', cluster_nbr=15, co2eq=co2eq, **plot_kwargs )
+
+
 
   def banner_cell( self, meeting_list_url:str, meeting_name:str ) -> str :
     """ returns the cell of the banner """
@@ -647,7 +842,11 @@ class MeetingList(Meeting):
     
     row_nbr = ceil( ( len( self.meeting_list ) + add_cell ) / col_nbr )
     ## meeting list including meetingList
-    meeting_list = [ self.banner_cell( meeting_list_url, m ) for m in self.meeting_list ]
+#    meeting_list = [ self.banner_cell( meeting_list_url, m ) for m in self.meeting_list ]
+    meeting_list = []
+    for m in self.meeting_list :
+      meeting_obj = self.get_meeting( m )
+      meeting_list.append( self.banner_cell( meeting_list_url, meeting_obj.name ) )
     meeting_list.insert( 0, self.banner_cell( meeting_list_url, self.name ) )
     if home_url != None:
       meeting_list.insert( 0, f"<a href='{home_url}' style='font-size: 30px; text-decoration: none' >⌂</a>" )
@@ -693,62 +892,257 @@ class MeetingList(Meeting):
       meeting = self.get_meeting( meeting_name )
       meeting.md( banner, toc=toc ) 
 
-## We may need to specify the remote nature of the meeting and the name when
-## it differs from teh closest airport
-##                 meeting name meeting location
-
-## should be a list [ 
-## { name : , 
-##   location : { 
-##     city: 
-##     country : 
-##     iata } 
-##   }
-## }
-## ]
-IETF_LOCATION = {
-   'IETF72' : ( 'Dublin',        'IE' ),
-   'IETF73' : ( 'Minneapolis',   'US' ),
-   'IETF74' : ( 'San Francisco', 'US' ),
-   'IETF75' : ( 'Stockholm',     'SE' ),
-   'IETF76' : ( 'Osaka',         'JP' ),
-   'IETF77' : ( 'Los Angeles',   'US' ),
-   'IETF78' : ( 'Brussels',      'BE' ),
-   'IETF79' : ( 'Beijing',       'CN' ),
-   'IETF80' : ( 'Prague',        'CZ' ),
-   'IETF81' : ( 'Montreal',      'CA' ),
-   'IETF82' : ( 'Taipei',        'TW' ),
-   'IETF83' : ( 'Paris',         'FR' ),
-   'IETF84' : ( 'Vancouver',     'CA' ),
-   'IETF85' : ( 'Atlanta',       'US' ),
-   'IETF86' : ( 'Orlando',       'US' ),
-   'IETF87' : ( 'Berlin',        'DE' ),
-   'IETF88' : ( 'Vancouver',     'CA' ),
-   'IETF89' : ( 'London',        'GB' ),
-   'IETF90' : ( 'Toronto',       'CA' ),
-   'IETF91' : ( 'Honolulu',      'US' ),
-   'IETF92' : ( 'Dallas/Fort W', 'US' ),
-   'IETF93' : ( 'Prague',        'CZ' ),
-   'IETF94' : ( 'Tokyo',         'JP' ),
-   'IETF95' : ( 'Buenos Aires',  'AR' ),
-   'IETF96' : ( 'Berlin',        'DE' ),
-   'IETF97' : ( 'Seoul',         'KR' ),
-   'IETF98' : ( 'Chicago',       'US' ),
-   'IETF99' : ( 'Prague',        'CZ' ),
-  'IETF100' : ( 'Singapore',     'SG' ),
-  'IETF101' : ( 'London',        'GB' ),
-  'IETF102' : ( 'Montreal',      'CA' ),
-  'IETF103' : ( 'Bangkok',       'TH' ),
-  'IETF104' : ( 'Prague',        'CZ' ),
-  'IETF105' : ( 'Montreal',      'CA' ),
-  'IETF106' : ( 'Singapore',     'SG' ),
-  'IETF107' : ( 'Vancouver',     'CA' ),
-  'IETF108' : ( 'Madrid',        'ES' ),
-  'IETF109' : ( 'Bangkok',       'TH' ),
-  'IETF110' : ( 'Prague',        'CZ' ),
-  'IETF111' : ( 'San Francisco', 'US' ),
-  'IETF112' : ( 'Madrid', 'ES' )
-                  }
+IETF_MEETING_LIST = [
+  { 'name' : 'IETF72', 
+    'location' : {
+      'country' : 'IE', 
+      'city' : 'Dublin'
+    }
+  }, 
+  { 'name' : 'IETF73', 
+    'location' : { 
+      'country' : 'US', 
+      'city' : 'Minneapolis'
+    }
+  }, 
+  { 'name' : 'IETF74', 
+    'location' : { 
+      'country' : 'US',
+      'city' : 'San Francisco'
+    }
+  },
+  { 'name' : 'IETF75', 
+    'location' : { 
+      'country' : 'SE',
+      'city' : 'Stockholm'
+    }
+  },
+  { 'name' : 'IETF76',
+    'location' : { 
+      'country' : 'JP', 
+      'city' : 'Hiroshima',
+      'iata' : 'OSA'          ## Hiroshima is too small
+     }
+  }, 
+  { 'name' : 'IETF77', 
+    'location' : {
+      'country' : 'US',
+      'city' : 'Los Angeles'
+    } 
+  }, 
+  { 'name' : 'IETF78', 
+    'location' : { 
+      'country' : 'NE', 
+      'city' : 'Maastricht', 
+      'iata' : 'BRU'          ## Next closest airport  
+    }
+  }, 
+  { 'name' : 'IETF79', 
+    'location' : { 
+      'country' : 'CN', 
+      'city' : 'Beijing'
+    }
+  }, 
+  { 'name' : 'IETF80', 
+    'location' : {
+      'country' : 'CZ',
+      'city' : 'Prague'
+    }
+  }, 
+  { 'name' : 'IETF81', 
+    'location' : { 
+      'country' : 'CA', 
+      'city' : 'Montreal'
+    } 
+  }, 
+  { 'name' : 'IETF82', 
+    'location' : { 
+      'country' : 'TW', 
+      'city' : 'Taipei'
+    } 
+  }, 
+  { 'name' : 'IETF83', 
+    'location' : { 
+      'country' : 'FR', 
+      'city' : 'Paris'
+    } 
+  }, 
+  { 'name' : 'IETF84', 
+    'location' : {
+      'country' : 'CA', 
+      'city' : 'Vancouver'
+    } 
+  }, 
+  { 'name' : 'IETF85', 
+    'location' : {
+      'country' : 'US', 
+      'city' : 'Atlanta'
+    }
+  }, 
+  { 'name' : 'IETF86', 
+    'location' : {
+      'country' : 'US', 
+      'city' : 'Orlando'
+    }
+  }, 
+  { 'name' : 'IETF87', 
+    'location' : {
+      'country' : 'DE', 
+      'city' : 'Berlin'
+    } 
+  }, 
+  { 'name' : 'IETF88', 
+    'location' : {
+      'country' : 'CA', 
+      'city' : 'Vancouver'
+    }
+  }, 
+  { 'name' : 'IETF89', 
+    'location' : { 
+      'country' : 'GB', 
+      'city' : 'London'
+    }
+  },
+  { 'name' : 'IETF90', 
+    'location' : {
+      'country' : 'CA',
+      'city' : 'Toronto'
+    }
+  }, 
+  { 'name' : 'IETF91', 
+    'location' : {
+      'country' : 'US', 
+      'city' : 'Honolulu'
+    }
+  }, 
+  { 'name' : 'IETF92', 
+    'location' : {
+      'country' : 'US', 
+      'city' : 'Dallas', 
+      'iata' : 'DFW'
+    }
+  }, 
+  { 'name' : 'IETF93',
+    'location' : {
+      'country' : 'CZ', 
+      'city' : 'Prague', 
+    }
+  }, 
+  { 'name' : 'IETF94',
+    'location' : {
+      'country' : 'JP', 
+      'city' : 'Tokyo', 
+    }
+  }, 
+  { 'name' : 'IETF95',
+    'location' : {
+      'country' : 'AR', 
+      'city' : 'Buenos Aires', 
+    }
+  }, 
+  { 'name' : 'IETF96',
+    'location' : {
+      'country' : 'DE', 
+      'city' : 'Berlin', 
+    }
+  }, 
+  { 'name' : 'IETF97',
+    'location' : {
+      'country' : 'KR', 
+      'city' : 'Seoul', 
+    }
+  }, 
+  { 'name' : 'IETF98',
+    'location' : {
+      'country' : 'US', 
+      'city' : 'Chicago', 
+    }
+  }, 
+  { 'name' : 'IETF99',
+    'location' : {
+      'country' : 'CZ', 
+      'city' : 'Prague', 
+    }
+  }, 
+  { 'name' : 'IETF100',
+    'location' : {
+      'country' : 'SG', 
+      'city' : 'Singapore', 
+    }
+  }, 
+  { 'name' : 'IETF101',
+    'location' : {
+      'country' : 'GB', 
+      'city' : 'London', 
+    }
+  }, 
+  { 'name' : 'IETF102',
+    'location' : {
+      'country' : 'CA', 
+      'city' : 'Montreal', 
+    }
+  }, 
+  { 'name' : 'IETF103',
+    'location' : {
+      'country' : 'TH', 
+      'city' : 'Bangkok', 
+    }
+  }, 
+  { 'name' : 'IETF104',
+    'location' : {
+      'country' : 'CZ', 
+      'city' : 'Prague', 
+    }
+  }, 
+  { 'name' : 'IETF105',
+    'location' : {
+      'country' : 'CA', 
+      'city' : 'Montreal', 
+    }
+  }, 
+  { 'name' : 'IETF106',
+    'location' : {
+      'country' : 'SG', 
+      'city' : 'Singapore', 
+    }
+  }, 
+  { 'name' : 'IETF107',
+    'location' : {
+      'country' : 'CA', 
+      'city' : 'Vancouver', 
+    }
+  }, 
+  { 'name' : 'IETF108',
+    'location' : {
+      'country' : 'ES', 
+      'city' : 'Madrid', 
+    }
+  }, 
+  { 'name' : 'IETF109',
+    'location' : {
+      'country' : 'TH', 
+      'city' : 'Bangkok', 
+    }
+  }, 
+  { 'name' : 'IETF110',
+    'location' : {
+      'country' : 'CZ', 
+      'city' : 'Prague', 
+    }
+  }, 
+  { 'name' : 'IETF111',
+    'location' : {
+      'country' : 'US', 
+      'city' : 'San Fransisco', 
+    }
+  }, 
+  { 'name' : 'IETF112',
+    'location' : {
+      'country' : 'ES', 
+      'city' : 'Madrid', 
+    }
+  } 
+]
 
 ORGANIZATION_MATCH = { 'huaw' : "Huawei",
                        'futurewei' : "Huawei",
@@ -827,19 +1221,24 @@ ORGANIZATION_MATCH = { 'huaw' : "Huawei",
 
 class IETFMeeting ( Meeting ):
 
-  def __init__( self, name:str, conf={},  airportDB=True, cityDB=True, \
-                flightDB=True, goclimateDB=True ):
-    self.ietf_nbr = int( name[4:] )
-    super().__init__( name, conf=conf, cityDB=cityDB, flightDB=flightDB, airportDB=airportDB )
+  def __init__( self, name:str, base_output_dir=None, conf={},  airportDB=True,\
+                cityDB=True, flightDB=True, goclimateDB=True ):
+    for meeting in IETF_MEETING_LIST:
+      if meeting[ 'name' ] == name:
+        self.ietf_nbr = name[ -4 : ]
+        location = meeting[ 'location' ]
+        break 
+    super().__init__( name, location, base_output_dir=base_output_dir, conf=conf, \
+                      cityDB=cityDB, flightDB=flightDB, airportDB=airportDB )
     self.attendee_list_html = join( self.output_dir,  'attendee_list.html.gz' )
     self.attendee_list_json = join( self.output_dir,  'attendee_list.json.gz' )
     self.attendee_list = self.get_attendee_list()
 
-  def get_location( self ):
-    return IETF_LOCATION[ self.name ]
-
-  def attendee_location( self, attendee ):
-    return attendee[ 'country' ]
+#  def get_location( self ):
+#    return IETF_LOCATION[ self.name ]
+#
+#  def attendee_location( self, attendee ):
+#    return attendee[ 'country' ]
 
   def get_attendee_list_html( self ):
     self.logger.info( f"{self.name}: Getting HTML file" )
@@ -1068,71 +1467,33 @@ class IETFMeeting ( Meeting ):
 
 class IETFMeetingList(MeetingList):
 
-  def __init__( self, name="IETF", conf={}, meeting_list=None, \
+  def __init__( self, name="IETF", conf={}, meeting_list=IETF_MEETING_LIST, \
                  airportDB=True, cityDB=True, flightDB=True, goclimateDB=True ):
     super().__init__( name, conf=conf, meeting_list=meeting_list )
-    if self.meeting_list is None:
-#      min_ietf_nbr =  min( IETF_LOCATION.keys() )
-#      max_ietf_nbr = max( IETF_LOCATION.keys() )
-#      self.meeting_list = [ min_ietf_nbr + i for i in  range( max_ietf_nbr - min_ietf_nbr + 1 ) ]
-      self.meeting_list = list( IETF_LOCATION.keys() )
-      self.meeting_list.sort( key = lambda meeting_name: int( meeting_name[4:] ) )
+##    if self.meeting_list is None:
+###      min_ietf_nbr =  min( IETF_LOCATION.keys() )
+###      max_ietf_nbr = max( IETF_LOCATION.keys() )
+###      self.meeting_list = [ min_ietf_nbr + i for i in  range( max_ietf_nbr - min_ietf_nbr + 1 ) ]
+##      self.meeting_list = list( IETF_LOCATION.keys() )
+##      self.meeting_list.sort( key = lambda meeting_name: int( meeting_name[4:] ) )
 
-  def get_meeting( self, meeting_name ):
+  def get_meeting( self, meeting ):
     """ returns a meeting object from various representation used to designate that object """
     
-    if isinstance( meeting_name, str ) :
-      return IETFMeeting( meeting_name, conf=self.conf, airportDB=self.airportDB, \
+    if isinstance( meeting, Meeting ):
+      return meeting
+    else:
+      name = meeting[ 'name' ]
+      location = meeting[ 'location' ]
+      if 'attendee_list' in meeting.keys():
+        attendee_list = meeting[ 'attendee_list' ]
+      else: 
+        attendee_list = None
+      return IETFMeeting( name, conf=self.conf, airportDB=self.airportDB, \
                           cityDB=self.cityDB, flightDB=self.flightDB,\
                           goclimateDB=self.goclimateDB )
     raise ValueError("Unable to return meeting object from meeting_list" )
 
-  def plot_all( self ):
-    for meeting_designation in self.meeting_list:
-      meeting = self.get_meeting( meeting_designation )
-      self.logger.info( f"{meeting.name}: Processing plot_co2eq" )
-      meeting.plot_co2eq( )
-      cluster_key_list = list( meeting.attendee_list[0].keys() )
-      print(cluster_key_list )
-      cluster_key_list.append( 'flight_segment_number' )
-      cluster_key_list.append( None )
-##      ## removing 
-##      cluster_key_list.remove( 'destination' )
-      for cluster_key in  cluster_key_list :
-        meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
-##      meeting.plot_co2eq( mode=None, cluster_key='organization', cluster_nbr=15)
-##      meeting.plot_co2eq( mode=None, cluster_key='presence' )
-##      meeting.plot_co2eq( mode=None, cluster_key='country', cluster_nbr=15 )
-##      meeting.plot_co2eq( mode=None, cluster_key='flight_segment_number',  cluster_nbr=15 )
-    self.logger.info( f"\nprocessing {self.name }\n" )
-    if isinstance( self.meeting_list[0], str ):
-      column_label = []
-      for meeting in self.meeting_list:
-#        label = f"{IETF_LOCATION[ meeting ][ 0 ]}  {ietf_nbr}"
-        label = f"{IETF_LOCATION[ meeting ][ 0 ]}  {meeting}"
-        label = label.replace( 'Osaka', 'Hiroshima' )
-        label = label.replace( 'Dallas/Fort W', 'Dallas' )
-        column_label.append( label )
-    else:
-      column_label = None
-    figsize=(10,4) ## width, heigh (inch) of the figure
-    adjust_bottom = 0.4 ## make sure we have enough space to read the xticks
-    xticks_rotation='vertical' ## xticks orientation
-    plot_kwargs = { 'cluster_nbr' : 15, 'figsize' : figsize, 'column_label' : column_label, \
-                    'adjust_bottom' : adjust_bottom, 'xticks_rotation' : xticks_rotation }
-    for mode in [ 'flight' ]:
-      for co2eq in [ 'myclimate', 'goclimate' ]:
-         for cluster_key in  cluster_key_list :
-           self.plot_co2eq( mode=mode, cluster_key=cluster_key, co2eq=co2eq, **plot_kwargs )
-    for mode in [ 'attendee' ]:
-       for cluster_key in  cluster_key_list :
-         self.plot_co2eq( mode=mode, cluster_key=cluster_key, **plot_kwargs )
-
-##        self.plot_co2eq( cluster_key=None, co2eq=co2eq, **plot_kwargs )
-##        self.plot_co2eq( cluster_key='organization', cluster_nbr=15, co2eq=co2eq, **plot_kwargs )
-##        self.plot_co2eq( cluster_key='presence', co2eq=co2eq, **plot_kwargs )
-##        self.plot_co2eq( cluster_key='country', cluster_nbr=15, co2eq=co2eq, **plot_kwargs )
-##        self.plot_co2eq( cluster_key='flight_segment_number', cluster_nbr=15, co2eq=co2eq, **plot_kwargs )
 
 
 def get_flight( conf, origin, destination ):
