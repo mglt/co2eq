@@ -1,3 +1,5 @@
+# IETF112 Data
+
 
 
   <html>
@@ -74,10 +76,6 @@
   </body>
   </html>
     
-
-# IETF112 Data
-
-
 <div id="flight"></div>
 ## CO2 Estimation in flight mode
 
@@ -88,17 +86,17 @@
 ![](co2eq-mode_flight_distance-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 
 <div id="flight- flight segment number"></div>
-### Clustering by key  flight segment number
+### Clustering by  flight segment number
 
 ![](co2eq-mode_flight_distance-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 
 <div id="flight- presence"></div>
-### Clustering by key  presence
+### Clustering by  presence
 
 ![](co2eq-mode_flight_distance-cluster_key_presence-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 
 <div id="flight- country"></div>
-### Clustering by key  country
+### Clustering by  country
 
 ![](co2eq-mode_flight_distance-cluster_key_country-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 

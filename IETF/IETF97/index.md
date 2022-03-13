@@ -1,3 +1,5 @@
+# IETF97 Data
+
 
 
   <html>
@@ -74,10 +76,6 @@
   </body>
   </html>
     
-
-# IETF97 Data
-
-
 <div id="flight"></div>
 ## CO2 Estimation in flight mode
 
@@ -88,37 +86,37 @@
 ![](co2eq-mode_flight_distance-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 
 <div id="flight- Profile"></div>
-### Clustering by key  Profile
+### Clustering by  Profile
 
 ![](co2eq-mode_flight_distance-cluster_key_Profile-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 
 <div id="flight- presence"></div>
-### Clustering by key  presence
+### Clustering by  presence
 
 ![](co2eq-mode_flight_distance-cluster_key_presence-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 
 <div id="flight- flight segment number"></div>
-### Clustering by key  flight segment number
+### Clustering by  flight segment number
 
 ![](co2eq-mode_flight_distance-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 
 <div id="flight- organization"></div>
-### Clustering by key  organization
+### Clustering by  organization
 
 ![](co2eq-mode_flight_distance-cluster_key_organization-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 
 <div id="flight- country"></div>
-### Clustering by key  country
+### Clustering by  country
 
 ![](co2eq-mode_flight_distance-cluster_key_country-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 
 <div id="flight- Unnamed: 0"></div>
-### Clustering by key  Unnamed: 0
+### Clustering by  Unnamed: 0
 
 ![](co2eq-mode_flight_distance-cluster_key_Unnamed: 0-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
 
 <div id="attendee"></div>
-## CO2 Estimation in attendee mode
+## Number of Attendees
 
 <div id="attendee-None"></div>
 ### No Clustering
@@ -126,30 +124,30 @@
 ![](co2eq-mode_attendee-cluster_nbr_15.svg)
 
 <div id="attendee- Profile"></div>
-### Clustering by key  Profile
+### Clustering by  Profile
 
 
 <div id="attendee- presence"></div>
-### Clustering by key  presence
+### Clustering by  presence
 
 ![](co2eq-mode_attendee-cluster_key_presence-cluster_nbr_15.svg)
 
 <div id="attendee- flight segment number"></div>
-### Clustering by key  flight segment number
+### Clustering by  flight segment number
 
 ![](co2eq-mode_attendee-cluster_key_flight_segment_number-cluster_nbr_15.svg)
 
 <div id="attendee- organization"></div>
-### Clustering by key  organization
+### Clustering by  organization
 
 ![](co2eq-mode_attendee-cluster_key_organization-cluster_nbr_15.svg)
 
 <div id="attendee- country"></div>
-### Clustering by key  country
+### Clustering by  country
 
 ![](co2eq-mode_attendee-cluster_key_country-cluster_nbr_15.svg)
 
 <div id="attendee- Unnamed: 0"></div>
-### Clustering by key  Unnamed: 0
+### Clustering by  Unnamed: 0
 
 

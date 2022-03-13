@@ -1,3 +1,5 @@
+# IETF Data
+
 
 
   <html>
@@ -74,10 +76,6 @@
   </body>
   </html>
     
-
-# IETF Data
-
-
 <div id="flight"></div>
 ## CO2 Estimation in flight mode
 
@@ -87,65 +85,55 @@
 ![](co2eq-mode_flight-cluster_nbr_15-co2eq_goclimate.svg)
 ![](co2eq-mode_flight-cluster_nbr_15-co2eq_myclimate.svg)
 
-<div id="flight- country"></div>
-### Clustering by key  country
-
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_goclimate.svg)
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_myclimate.svg)
-
 <div id="flight- presence"></div>
-### Clustering by key  presence
+### Clustering by  presence
 
 ![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_myclimate.svg)
 ![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_goclimate.svg)
 
-<div id="flight- organization"></div>
-### Clustering by key  organization
+<div id="flight- country"></div>
+### Clustering by  country
 
-![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_myclimate.svg)
-![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_goclimate.svg)
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_goclimate.svg)
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_myclimate.svg)
 
 <div id="flight- flight segment number"></div>
-### Clustering by key  flight segment number
+### Clustering by  flight segment number
 
 ![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate.svg)
 ![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_goclimate.svg)
 
+<div id="flight- organization"></div>
+### Clustering by  organization
+
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_myclimate.svg)
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_goclimate.svg)
+
 <div id="attendee"></div>
-## CO2 Estimation in attendee mode
+## Number of Attendees
 
 <div id="attendee-None"></div>
 ### No Clustering
 
-![](co2eq-mode_attendee-cluster_nbr_15-co2eq_goclimate.svg)
 ![](co2eq-mode_attendee-cluster_nbr_15.svg)
-![](co2eq-mode_attendee-cluster_nbr_15-co2eq_myclimate.svg)
-
-<div id="attendee- country"></div>
-### Clustering by key  country
-
-![](co2eq-mode_attendee-cluster_key_country-cluster_nbr_15-co2eq_myclimate.svg)
-![](co2eq-mode_attendee-cluster_key_country-cluster_nbr_15-co2eq_goclimate.svg)
-![](co2eq-mode_attendee-cluster_key_country-cluster_nbr_15.svg)
 
 <div id="attendee- presence"></div>
-### Clustering by key  presence
+### Clustering by  presence
 
-![](co2eq-mode_attendee-cluster_key_presence-cluster_nbr_15-co2eq_myclimate.svg)
 ![](co2eq-mode_attendee-cluster_key_presence-cluster_nbr_15.svg)
-![](co2eq-mode_attendee-cluster_key_presence-cluster_nbr_15-co2eq_goclimate.svg)
 
-<div id="attendee- organization"></div>
-### Clustering by key  organization
+<div id="attendee- country"></div>
+### Clustering by  country
 
-![](co2eq-mode_attendee-cluster_key_organization-cluster_nbr_15-co2eq_myclimate.svg)
-![](co2eq-mode_attendee-cluster_key_organization-cluster_nbr_15.svg)
-![](co2eq-mode_attendee-cluster_key_organization-cluster_nbr_15-co2eq_goclimate.svg)
+![](co2eq-mode_attendee-cluster_key_country-cluster_nbr_15.svg)
 
 <div id="attendee- flight segment number"></div>
-### Clustering by key  flight segment number
+### Clustering by  flight segment number
 
 ![](co2eq-mode_attendee-cluster_key_flight_segment_number-cluster_nbr_15.svg)
-![](co2eq-mode_attendee-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate.svg)
-![](co2eq-mode_attendee-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_goclimate.svg)
+
+<div id="attendee- organization"></div>
+### Clustering by  organization
+
+![](co2eq-mode_attendee-cluster_key_organization-cluster_nbr_15.svg)
 
