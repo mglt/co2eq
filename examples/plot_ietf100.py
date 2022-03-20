@@ -1,4 +1,4 @@
-from co2eq.meeting import IETFMeeting, IETFMeetingList, get_flight
+from co2eq.ietf_meeting import IETFMeeting, IETFMeetingList, get_flight
 from conf import CONF
 
 ## Ploting a single IETF meeting

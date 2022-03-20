@@ -19,6 +19,7 @@ from ourairports import OurAirports
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 from geopy.distance import great_circle
+from pip._vendor import pkg_resources
 import logging
 
 from climate_neutral import GoClimateNeutralAPI, Segment # Footprint
@@ -49,100 +50,6 @@ def logger( conf, __name__ ):
   logging.basicConfig(filename=log_file, format=FORMAT )
   return logger
 
-
-## Binds ISO3166 country code to a city that is in the IATA DB with the largest airport.
-
-## This is typically usefull when the economic city does not corresponds to the capital.
-## In some cases this overwrite the capital to the corresponding entry in the IATA DB
-## - typically when the entry is not the capital but the country name.
-
-## we shoudl use iata code and use get_city_by_iata 
-ISO3166_REPRESENTATIVE_CITY = {
-  'IL' : { 'name' : "Tel Aviv Yafo", 'iata' : 'TLV' },
-  'PS' : { 'name' : "Tel Aviv Yafo", 'iata' : 'TLV' }, # no capital
-  'AU' : { 'name' : "Sydney", 'iata' : 'YQY' },
-  'NZ' : { 'name' : "Auckland", 'iata' : 'AKL' },
-  'CY' : { 'name' : "Larnaca", 'iata' : 'LCA' },
-  'CH' : { 'name' : "Zurich", 'iata' : 'ZRH' },
-  'ZA' : { 'name' : "Johannesburg", 'iata' : 'JNB' },
-  'CI' : { 'name' : "Abidjan", 'iata' : 'ABJ' },
-  'SK' : { 'name' : "Kosice", 'iata' : 'KSC' },
-#  'BO' : { 'name' : "Santa Cruz", 'iata' : 'SRZ' }, 
-  'BO' : { 'name' : 'Sao Paulo', 'iata' : 'SAO' },
-  'CA' : { 'name' : "Toronto", 'iata' : 'YTO' },
-#  'BJ' : 'Cotonou',
-#  'PY' : 'Asuncion',
-#  'BN' : 'Bandar Seri B',
-  'CM' :  { 'name' : "Douala", 'iata' : 'DLA' },
-  'NG' :  { 'name' : "Lagos", 'iata' : 'LOS' },
-##  'BM' : 'Bermuda',
-  'TZ' : { 'name' : "Dar Es Salaam", 'iata' : 'DAR' },
-#  'GU' : 'Guam',
-  'KZ' : { 'name' : "Almaty", 'iata' : 'ALA' },
-###  'GD' : 'Grenada',
-  'BR' : { 'name' : 'Sao Paulo', 'iata' : 'SAO' },
-  'AD' : { 'name' : 'Toulouse', 'iata' : 'TLS' },
-  'AD' : { 'name' : 'Toulouse', 'iata' : 'TLS' },
-  'VN' : { 'name' : 'Ho Chi Minh', 'iata' : 'SGN' },
-#  'TG' : { 'name' : 'Abidjan', 'iata': 'ABJ' }, ## Lome has the largest airport of TG but a very limited number of flights
-  'MM' : { 'name' : "Yangon", 'iata' : 'RGN' },
-   ### The following redirections happens as AMADEUX is not able to retrieve an itinerary 
-   ## from these airport.
-  'KY' : { 'name' : "Kingston", 'iata' : 'KIN'},  ##  few routes redirection to Jamaica
-  'TC' : { 'name' : 'Santo Domingo', 'iata' : 'SDQ' }, 
-  'HT' : { 'name' : 'Santo Domingo', 'iata' : 'SDQ' }, 
-  'LC' : { 'name' : "San Juan", 'iata' : 'SJU' },
-  'BB' : { 'name' : "San Juan", 'iata' : 'SJU' },
-  'VC' : { 'name' : "San Juan", 'iata' : 'SJU' },
-  'GY' : { 'name' : "San Juan", 'iata' : 'SJU' },
-  'KN' : { 'name' : "San Juan", 'iata' : 'SJU' },
-  'GD' : { 'name' : "San Juan", 'iata' : 'SJU' },
-  'VI' : { 'name' : "San Juan", 'iata' : 'SJU' },
-  'DM' : { 'name' : "San Juan", 'iata' : 'SJU' },
-  'CU' : { 'name' : "Miami", 'iata' : 'MIA' }, 
-  'HN' : { 'name' : "Miami", 'iata' : 'MIA' },
-  'BZ' : { 'name' : "Mexico City", 'iata' : 'MEX' }, 
-  'GT' : { 'name' : "Mexico City", 'iata' : 'MEX' }, 
-  'VE' : { 'name' : "Panama City", 'iata' : 'PTY' }, 
-  'CW' : { 'name' : "Panama City", 'iata' : 'PTY' }, 
-  'EC' : { 'name' : "Panama City", 'iata' : 'PTY' }, 
-#
-  'AS' : { 'name' : "Auckland", 'iata' : 'AKL' },
-  'FJ' : { 'name' : "Auckland", 'iata' : 'AKL' },
-  'NU' : { 'name' : "Auckland", 'iata' : 'AKL' },
-  'CK' : { 'name' : "Auckland", 'iata' : 'AKL' },
-  'TV' : { 'name' : "Auckland", 'iata' : 'AKL' },
-  'KI' : { 'name' : "Auckland", 'iata' : 'AKL' },
-  'AQ' : { 'name' : "Auckland", 'iata' : 'AKL' }, ## likely to be an error as none lives in AQ, redirected to New Zealand
-#  'PG' : { 'name' : "Jayapura", 'iata' : 'DJJ' }
-  'PG' : { 'name' : "Brisbane", 'iata' : 'BNE' },
-  'NR' : { 'name' : "Brisbane", 'iata' : 'BNE' },
-  'VU' : { 'name' : "Sydney", 'iata' : 'YQY' }, 
-#
-  'GG' : { 'name' : "Paris", 'iata' : 'PAR' }, ## closest airport is too small and Paris is well connected by train 
-  'KM' : { 'name' : "Dar Es Salaam", 'iata' : 'DAR' },
-  'GI' : { 'name' : "Malaga", 'iata' : 'AGP' },
-#  'GW' : { 'name' : "Conakry", 'iata' : 'CKY' },
-  'GW' : { 'name' : "Dakar", 'iata' : 'DKR' },
-  'GN' : { 'name' : "Dakar", 'iata' : 'DKR' },
-  'SL' : { 'name' : "Dakar", 'iata' : 'DKR' },
-  'TD' : { 'name' : "Lagos", 'iata' : 'LOS' },
-  'BI' : { 'name' : "Nairobi", 'iata' : 'NBO' },
-  'LY' : { 'name' : "Tunis", 'iata' : 'TUN' }, 
-  'SZ' : { 'name' : "Johannesburg", 'iata' : 'JNB' },
-  'ST' : { 'name' : "Abidjan", 'iata' : 'ABJ' }, ## few routes redirecting to Cote d'Ivoire
-  'MG' : { 'name' : "Mauritius", 'iata' : 'MRU' },
-  'LU' : { 'name' : "Brussels", 'iata' : 'BRU' },
-  'SI' : { 'name' : "Vienna", 'iata' : 'VIE' },
-  'FO' : { 'name' : "Oslo", 'iata' : 'OSL' },
-#### For San Juan
-##'CN' : { 'name' : "Shanghai", 'iata' : 'SHA' },  ## no connection to San Juan from Beijn
-  'DE' : { 'name' : "Frankfurt", 'iata' : 'FRA' },
-  'PF' : { 'name' : "Tahiti", 'iata' : 'PPT' },
-  'NP' : { 'name' : "Patna", 'iata' : 'PAT' },
-}
-
-from pip._vendor import pkg_resources
 
 
 class AirportDB( OurAirports ):
@@ -295,7 +202,7 @@ class CountryDB :
   
 
 class CityDB :
-  def __init__( self, conf, airportDB=AirportDB() ):
+  def __init__( self, conf={}, airportDB=AirportDB() ):
     """ This class contains function related to cities.
 
     The current use of this class is to retrieve the IATA associated to a
@@ -317,6 +224,15 @@ class CityDB :
     self.micro_cache_representative_city = {}
     self.airportDB = airportDB
     self.countryDB = CountryDB()
+    ## ISO3166_REPRESENTATIVE_CITY enable to indicate a specific
+    ## representative city for that country.
+    ## This is usually useful when the capital is not the main 
+    ## representative city or when no flight can be retrieved from 
+    ## that country
+    try:
+      self.ISO3166_REPRESENTATIVE_CITY = conf[ 'ISO3166_REPRESENTATIVE_CITY' ]
+    except KeyError:
+      self.ISO3166_REPRESENTATIVE_CITY = {}
     ## list of cities with iata city codes. each city is an object 
     ## {
     ##   "name": "Paris",
@@ -341,7 +257,6 @@ class CityDB :
     self.iata_dict = {}
     for city in self.iata_city_list:
       self.iata_dict[ city[ 'iata' ] ] = city
-  
 
   def is_iata_city_code( self, iata ) -> bool:
     """ returns true is iata is an IATA city code"""
@@ -425,7 +340,8 @@ class CityDB :
       if k not in [ 'name', 'iata', 'latitude', 'longitude', 'country', 'state' ] :
         removed_keys.append( k )
         del kwargs[ k ]
-    self.logger.debug( f"The {removed_keys} have been ignored" ) 
+    if removed_keys != [] :
+      self.logger.debug( f"The {removed_keys} have been ignored" ) 
     ## country field of iata_city_list is using iso(2)
     if 'country' in kwargs.keys() : 
       country_info = self.countryDB.get_country_info( kwargs[ 'country' ] )
@@ -452,7 +368,11 @@ class CityDB :
    
     Nominatim is a general purpose api that matches a specific address to a geodesic point. 
     In the case of country code, we do prefer to rely on a data base provided by country_info.
-    """ 
+    """
+    ## deprecated countries
+    if country == 'AN': ## Netherlands Antilles We should maybe add 
+                        ## an entry to country_info
+      country = 'CW'
     ## try a cache lookup
     try:
       city = self.micro_cache[ country ]
@@ -478,12 +398,12 @@ class CityDB :
       else:
         iata_city = 'LAX'
       city = self.get_city_by_iata( iata_city )
-    elif country_iso in ISO3166_REPRESENTATIVE_CITY.keys() :
-      city = self.get_city_by_iata( ISO3166_REPRESENTATIVE_CITY[ country_iso ][ 'iata' ] )
+    elif country_iso in self.ISO3166_REPRESENTATIVE_CITY.keys() :
+      city = self.get_city_by_iata( self.ISO3166_REPRESENTATIVE_CITY[ country_iso ][ 'iata' ] )
     else: 
       iata_coordinates = country_info.capital_latlng()
-      self.logger.debug( f"{iata_coordinates} for ( {country_iso}, "\
-                         f"{CountryInfo( country_iso ).capital()} )" )
+      self.logger.debug( f"{iata_coordinates} for ( {country_info.name()}, "\
+                         f"{country_iso}, {country_info.capital()} )" )
       iata_city  = { "latitude" : iata_coordinates[ 0 ], 
                      "longitude" : iata_coordinates[ 1 ] }
       city_list = self.neighboring_city_list( iata_city, list_len=1, max_dist=None)  
@@ -571,7 +491,7 @@ class CityDB :
     elif 'country' in location.keys() and 'city' in location.keys():
       city_list = self.get_city( name=location[ 'city' ], \
                                  country=location[ 'country' ] )
-      print( f"city_list : {city_list}" )
+#      print( f"city_list : {city_list} - location {location}" )
       city = city_list[ 0 ] 
     elif 'country' in location.keys() :
       city = self.country_representative_city( location[ 'country' ] )

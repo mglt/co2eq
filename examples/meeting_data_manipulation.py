@@ -8,24 +8,27 @@ ietf_meeting_list = IETFMeetingList( conf=CONF )
 
 ## computing average CO2
 mode = 'flight'
-cluster_key = 'presence'
-cluster_value = 'on-site'
+cluster_key = None #'presence'
+cluster_value = None #'on-site'
 co2eq = 'myclimate'
 
 ## Computing the average effective CO2 per capita: That is CO2 associated to remote
 ## participants divided by the numbe rof participants
-value_dict = {}
-for meeting_designation in ietf_meeting_list.meeting_list :
-  meeting = ietf_meeting_list.get_meeting( meeting_designation )
+mean_co2eq_per_attendee = {}
+co2eq_total = {}
+for meeting_dict in ietf_meeting_list.meeting_list :
+  meeting = ietf_meeting_list.get_meeting( meeting_dict )
   attendee_nbr = len( meeting.select_attendee_list( cluster_key=cluster_key, cluster_value=cluster_value ) )
   cluster = meeting.cluster_dict( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
   try: 
-    value_dict[ meeting_designation ] = cluster[ cluster_value ] / attendee_nbr
+    co2eq_total[ meeting.name ] = cluster[ cluster_value ]
+    mean_co2eq_per_attendee[ meeting.name ] = cluster[ cluster_value ] / attendee_nbr
   except KeyError: ## cluster_value does not exist
     continue
 
-print( f"{cluster_value} CO2eq {json.dumps( value_dict, indent=2) }" )
-print( f"Average onsite CO2 ({mode}, {cluster_key}->{cluster_value}, {co2eq}): {mean(value_dict.values())}" )
+print( f"{cluster_value} Total CO2eq {json.dumps( co2eq_total, indent=2) }" )
+print( f"{cluster_value} Per Participant CO2eq {json.dumps( mean_co2eq_per_attendee, indent=2) }" )
+print( f"Average onsite CO2 ({mode}, {cluster_key}->{cluster_value}, {co2eq}): {mean(mean_co2eq_per_attendee.values())}" )
 
 ## Computing the average number of flight segments per participants
 ## considering all participants 
@@ -52,7 +55,7 @@ for meeting_designation in ietf_meeting_list.meeting_list :
 print( f"{cluster_value} Average flight segments {json.dumps( value_dict, indent=2)}" )
 print( f"min average : {min( value_dict.values() )}" )  
 print( f"max average : {max( value_dict.values() )}" )  
-print( f"{sorted( value_dict.items() , key key= lambda item : item[1]  ) }" ) 
+print( f"{sorted( value_dict.items() , key= lambda item : item[1]  ) }" ) 
 
 
 

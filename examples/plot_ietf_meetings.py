@@ -1,6 +1,7 @@
-from co2eq.meeting import IETFMeetingList
+from co2eq.ietf_meeting import IETFMeetingList
 from conf import CONF
 
+CONF['OUTPUT_DIR' ] = "/home/emigdan/gitlab/ietf/co2eq/examples/IETF"
 ## building a meeting serie 
 ietf_meeting_list = IETFMeetingList( conf=CONF ) 
 ## building all graphs
@@ -13,5 +14,5 @@ ietf_meeting_list.plot_all()
 ## gh-pages uses https://mglt.github.io/co2eq/IETF
 ## the leap theme seems to be the only one that generates a TOC
 #ietf_meeting_list.www_md( 'http://127.0.0.1:4000/IETF/', toc=False, home_url='http://127.0.0.1:4000/')
-ietf_meeting_list.www_md( 'https://mglt.github.io/co2eq/IETF/', toc=False, home_url='https://mglt.github.io/co2eq' )
+#ietf_meeting_list.www_md( 'https://mglt.github.io/co2eq/IETF/', toc=False, home_url='https://mglt.github.io/co2eq' )
 
