@@ -32,43 +32,22 @@
 
     function contactServer() {
         socket.send(JSON.stringify({ 
-            'name' : 'IETF_150', 
+            'name' : 'IETF_173', 
             'location' : { 
                 'country' : 'DE', 
                 'city' : 'BER',
-                'iata' : "BER",
+                'iata' : "TXL",
             },
-            'attendee_list': [                 
-                {  
-                "country": "NP" 
-                }, 
-                { 
-                "country": "JP"                       
-                },
+            'attendee_list': [
                 {
-                "country": "NZ"
-                },
-                {
-                "country": "UK"
-                },
-                {
-                "country": "FR"
-                },
-                {
-                "country": "UK" 
-                },
-                {
-                "country": "UK" 
-                },
-                {
-                "country": "UK" 
+                    "country": "NP",
+                    "iata": "KTM"
                 }
             ]                                    
         }));
     }
 
     socket.addEventListener('message', function (event) {
-        console.log("asd");
         var messageContainer = document.getElementById('message-container');
         messageContainer.appendChild(createImageMessageDOM(event.data))
     });

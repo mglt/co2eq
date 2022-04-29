@@ -4,10 +4,8 @@ import websockets
 import base64
 import os
 from conf import CONF
-from plot_ietf_meetings import get_meeting_list
+from plot_meeting import plot_meeting
 import json
-
-# create handler for each connection
 
 output_file_path = CONF['OUTPUT_DIR']
 
@@ -19,7 +17,7 @@ async def handler(websocket, path):
 
     print(data_dict)
 
-    get_meeting_list(data_dict)
+    plot_meeting(data_dict)
 
     for file_name in os.listdir(os.path.join(output_file_path, data_dict['name'])):
         if file_name.endswith('.svg'):
