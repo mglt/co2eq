@@ -3058,3 +3058,817 @@ processing IETF_173
 
 [2022-04-29 22:31:43,659 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
 [2022-04-29 22:31:43,660 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:29,691 : meeting.py:710 -             plot_all() ] IETF_174: Processing plot_co2eq
+[2022-04-30 00:10:29,691 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:29,691 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:29,691 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:29,691 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:29,691 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:29,692 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:29,692 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:29,692 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,393 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:30,393 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,393 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:30,393 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,393 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:30,393 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,394 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:30,394 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,608 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:30,608 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,608 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:30,608 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,608 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:30,608 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,609 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:30,609 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,869 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:30,870 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,870 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM', 'flight_segment_number': 5}
+[2022-04-30 00:10:30,870 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,870 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM', 'flight_segment_number': 5}
+[2022-04-30 00:10:30,870 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:30,870 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM', 'flight_segment_number': 2}
+[2022-04-30 00:10:30,870 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:31,253 : meeting.py:723 -             plot_all() ] 
+processing IETF_174
+
+[2022-04-30 00:10:32,555 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM', 'flight_segment_number': 2}
+[2022-04-30 00:10:32,555 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:32,695 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM', 'flight_segment_number': 2}
+[2022-04-30 00:10:32,695 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:32,821 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM', 'flight_segment_number': 2}
+[2022-04-30 00:10:32,821 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:32,951 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM', 'flight_segment_number': 5}
+[2022-04-30 00:10:32,951 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KTM to  BER
+[2022-04-30 00:10:53,586 : meeting.py:710 -             plot_all() ] IETF_175: Processing plot_co2eq
+[2022-04-30 00:10:53,586 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'iata': 'KTM'}
+[2022-04-30 00:10:53,587 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 20, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 711, in plot_all
+    meeting.plot_co2eq( )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 184, in build_co2eq_data
+    meeting_iata_city = self.cityDB.representative_city( self.location )[ 'iata' ]
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/flight_utils.py", line 495, in representative_city
+    city = city_list[ 0 ]
+IndexError: list index out of range
+[2022-04-30 00:11:13,437 : meeting.py:710 -             plot_all() ] IETF_175: Processing plot_co2eq
+[2022-04-30 00:11:13,437 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:11:13,438 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 20, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 711, in plot_all
+    meeting.plot_co2eq( )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 184, in build_co2eq_data
+    meeting_iata_city = self.cityDB.representative_city( self.location )[ 'iata' ]
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/flight_utils.py", line 495, in representative_city
+    city = city_list[ 0 ]
+IndexError: list index out of range
+[2022-04-30 00:12:29,618 : meeting.py:710 -             plot_all() ] IETF_175: Processing plot_co2eq
+[2022-04-30 00:12:29,618 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:29,619 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:29,619 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:29,619 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:29,619 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:29,619 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:29,619 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:29,619 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,111 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:30,112 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,112 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:30,112 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,112 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:30,112 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,112 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:30,112 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,330 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:30,330 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,331 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:30,331 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,331 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:30,331 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,331 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:30,331 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,546 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-04-30 00:12:30,546 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,546 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX', 'flight_segment_number': 4}
+[2022-04-30 00:12:30,546 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,546 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX', 'flight_segment_number': 4}
+[2022-04-30 00:12:30,546 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,546 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX', 'flight_segment_number': 2}
+[2022-04-30 00:12:30,546 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:30,912 : meeting.py:723 -             plot_all() ] 
+processing IETF_175
+
+[2022-04-30 00:12:32,343 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX', 'flight_segment_number': 2}
+[2022-04-30 00:12:32,343 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:32,485 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX', 'flight_segment_number': 2}
+[2022-04-30 00:12:32,485 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:32,657 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX', 'flight_segment_number': 2}
+[2022-04-30 00:12:32,657 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:32,785 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX', 'flight_segment_number': 4}
+[2022-04-30 00:12:32,785 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  BER
+[2022-04-30 00:12:48,890 : meeting.py:710 -             plot_all() ] IETF_175: Processing plot_co2eq
+[2022-04-30 00:12:48,890 : meeting.py:723 -             plot_all() ] 
+processing IETF_175
+
+[2022-04-30 00:13:09,594 : meeting.py:710 -             plot_all() ] IETF_175: Processing plot_co2eq
+[2022-04-30 00:13:09,595 : meeting.py:723 -             plot_all() ] 
+processing IETF_175
+
+[2022-04-30 00:25:09,601 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:25:22,193 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:26:34,299 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:27:01,564 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:30:07,266 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:30:19,083 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:30:46,831 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:30:51,283 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:31:10,703 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:32:12,192 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:32:26,850 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:35:13,586 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:35:28,436 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:36:18,717 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:36:27,047 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:36:37,054 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:36:46,471 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:37:03,153 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:37:20,963 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:38:14,030 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:41:58,111 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:42:03,011 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:42:24,454 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:43:14,513 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:43:20,511 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:43:51,760 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:43:55,321 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:44:33,526 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:45:28,416 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:45:34,066 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:47:04,532 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:47:59,342 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:48:10,956 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:49:13,391 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:53:03,678 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:53:07,404 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:53:19,832 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:53:43,175 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:56:23,467 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:56:34,860 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:56:58,843 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:57:08,842 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 00:59:32,521 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 01:01:06,884 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 01:02:54,193 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 01:03:53,217 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 01:05:45,263 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 01:05:57,296 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 01:07:04,619 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 01:07:09,049 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 01:07:16,662 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-04-30 01:07:22,913 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 14, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
