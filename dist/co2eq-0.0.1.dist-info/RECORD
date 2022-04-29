@@ -1,0 +1,15 @@
+co2eq/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+co2eq/flight_utils.py,sha256=QtCxnpjz1usGKND3BFY8YjETRQREuenykFMtLcwWy0w,52314
+co2eq/jcache.py,sha256=0So4_4fM_2nNMP6rYH8YL2bIrS1CAOZMSNS69ZuRLwA,6155
+co2eq/meeting.py,sha256=n0HVLIeIMNfOUx4olRg843bkDkW1W-V4tAC4Xw124Cc,32436
+co2eq/data/iata_city_airport_map.csv.gz,sha256=FHFp96qr1S45LKuBxcElA12GAOyijLc5Z-mxeDkBgtI,13542
+co2eq/data/iata_city_airport_map.json.gz,sha256=s4v2aa2_eHAE8fDrOkQOMEB7shUOq9bFFDO4e0a5YYM,18722
+co2eq/data/iata_city_airport_map.ods.gz,sha256=1_VAq5z6HmTF5nNwG9xswaWS-UyqsGSepbHnlK0gGAo,23304
+co2eq/data/iata_city_codes-2015.json.gz,sha256=0G0Te_13VBtHjkeqfdDKTAzROPyfX5SVwOqhSTDKJ_U,176022
+co2eq/data/iata_city_codes-2015.txt.gz,sha256=C4UXMgJq-iEiJlExqNEYJteI8QS9VAijFFRATcNVd4E,57154
+co2eq/data/iata_city_codes-2015_enhanced.txt.gz,sha256=rFuMi8rPe6zElqFOSAUyhtkyX51ucm4GmP_6q1YMaeg,57168
+co2eq-0.0.1.dist-info/LICENSE.txt,sha256=AbpHGcgLb-kRsJGnwFEktk7uzpZOCcBY74-YBdrKVGs,1
+co2eq-0.0.1.dist-info/METADATA,sha256=yMiu3Z4Qv4qybM2ema47YYq7WNN0iIRjHZvPT0RovEo,686
+co2eq-0.0.1.dist-info/WHEEL,sha256=ewwEueio1C2XeHTvT17n8dZUJgOvyCWCt0WVNLClP9o,92
+co2eq-0.0.1.dist-info/top_level.txt,sha256=HtjJW6v-uPGWvjFOfCUOG92LCFchzqduEsl3JiKpMNo,6
+co2eq-0.0.1.dist-info/RECORD,,

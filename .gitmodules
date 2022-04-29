@@ -1,0 +1,3 @@
+[submodule "country_info"]
+	path = country_info
+	url = https://github.com/mglt/countryinfo

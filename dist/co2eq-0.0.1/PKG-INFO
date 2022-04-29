@@ -1,0 +1,30 @@
+Metadata-Version: 2.1
+Name: co2eq
+Version: 0.0.1
+Summary: "Compute CO2 equivalent emissions"
+Home-page: https://github.com/mglt/co2eq
+Author: Daniel Migault
+Author-email: mglt.biz@gmail.com
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/mglt/co2eq/issues
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+
+## Installation 
+
+1) install the climate neutral 
+
+```
+sudo python3 install setup.py
+```
+
+TO DO:
+* git pull new version of climate_neutral
+* produce a package.
+
+

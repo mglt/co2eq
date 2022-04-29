@@ -1,4 +1,4 @@
-from co2eq.meeting import IETFMeeting, IETFMeetingList, get_flight
+from co2eq.meeting import Meeting, MeetingList, get_flight
 # from meeting import IETFMeeting, IETFMeetingList, get_flight
 from co2eq.flight_utils import FlightDB
 from conf import CONF

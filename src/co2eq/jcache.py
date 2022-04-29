@@ -1,3 +1,4 @@
+from hashlib import new
 import os
 from os.path import getsize, exists, dirname
 import json

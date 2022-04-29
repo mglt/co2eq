@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 #import numpy as np
 import requests
 from math import ceil
-from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, Flight, logger
+from flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, Flight, logger
 
 
 

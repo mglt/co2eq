@@ -1,9 +1,9 @@
-from co2eq.ietf_meeting import IETFMeetingList
+from co2eq.meeting import MeetingList
 from conf import CONF
 
 CONF['OUTPUT_DIR' ] = "/home/emigdan/gitlab/ietf/co2eq/examples/IETF"
 ## building a meeting serie 
-ietf_meeting_list = IETFMeetingList( conf=CONF ) 
+ietf_meeting_list = MeetingList( conf=CONF ) 
 ## building all graphs
 ietf_meeting_list.plot_all()
 ## building web pages in md format
