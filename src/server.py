@@ -24,7 +24,7 @@ async def handler(websocket, path):
 
  
 
-start_server = websockets.serve(handler, "localhost", 8000)
+start_server = websockets.serve(handler, "", 8000)
 
  
 

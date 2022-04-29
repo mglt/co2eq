@@ -1,3 +1,5 @@
+from decouple import config
+
 CONF = {
   ## The directory where air flights, or CO2 emissions for a given air flight
   ## requested to GO Climate are stored after it has been requested.
@@ -8,20 +10,20 @@ CONF = {
   ## https://developers.amadeus.com/get-started/get-started-with-amadeus-apis-334
   ## You need to register and request and an API Key and an API Secret for the
   ## Flight Offers Search service.
-  'AMADEUS_ID' : "ZVCEHBaThOa3dgit8AkvVC4ATmLpcMAv",
-  'AMADEUS_SECRET' : "wKv8R9a23vuhs2uG",
+  'AMADEUS_ID' : config('AMADEUS_ID'),
+  'AMADEUS_SECRET' : config('AMADEUS_SECRET'),
 
   ## To compute the CO2 emissions associated a flight a request is sent to GO Climate
   ## Please go through https://api.goclimate.com/docs to get an account.
-  'GOCLIMATE_SECRET' :  "75a14c715582fd1613297e5c",
-  'NOMINATIM_ID' : "P2LGDAyXKBJFv34F", 
+  'GOCLIMATE_SECRET' :  config('GOCLIMATE_SECRET'),
+  'NOMINATIM_ID' : config('GOCLIMATE_SECRET'), 
 
   ## where logs are stored. We suggest you perform tail -f your_log_file
   ## to monitor what can possibly go wrong.
   'log' : './co2eq.log',
 
   ## Directory where all outputs are stored
-  'OUTPUT_DIR' : "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/output",
+  'OUTPUT_DIR' : "/app/src/co2eq/output",
 
   ## CityDB specific parameters
   ## ISO3166_REPRESENTATIVE_CITY enable to indicate a specific

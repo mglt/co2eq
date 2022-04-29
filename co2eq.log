@@ -621,3 +621,251 @@ processing Test
 [2022-04-29 12:23:58,133 : meeting.py:723 -             plot_all() ] 
 processing ICANN
 
+[2022-04-29 14:08:17,520 : meeting.py:710 -             plot_all() ] meeting_nameq: Processing plot_co2eq
+[2022-04-29 14:08:17,520 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:17,520 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:17,520 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:17,520 : flight_utils.py:405 - country_representative_city() ] [35.682839, 139.759455] for ( Japan, JP, Tokyo )
+[2022-04-29 14:08:18,179 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:18,179 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:18,179 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:18,179 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:18,179 : flight_utils.py:405 - country_representative_city() ] [51.507322, -0.127647] for ( United Kingdom, GB, London )
+[2022-04-29 14:08:18,867 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:18,867 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:18,867 : flight_utils.py:405 - country_representative_city() ] [48.856697, 2.351462] for ( France, FR, Paris )
+[2022-04-29 14:08:19,417 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:19,418 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:19,418 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:19,418 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:19,418 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:19,418 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:19,418 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:19,418 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:19,418 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:19,418 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:19,418 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:19,418 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:19,418 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:19,418 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:19,418 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:19,418 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:19,418 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:19,419 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:19,419 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:19,419 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:19,419 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:19,419 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:19,419 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:19,419 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:19,419 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:19,419 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:19,419 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:19,419 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:19,419 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:19,419 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:19,419 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,039 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,040 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,040 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,040 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,040 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,040 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,040 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,040 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,040 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,040 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,040 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,040 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,040 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,040 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,040 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,040 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,040 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,040 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,040 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,040 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,041 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,041 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,041 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,041 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,041 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,041 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,041 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,041 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,041 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,041 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,042 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,042 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,042 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,042 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,042 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,042 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,042 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,042 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,042 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,042 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,258 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,258 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,258 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,258 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,258 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,258 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,258 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,258 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,258 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,258 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,259 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'flight_segment_number': 6}
+[2022-04-29 14:08:20,259 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,259 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP', 'flight_segment_number': 4}
+[2022-04-29 14:08:20,259 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,259 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ', 'flight_segment_number': 6}
+[2022-04-29 14:08:20,259 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,259 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK', 'flight_segment_number': 4}
+[2022-04-29 14:08:20,259 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,259 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR', 'flight_segment_number': 4}
+[2022-04-29 14:08:20,259 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,259 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'flight_segment_number': 6}
+[2022-04-29 14:08:20,259 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,259 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP', 'flight_segment_number': 4}
+[2022-04-29 14:08:20,259 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,260 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ', 'flight_segment_number': 6}
+[2022-04-29 14:08:20,260 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,260 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK', 'flight_segment_number': 4}
+[2022-04-29 14:08:20,260 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,260 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR', 'flight_segment_number': 4}
+[2022-04-29 14:08:20,260 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,260 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'flight_segment_number': 2}
+[2022-04-29 14:08:20,260 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,260 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP', 'flight_segment_number': 2}
+[2022-04-29 14:08:20,260 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,260 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ', 'flight_segment_number': 2}
+[2022-04-29 14:08:20,261 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,261 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK', 'flight_segment_number': 2}
+[2022-04-29 14:08:20,261 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,261 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR', 'flight_segment_number': 2}
+[2022-04-29 14:08:20,261 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,630 : meeting.py:710 -             plot_all() ] meeting_namew: Processing plot_co2eq
+[2022-04-29 14:08:20,630 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,630 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,630 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,630 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,630 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,630 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,630 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,630 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,630 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,630 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,631 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,631 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,631 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,631 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,631 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,631 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,631 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,631 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,631 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,631 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,631 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,631 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,631 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,631 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,632 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,632 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,632 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,632 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,632 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,632 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,632 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,632 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,632 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,632 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,632 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,632 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,632 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,632 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,633 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,633 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,800 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,800 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,800 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,800 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,800 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,800 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,800 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,800 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,800 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,800 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,800 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,800 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,800 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,800 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,800 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,800 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,800 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,800 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,800 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,800 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,801 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,801 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,801 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,801 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,801 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,801 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,801 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,801 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,801 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,801 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:20,801 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:20,802 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:20,802 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:20,802 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:20,802 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:20,802 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:20,802 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:20,802 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:20,802 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:20,802 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:21,004 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP'}
+[2022-04-29 14:08:21,004 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:21,004 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-04-29 14:08:21,004 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:21,004 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ'}
+[2022-04-29 14:08:21,004 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:21,004 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK'}
+[2022-04-29 14:08:21,004 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:21,004 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR'}
+[2022-04-29 14:08:21,004 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:21,005 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'flight_segment_number': 6}
+[2022-04-29 14:08:21,005 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:21,005 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP', 'flight_segment_number': 4}
+[2022-04-29 14:08:21,005 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:21,005 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ', 'flight_segment_number': 6}
+[2022-04-29 14:08:21,005 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:21,005 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK', 'flight_segment_number': 4}
+[2022-04-29 14:08:21,005 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:21,005 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR', 'flight_segment_number': 4}
+[2022-04-29 14:08:21,005 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:21,005 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'flight_segment_number': 6}
+[2022-04-29 14:08:21,005 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:21,005 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP', 'flight_segment_number': 4}
+[2022-04-29 14:08:21,005 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:21,005 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ', 'flight_segment_number': 6}
+[2022-04-29 14:08:21,005 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:21,005 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK', 'flight_segment_number': 4}
+[2022-04-29 14:08:21,005 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:21,006 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR', 'flight_segment_number': 4}
+[2022-04-29 14:08:21,006 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:21,006 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'NP', 'flight_segment_number': 2}
+[2022-04-29 14:08:21,006 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAT to  BER
+[2022-04-29 14:08:21,006 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP', 'flight_segment_number': 2}
+[2022-04-29 14:08:21,006 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  BER
+[2022-04-29 14:08:21,006 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'NZ', 'flight_segment_number': 2}
+[2022-04-29 14:08:21,006 : meeting.py:185 -     build_co2eq_data() ]   - Flight from AKL to  BER
+[2022-04-29 14:08:21,006 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'UK', 'flight_segment_number': 2}
+[2022-04-29 14:08:21,006 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  BER
+[2022-04-29 14:08:21,006 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'FR', 'flight_segment_number': 2}
+[2022-04-29 14:08:21,006 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  BER
+[2022-04-29 14:08:21,448 : meeting.py:723 -             plot_all() ] 
+processing Test
+

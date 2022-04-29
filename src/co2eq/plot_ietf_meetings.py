@@ -4,7 +4,7 @@ from conf import CONF
 ## building a meeting serie 
 meeting_list = [
   { 
-    'name' : 'meeting_nameq', 
+    'name' : 'meeting_namet', 
     'location' : { 
       'country' : 'DE', 
       'city' : 'BER',
@@ -29,7 +29,7 @@ meeting_list = [
     ]                                    
   },
   { 
-    'name' : 'meeting_namew', 
+    'name' : 'meeting_namey', 
     'location' : { 
       'country' : 'DE', 
       'city' : 'BER',
