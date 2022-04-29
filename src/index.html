@@ -31,7 +31,40 @@
     });
 
     function contactServer() {
-        socket.send("Initialize");
+        socket.send(JSON.stringify({ 
+            'name' : 'IETF_150', 
+            'location' : { 
+                'country' : 'DE', 
+                'city' : 'BER',
+                'iata' : "BER",
+            },
+            'attendee_list': [                 
+                {  
+                "country": "NP" 
+                }, 
+                { 
+                "country": "JP"                       
+                },
+                {
+                "country": "NZ"
+                },
+                {
+                "country": "UK"
+                },
+                {
+                "country": "FR"
+                },
+                {
+                "country": "UK" 
+                },
+                {
+                "country": "UK" 
+                },
+                {
+                "country": "UK" 
+                }
+            ]                                    
+        }));
     }
 
     socket.addEventListener('message', function (event) {

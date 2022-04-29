@@ -23,7 +23,7 @@ CONF = {
   'log' : './co2eq.log',
 
   ## Directory where all outputs are stored
-  'OUTPUT_DIR' : "/app/src/co2eq/output",
+  'OUTPUT_DIR' : config('OUTPUT_DIR'),
 
   ## CityDB specific parameters
   ## ISO3166_REPRESENTATIVE_CITY enable to indicate a specific

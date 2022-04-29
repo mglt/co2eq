@@ -9,4 +9,4 @@ EXPOSE 8000
 
 COPY . .
 
-CMD [ "python3", "src/server.py"]
+CMD [ "python3", "src/co2eq/server.py"]
