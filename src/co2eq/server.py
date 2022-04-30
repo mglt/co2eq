@@ -6,6 +6,7 @@ import os
 from conf import CONF
 from plot_meeting import plot_meeting
 import json
+import shutil
 
 output_file_path = CONF['OUTPUT_DIR']
 
@@ -27,6 +28,11 @@ async def handler(websocket, path):
             await websocket.send(encoded_string.decode('utf8'))
         else:
             continue
+
+    try:
+        shutil.rmtree(os.path.join(output_file_path, data_dict['name']))
+    except OSError as e:
+        print("Error: %s - %s." % (e.filename, e.strerror))
 
 start_server = websockets.serve(handler, "", os.environ.get('PORT', 8000))
 
