@@ -504,6 +504,8 @@ var countries = {
     }
 
     function appendCheckMark(element) {
+        let check_mark_to_be_removed = element.getElementsByTagName("span")[0];
+        if(check_mark_to_be_removed) return;
         const newDiv = document.createElement("span");
         const newContent = document.createTextNode("\u2713");
         newDiv.appendChild(newContent);
