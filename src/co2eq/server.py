@@ -14,6 +14,8 @@ async def handler(websocket, path):
 
     data = await websocket.recv()
 
+    print(data)
+
     data_dict = json.loads(data)
 
     print(data_dict)

@@ -16,27 +16,52 @@
 
 <body>
 
+    <h1>Co<sub>2</sub>eq</h1>
+
     <div>
         <form onsubmit="return submitname(this);" method="post">
-            <label for="meeting_name">Meeting name:</label>
-            <input type="text" id="meeting_name" name="meeting_name">
-            <input type="submit" value="Confirm">
+            <label for="meeting_name">Meeting name*:</label>
+            <input required type="text" id="meeting_name" name="meeting_name">
+            <input type="submit" value="Confirm" id="confirm_name">
         </form>
     </div>
+
+    <br/>
 
     <div>
         <form onsubmit="return submitlocation(this);" method="post">
-            <label for="location_select_country">Meeting Country:</label>
-            <select name="location_select_country" id="location_select_country" onchange="changeIATA(this.value, 'location_select_iata')">
+            <label for="location_select_country">Meeting Country*:</label>
+            <select required name="location_select_country" id="location_select_country" onchange="changeIATA(this.value, 'location_select_iata',false)">
             </select>
             <label for="location_select_iata">Airport:</label>
-            <select name="location_select_iata" id="location_select_iata">
+            <select required name="location_select_iata" id="location_select_iata">
             </select>
-            <input type="submit" value="Confirm">
+            <input type="submit" value="Confirm" id="confirm_location">
         </form>
     </div>
 
-    <button onclick="contactServer()">Click Here</button>
+    <br/>
+
+    <div id="attendee_list">
+        <form onsubmit="return submitAttendee(this);" method="post" id="0">
+            <label for="attendee_select_country">Attendee Country*:</label>
+            <select required name="attendee_select_country" id="attendee_select_country0" onchange="changeIATA(this.value, 'attendee_select_iata0', true)">
+            </select>
+            <label for="attendee_select_iata">Airport (optional):</label>
+            <select name="attendee_select_iata" id="attendee_select_iata0">
+            </select>
+            <label for="number_of_attendee">Number of attendees:</label>
+            <input required type="number" id="number_of_attendee0" name="number_of_attendee" min="1" value="1"> 
+            <input type="submit" value="Confirm" id="confirm_attendee">
+        </form>
+    </div>
+
+    <br/>
+
+    <button onclick="addAttendee()">Add Attendee</button>
+
+    <button onclick="contactServer()">Calculate</button>
+    <button onclick="window.location.href=window.location.href">Reset All</button>
     <div id="message_container"></div>
 
 </body>
@@ -295,27 +320,59 @@ var countries = {
     }
 
     ////////////////////////////////////////Backend Communication//////////////////////////////////////////////////
-    // const socket = new WebSocket('ws://co2eq.herokuapp.com');
-    const socket = new WebSocket('ws://localhost:8000');
+    const socket = new WebSocket('ws://co2eq.herokuapp.com');
+    // const socket = new WebSocket('ws://localhost:8000');
 
     socket.addEventListener('open', function (event) {
         console.log("Connected to Socket");
     });
 
     function contactServer() {
-        socket.send(JSON.stringify({ 
-            'name' : 'IETF_175', 
-            'location' : { 
-                'country' : 'DE', 
-                'iata': 'TXL'
-            },
-            'attendee_list': [
-                {
-                    "country": "NP",
-                    "iata": "KTM"
-                }
-            ]                                    
-        }));
+        if(!meeting_details.attendee_list || meeting_details.attendee_list.length === 0) {
+            alert("Please confirm at least one attendee");
+            return;
+        }
+
+        if(!meeting_details.name || meeting_details.name === "") {
+            alert("Please confirm a meeting name");
+            return;
+        }
+
+        if(!meeting_details.location || (meeting_details.location.country && meeting_details.location.iata) === "") {
+            alert("Please confirm a meeting location");
+            return;
+        }
+
+        let attendee_list_expanded = [];
+        meeting_details.attendee_list.forEach((location) => {
+            for(let i = 1; i<=location.number_of_attendee; i++) {
+                attendee_list_expanded.push({
+                    "country": location.country,
+                    "iata": location.iata
+                });
+            }
+        });
+        
+        meeting_data_formatted = {
+            ...meeting_details,
+            attendee_list: attendee_list_expanded
+        };
+        socket.send(JSON.stringify(meeting_data_formatted));
+
+        // sample format
+        // socket.send(JSON.stringify({ 
+        //     'name' : 'IETF_176', 
+        //     'location' : { 
+        //         'country' : 'DE', 
+        //         'iata': 'TXL'
+        //     },
+        //     'attendee_list': [
+        //         {
+        //             "country": "NP",
+        //             "iata": "KTM"
+        //         }
+        //     ]                                    
+        // }));
     }
 
     socket.addEventListener('message', function (event) {
@@ -326,13 +383,17 @@ var countries = {
     function createImageMessageDOM(data) {
         let img = document.createElement("img");
         img.src = 'data:image/svg+xml;base64,' + data;    
-        console.log(img.src)
         return img;
     }
     
     ////////////////////////////////////Frontend JS ///////////////////////////////////////////////////////////////////
     meeting_details = {};
+    var attendeeIndex = 0;
+
     attachAllCountries("location_select_country");
+    changeIATA(Object.keys(countries)[0], "location_select_iata", false);
+    attachAllCountries("attendee_select_country0");
+    changeIATA(Object.keys(countries)[0], "attendee_select_iata0", true);
 
     function attachAllCountries(id) {
         let frag = document.createDocumentFragment();
@@ -346,15 +407,21 @@ var countries = {
         parent.appendChild(frag);
     }
 
-    function changeIATA(selectedcountry, id) {
+    function changeIATA(selectedcountry, id, addEmptyOption) {
         let frag = document.createDocumentFragment();
-        let parent = document.getElementById(id);
+        let parent = document.getElementById(id) || document.getElementById(id.id);
         parent.innerHTML = " ";
+        if(addEmptyOption) {
+            let option = document.createElement("option");
+            option.value = "";
+            option.text = "Default Airport";
+            frag.appendChild(option);
+        }
         airports.forEach(function(airport) {
             if(airport.country === selectedcountry) {
                 let option = document.createElement("option");
                 option.value = airport.iata;
-                option.text = airport.name + ' ' + airport.city;
+                option.text = airport.city ? airport.city + ' - ' + airport.name : airport.name;
                 frag.appendChild(option);
             }
         });
@@ -364,6 +431,7 @@ var countries = {
     function submitname(theForm) {
         if(theForm.meeting_name.value === '') return false;
         meeting_details.name = theForm.meeting_name.value;
+        appendCheckMark(theForm);
         return false;
     }
     
@@ -372,6 +440,73 @@ var countries = {
         if(!meeting_details.location) meeting_details.location = {};
         meeting_details.location.country = theForm.location_select_country.value;
         meeting_details.location.iata = theForm.location_select_iata.value;
+        appendCheckMark(theForm);
         return false;
+    }
+
+    function addAttendee(theForm){
+        let previousForm = document.getElementById(`${attendeeIndex}`);
+        let cloned_form = previousForm.cloneNode(true);
+        let check_mark_to_be_removed = cloned_form.getElementsByTagName("span")[0];
+        if(check_mark_to_be_removed) cloned_form.removeChild(check_mark_to_be_removed);
+        const old_id = parseInt(cloned_form.id);
+        cloned_form.id = `${old_id + 1}`;
+        cloned_form.reset();
+        let parent = document.getElementById("attendee_list");
+        const attendee_select_country_id_old = 'attendee_select_country' + old_id;
+        const attendee_select_country_id_new = 'attendee_select_country' + (old_id+1);
+        const attendee_select_iata_id_old = 'attendee_select_iata' + old_id;
+        const attendee_select_iata_id_new = 'attendee_select_iata' + (old_id+1);
+        const number_of_attendee_old = 'number_of_attendee' + old_id;
+        const number_of_attendee_new = 'number_of_attendee' + (old_id+1);
+        cloned_form[attendee_select_country_id_old].id = attendee_select_country_id_new;
+        cloned_form[attendee_select_iata_id_old].id = attendee_select_iata_id_new;
+        cloned_form[number_of_attendee_old].id = number_of_attendee_new;
+        parent.appendChild(cloned_form);
+        cloned_form[attendee_select_country_id_new].setAttribute('onchange',`changeIATA(this.value, ${attendee_select_iata_id_new}, true)`);
+        attendeeIndex++;
+    }
+
+    function submitAttendee(theForm) {
+        if(theForm.attendee_select_country.value === '' || theForm.number_of_attendee.value < 1) return false;
+        if(!meeting_details.attendee_list) meeting_details.attendee_list = [];
+        const formId = parseInt(theForm.id);
+
+        if(formId === attendeeIndex) {
+            if(theForm.attendee_select_iata.value === "") {
+                meeting_details.attendee_list.push({
+                    "country": theForm.attendee_select_country.value,
+                    "number_of_attendee": theForm.number_of_attendee.value
+                });
+            }else {
+                meeting_details.attendee_list.push({
+                    "country": theForm.attendee_select_country.value,
+                    "iata": theForm.attendee_select_iata.value,
+                    "number_of_attendee": theForm.number_of_attendee.value
+                });
+            }
+        } else if(formId < attendeeIndex) {
+            if(theForm.attendee_select_iata.value === "") {
+                meeting_details.attendee_list[formId] = {
+                    "country": theForm.attendee_select_country.value,
+                    "number_of_attendee": theForm.number_of_attendee.value
+                };
+            }else {
+                meeting_details.attendee_list[formId] = {
+                    "country": theForm.attendee_select_country.value,
+                    "iata": theForm.attendee_select_iata.value,
+                    "number_of_attendee": theForm.number_of_attendee.value
+                };
+            }
+        }
+        appendCheckMark(theForm);
+        return false;
+    }
+
+    function appendCheckMark(element) {
+        const newDiv = document.createElement("span");
+        const newContent = document.createTextNode("\u2713");
+        newDiv.appendChild(newContent);
+        element.appendChild(newDiv);
     }
 </script>
