@@ -20,16 +20,18 @@ async def handler(websocket, path):
 
     print(data_dict)
 
-
     async def fileWatch():
+        sent_files = []
         while True:
             if os.path.isdir(os.path.join(output_file_path, data_dict['name'])):
                 for file_name in os.listdir(os.path.join(output_file_path, data_dict['name'])):
                     if file_name.endswith('.svg'):
-                        graph_path = os.path.join(output_file_path, data_dict['name'], file_name)
-                        with open(graph_path, "rb") as image_file:
-                            encoded_string = base64.b64encode(image_file.read())
-                        await websocket.send(encoded_string.decode('utf8'))
+                        if file_name not in sent_files:
+                            sent_files.append(file_name)
+                            graph_path = os.path.join(output_file_path, data_dict['name'], file_name)
+                            with open(graph_path, "rb") as image_file:
+                                encoded_string = base64.b64encode(image_file.read())
+                            await websocket.send(encoded_string.decode('utf8'))
                     else:
                         continue
             await asyncio.sleep(10)
@@ -40,9 +42,7 @@ async def handler(websocket, path):
     _thread = Thread(target=runFileWatch)
     _thread.start()
 
-    asyncio.Task(fileWatch())
-
-
+    # asyncio.Task(fileWatch())
 
     plot_meeting(data_dict)
 
