@@ -31,10 +31,10 @@
     <div>
         <form onsubmit="return submitlocation(this);" method="post">
             <label for="location_select_country">Meeting Country*:</label>
-            <select required name="location_select_country" id="location_select_country" onchange="changeIATA(this.value, 'location_select_iata',false)">
+            <select required name="location_select_country" id="location_select_country" onchange="changeIATA(this.value, 'location_select_iata',true)">
             </select>
-            <label for="location_select_iata">Airport:</label>
-            <select required name="location_select_iata" id="location_select_iata">
+            <label for="location_select_iata">Airport (optional):</label>
+            <select name="location_select_iata" id="location_select_iata">
             </select>
             <input type="submit" value="Confirm" id="confirm_location">
         </form>
@@ -414,7 +414,7 @@ var countries = {
     var attendeeIndex = 0;
 
     attachAllCountries("location_select_country");
-    changeIATA(Object.keys(countries)[0], "location_select_iata", false);
+    changeIATA(Object.keys(countries)[0], "location_select_iata", true);
     attachAllCountries("attendee_select_country0");
     changeIATA(Object.keys(countries)[0], "attendee_select_iata0", true);
 
@@ -459,10 +459,12 @@ var countries = {
     }
     
     function submitlocation(theForm){
-        if(theForm.location_select_country.value === '' || theForm.location_select_iata.value === '') return false;
+        if(theForm.location_select_country.value === '') return false;
         if(!meeting_details.location) meeting_details.location = {};
         meeting_details.location.country = theForm.location_select_country.value;
-        meeting_details.location.iata = theForm.location_select_iata.value;
+        if(theForm.location_select_iata.value !== ""){
+            meeting_details.location.iata = theForm.location_select_iata.value;
+        }
         appendCheckMark(theForm);
         return false;
     }
