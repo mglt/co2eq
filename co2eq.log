@@ -15814,3 +15814,282 @@ Traceback (most recent call last):
   File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
     key = attendee[ cluster_key ]
 KeyError: 'iata'
+[2022-05-01 13:32:33,296 : meeting.py:710 -             plot_all() ] check14: Processing plot_co2eq
+[2022-05-01 13:32:33,297 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:32:33,297 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:32:33,297 : flight_utils.py:799 -     retrieve_amadeus() ] requesting amadeus round trip flight for WAS -FRA - 2022-06-02 for 1 adult(s)
+[2022-05-01 13:32:52,239 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:32:52,239 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:32:52,240 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:32:52,240 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:32:52,407 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:32:52,407 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:32:54,030 : meeting.py:723 -             plot_all() ] 
+processing check14
+
+[2022-05-01 13:32:56,492 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:32:56,492 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:32:56,937 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:32:56,937 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:32:57,273 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:32:57,273 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:33:10,897 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 17, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-05-01 13:33:31,493 : meeting.py:710 -             plot_all() ] check14: Processing plot_co2eq
+[2022-05-01 13:33:31,493 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:33:31,494 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:31,494 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:33:31,494 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:31,495 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:33:31,495 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:31,495 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:33:31,495 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:32,074 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:33:32,074 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:32,075 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:33:32,075 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:32,075 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:33:32,075 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:32,075 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:33:32,075 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:32,247 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:33:32,247 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:32,247 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:33:32,247 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:32,247 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:33:32,247 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:32,247 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:33:32,247 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:32,594 : meeting.py:723 -             plot_all() ] 
+processing check14
+
+[2022-05-01 13:33:33,644 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:33:33,644 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:33,794 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:33:33,794 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:33:33,929 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:33:33,929 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:36:37,110 : meeting.py:710 -             plot_all() ] vvv: Processing plot_co2eq
+[2022-05-01 13:36:37,110 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:36:37,110 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,111 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:36:37,111 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,111 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:36:37,111 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,111 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:36:37,111 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,656 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:36:37,656 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,656 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:36:37,656 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,657 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:36:37,657 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,657 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:36:37,657 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,842 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:36:37,842 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,842 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:36:37,842 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,842 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:36:37,843 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:37,843 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:36:37,843 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:38,298 : meeting.py:723 -             plot_all() ] 
+processing vvv
+
+[2022-05-01 13:36:39,454 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:36:39,454 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:39,597 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:36:39,597 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:36:39,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:36:39,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,510 : meeting.py:710 -             plot_all() ] aaa: Processing plot_co2eq
+[2022-05-01 13:37:04,511 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:04,511 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,511 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US'}
+[2022-05-01 13:37:04,511 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,511 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:04,511 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,512 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US'}
+[2022-05-01 13:37:04,512 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,512 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:04,512 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,512 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US'}
+[2022-05-01 13:37:04,512 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,513 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:04,513 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,513 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US'}
+[2022-05-01 13:37:04,513 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,711 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:04,711 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,711 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US'}
+[2022-05-01 13:37:04,712 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,712 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:04,712 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,712 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US'}
+[2022-05-01 13:37:04,712 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,712 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:04,712 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,712 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US'}
+[2022-05-01 13:37:04,712 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,713 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:04,713 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,713 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US'}
+[2022-05-01 13:37:04,713 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,934 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:04,934 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,934 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US'}
+[2022-05-01 13:37:04,934 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,934 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:37:04,934 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,934 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:37:04,934 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,934 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:37:04,934 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,935 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:37:04,935 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,935 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:37:04,935 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:04,935 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:37:04,935 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:05,399 : meeting.py:723 -             plot_all() ] 
+processing aaa
+
+[2022-05-01 13:37:06,324 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:37:06,324 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:06,324 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:37:06,324 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:06,480 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:37:06,480 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:06,480 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:37:06,480 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:06,681 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:37:06,681 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:06,682 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:37:06,682 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:37:17,190 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 17, in handler
+    data = await websocket.recv()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/co2eq/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-05-01 13:37:38,680 : meeting.py:710 -             plot_all() ] aadd: Processing plot_co2eq
+[2022-05-01 13:37:38,680 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:38,680 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:38,680 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:38,680 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:38,680 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:38,680 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:38,681 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:38,681 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:38,987 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:38,987 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:38,987 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:38,987 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:38,988 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:38,988 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:38,988 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:38,988 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:39,329 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:37:39,329 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:39,330 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:37:39,330 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:39,331 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:37:39,331 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:39,332 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:37:39,332 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:39,759 : meeting.py:723 -             plot_all() ] 
+processing aadd
+
+[2022-05-01 13:37:40,873 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:37:40,873 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:41,007 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:37:41,007 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:37:41,202 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:37:41,202 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-01 13:40:51,044 : meeting.py:710 -             plot_all() ] addd: Processing plot_co2eq
+[2022-05-01 13:40:51,044 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:40:51,044 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,044 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:40:51,045 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,045 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:40:51,045 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,045 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:40:51,045 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,590 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:40:51,590 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,590 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:40:51,590 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,590 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:40:51,590 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,590 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:40:51,591 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:40:51,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,749 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:40:51,749 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,749 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:40:51,749 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:51,749 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:40:51,749 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:52,177 : meeting.py:723 -             plot_all() ] 
+processing addd
+
+[2022-05-01 13:40:53,221 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:40:53,221 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:53,357 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:40:53,357 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:40:53,493 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:40:53,494 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,087 : meeting.py:710 -             plot_all() ] sss: Processing plot_co2eq
+[2022-05-01 13:41:07,087 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:41:07,088 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,088 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:41:07,088 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,088 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:41:07,088 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,088 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:41:07,088 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,301 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:41:07,301 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,302 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:41:07,302 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,302 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:41:07,302 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,302 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:41:07,302 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,488 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US'}
+[2022-05-01 13:41:07,488 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,488 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:41:07,488 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,489 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:41:07,489 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,489 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:41:07,489 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:07,953 : meeting.py:723 -             plot_all() ] 
+processing sss
+
+[2022-05-01 13:41:08,899 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:41:08,899 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:09,030 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 2}
+[2022-05-01 13:41:09,030 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-01 13:41:09,184 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
+[2022-05-01 13:41:09,184 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA

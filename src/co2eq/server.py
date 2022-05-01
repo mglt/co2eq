@@ -1,5 +1,4 @@
 import asyncio
-
 import websockets
 import base64
 import os
@@ -19,6 +18,8 @@ async def handler(websocket, path):
     data_dict = json.loads(data)
 
     print(data_dict)
+
+    delete_folder(os.path.join(output_file_path, data_dict['name']))
 
     async def fileWatch():
         sent_files = []
@@ -42,14 +43,15 @@ async def handler(websocket, path):
     _thread = Thread(target=runFileWatch)
     _thread.start()
 
-    # asyncio.Task(fileWatch())
-
     plot_meeting(data_dict)
 
     await asyncio.sleep(10)
 
+    delete_folder(os.path.join(output_file_path, data_dict['name']))
+
+def delete_folder(folder_name):
     try:
-        shutil.rmtree(os.path.join(output_file_path, data_dict['name']))
+        shutil.rmtree(folder_name)
     except OSError as e:
         print("Error: %s - %s." % (e.filename, e.strerror))
 
