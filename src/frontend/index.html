@@ -320,12 +320,35 @@ var countries = {
     }
 
     ////////////////////////////////////////Backend Communication//////////////////////////////////////////////////
-    const socket = new WebSocket('ws://co2eq.herokuapp.com');
-    // const socket = new WebSocket('ws://localhost:8000');
 
-    socket.addEventListener('open', function (event) {
+    // const socketURL = "ws://localhost:8000";
+    const socketURL = "ws://co2eq.herokuapp.com";
+    
+    var socket;
+    let is_socket_connected = false;
+
+    const socketOpenListener = (event) => {
         console.log("Connected to Socket");
-    });
+        is_socket_connected = true;
+    };
+
+    const socketMessageListener = (event) => {
+        let messageContainer = document.getElementById('message_container');
+        messageContainer.appendChild(createImageMessageDOM(event.data));
+    };
+
+    const socketCloseListener = (event) => {
+        if (socket) {
+            console.error('Disconnected. Retrying...');
+            is_socket_connected = false;
+        }
+        socket = new WebSocket(socketURL);
+        socket.addEventListener('open', socketOpenListener);
+        socket.addEventListener('message', socketMessageListener);
+        socket.addEventListener('close', socketCloseListener);
+    };
+
+    socketCloseListener();
 
     function contactServer() {
         if(!meeting_details.attendee_list || meeting_details.attendee_list.length === 0) {
@@ -340,6 +363,11 @@ var countries = {
 
         if(!meeting_details.location || (meeting_details.location.country && meeting_details.location.iata) === "") {
             alert("Please confirm a meeting location");
+            return;
+        }
+
+        if(!is_socket_connected) {
+            alert("Connection to Backend failed. Please try refreshing the page.");
             return;
         }
 
@@ -374,11 +402,6 @@ var countries = {
         //     ]                                    
         // }));
     }
-
-    socket.addEventListener('message', function (event) {
-        let messageContainer = document.getElementById('message_container');
-        messageContainer.appendChild(createImageMessageDOM(event.data))
-    });
 
     function createImageMessageDOM(data) {
         let img = document.createElement("img");
