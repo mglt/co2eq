@@ -1,3 +1,5 @@
+# Live application: [![Netlify Status](https://api.netlify.com/api/v1/badges/d8891a86-be1d-4e5a-8789-b4592385910a/deploy-status)](https://app.netlify.com/sites/co2eq/deploys)
+
 `co2eq` estimates the CO2 emissions associated to air flights.
 It is currently focused on a single meeting. 
 CO2 emissions can be estimated according to the flying distance between each attendee and the meeting place (distance mode). 
