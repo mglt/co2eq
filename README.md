@@ -60,7 +60,6 @@ AMADEUS_SECRET=XXXX
 GOCLIMATE_SECRET=XXXX
 NOMINATIM_ID=XXXX
 
-
 OUTPUT_DIR=/app/src/co2eq/output                                        #For docker images
 OUTPUT_DIR=/home/your_path_to_project_folder/co2eq/src/co2eq/output     #For local development
 
