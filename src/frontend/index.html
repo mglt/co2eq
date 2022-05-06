@@ -326,13 +326,18 @@ var countries = {
     
     var socket;
     let is_socket_connected = false;
+    let initial_response = false;
 
     const socketOpenListener = (event) => {
         console.log("Connected to Socket");
         is_socket_connected = true;
+        if(!initial_response && (meeting_details.attendee_list && meeting_details.attendee_list.length > 0) && (meeting_details.name && meeting_details.name !== "") && (meeting_details.location && meeting_details.location.country)) {
+            contactServer();
+        }
     };
 
     const socketMessageListener = (event) => {
+        initial_response = true;
         let messageContainer = document.getElementById('message_container');
         messageContainer.appendChild(createImageMessageDOM(event.data));
     };
@@ -385,6 +390,11 @@ var countries = {
             ...meeting_details,
             attendee_list: attendee_list_expanded
         };
+
+        if(!initial_response) {
+            console.log(meeting_data_formatted);
+        }
+
         socket.send(JSON.stringify(meeting_data_formatted));
 
         // sample format

@@ -19,8 +19,6 @@ async def handler(websocket, path):
 
     print(data_dict)
 
-    delete_folder(os.path.join(output_file_path, data_dict['name']))
-
     async def fileWatch():
         sent_files = []
         while True:
@@ -35,7 +33,7 @@ async def handler(websocket, path):
                             await websocket.send(encoded_string.decode('utf8'))
                     else:
                         continue
-            await asyncio.sleep(10)
+            await asyncio.sleep(5)
 
     def runFileWatch():
         asyncio.run(fileWatch())
@@ -45,7 +43,7 @@ async def handler(websocket, path):
 
     plot_meeting(data_dict)
 
-    await asyncio.sleep(10)
+    await asyncio.sleep(5)
 
     delete_folder(os.path.join(output_file_path, data_dict['name']))
 

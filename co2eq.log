@@ -16093,3 +16093,1036 @@ processing sss
 [2022-05-01 13:41:09,030 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
 [2022-05-01 13:41:09,184 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'flight_segment_number': 4}
 [2022-05-01 13:41:09,184 : meeting.py:185 -     build_co2eq_data() ]   - Flight from WAS to  FRA
+[2022-05-06 13:18:12,215 : meeting.py:710 -             plot_all() ] ietf_176: Processing plot_co2eq
+[2022-05-06 13:18:12,216 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:18:12,216 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:18:12,216 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-05-06 13:18:12,216 : flight_utils.py:405 - country_representative_city() ] [35.682839, 139.759455] for ( Japan, JP, Tokyo )
+[2022-05-06 13:18:12,845 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:18:12,845 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'PT'}
+[2022-05-06 13:18:12,845 : flight_utils.py:405 - country_representative_city() ] [38.707751, -9.136592] for ( Portugal, PT, Lisbon )
+[2022-05-06 13:18:13,368 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:13,369 : flight_utils.py:799 -     retrieve_amadeus() ] requesting amadeus round trip flight for LIS -FRA - 2022-06-03 for 1 adult(s)
+[2022-05-06 13:18:20,301 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:18:20,301 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:20,301 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'CN'}
+[2022-05-06 13:18:20,302 : flight_utils.py:405 - country_representative_city() ] [39.906217, 116.391276] for ( China, CN, Beijing )
+[2022-05-06 13:18:20,859 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:18:20,859 : flight_utils.py:799 -     retrieve_amadeus() ] requesting amadeus round trip flight for BJS -FRA - 2022-06-03 for 1 adult(s)
+[2022-05-06 13:18:26,238 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:18:26,238 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:18:26,239 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-05-06 13:18:26,239 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:18:26,239 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'PT'}
+[2022-05-06 13:18:26,239 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:26,239 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:18:26,239 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:26,239 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'CN'}
+[2022-05-06 13:18:26,239 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:18:26,240 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:18:26,240 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:18:26,240 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-05-06 13:18:26,240 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:18:26,405 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'PT'}
+[2022-05-06 13:18:26,406 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:26,556 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:18:26,556 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:26,556 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'CN'}
+[2022-05-06 13:18:26,556 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:18:26,716 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:18:26,716 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:18:26,717 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-05-06 13:18:26,717 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:18:26,717 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'PT'}
+[2022-05-06 13:18:26,718 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:26,718 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:18:26,718 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:26,719 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'CN'}
+[2022-05-06 13:18:26,719 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:18:27,357 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:18:27,358 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:18:27,358 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-05-06 13:18:27,358 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:18:27,358 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'PT'}
+[2022-05-06 13:18:27,358 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:27,358 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:18:27,358 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:27,358 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'CN'}
+[2022-05-06 13:18:27,358 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:18:27,358 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:18:27,358 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:18:27,358 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-05-06 13:18:27,358 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:18:27,358 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'PT'}
+[2022-05-06 13:18:27,358 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:27,358 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:18:27,358 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:27,358 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'CN'}
+[2022-05-06 13:18:27,358 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:18:27,359 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:18:27,359 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:18:27,359 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-05-06 13:18:27,359 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:18:27,359 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'PT'}
+[2022-05-06 13:18:27,359 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:27,359 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:18:27,359 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:27,359 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'CN'}
+[2022-05-06 13:18:27,359 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:18:27,359 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:18:27,359 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:18:27,360 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-05-06 13:18:27,360 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:18:27,360 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'PT'}
+[2022-05-06 13:18:27,360 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:27,360 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:18:27,360 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:18:27,360 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'CN'}
+[2022-05-06 13:18:27,360 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:18:27,610 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:18:27,610 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:18:27,610 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-05-06 13:18:27,610 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:18:27,610 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:18:35,418 : meeting.py:710 -             plot_all() ] ietf_176: Processing plot_co2eq
+[2022-05-06 13:18:35,418 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:18:35,418 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:18:35,418 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'JP'}
+[2022-05-06 13:18:35,418 : flight_utils.py:405 - country_representative_city() ] [35.682839, 139.759455] for ( Japan, JP, Tokyo )
+[2022-05-06 13:18:35,948 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:18:35,948 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:21:45,333 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 16, in handler
+    data = await websocket.recv()
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-05-06 13:22:46,903 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:22:46,904 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:22:46,904 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:22:46,904 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:22:46,904 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:22:46,904 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:22:46,904 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:22:47,429 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:22:47,429 : flight_utils.py:799 -     retrieve_amadeus() ] requesting amadeus round trip flight for TIA -FRA - 2022-06-03 for 1 adult(s)
+[2022-05-06 13:22:52,618 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'JP'}
+[2022-05-06 13:22:52,618 : flight_utils.py:405 - country_representative_city() ] [35.682839, 139.759455] for ( Japan, JP, Tokyo )
+[2022-05-06 13:22:53,141 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:22:53,141 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:22:53,142 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:22:53,142 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'CN'}
+[2022-05-06 13:22:53,142 : flight_utils.py:405 - country_representative_city() ] [39.906217, 116.391276] for ( China, CN, Beijing )
+[2022-05-06 13:22:53,661 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:22:53,661 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'PT'}
+[2022-05-06 13:22:53,661 : flight_utils.py:405 - country_representative_city() ] [38.707751, -9.136592] for ( Portugal, PT, Lisbon )
+[2022-05-06 13:22:54,179 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:22:54,179 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'FR'}
+[2022-05-06 13:22:54,179 : flight_utils.py:405 - country_representative_city() ] [48.856697, 2.351462] for ( France, FR, Paris )
+[2022-05-06 13:22:54,682 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:22:54,683 : flight_utils.py:799 -     retrieve_amadeus() ] requesting amadeus round trip flight for PAR -FRA - 2022-06-03 for 1 adult(s)
+[2022-05-06 13:23:03,916 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'GB'}
+[2022-05-06 13:23:03,916 : flight_utils.py:405 - country_representative_city() ] [51.507322, -0.127647] for ( United Kingdom, GB, London )
+[2022-05-06 13:23:04,444 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:04,444 : flight_utils.py:799 -     retrieve_amadeus() ] requesting amadeus round trip flight for LON -FRA - 2022-06-03 for 1 adult(s)
+[2022-05-06 13:23:10,420 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'GB'}
+[2022-05-06 13:23:10,420 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,421 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,421 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,421 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,421 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,422 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:10,422 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:10,422 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'JP'}
+[2022-05-06 13:23:10,422 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,422 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:23:10,422 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,422 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'CN'}
+[2022-05-06 13:23:10,423 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:23:10,423 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'PT'}
+[2022-05-06 13:23:10,423 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:23:10,423 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'FR'}
+[2022-05-06 13:23:10,423 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:23:10,423 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'GB'}
+[2022-05-06 13:23:10,423 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,423 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'GB'}
+[2022-05-06 13:23:10,423 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,424 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,424 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,424 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,425 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,425 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:10,425 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:10,581 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'JP'}
+[2022-05-06 13:23:10,582 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,582 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:23:10,582 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,582 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'CN'}
+[2022-05-06 13:23:10,583 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:23:10,583 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'PT'}
+[2022-05-06 13:23:10,583 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:23:10,583 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'FR'}
+[2022-05-06 13:23:10,584 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:23:10,584 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'GB'}
+[2022-05-06 13:23:10,584 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,584 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'GB'}
+[2022-05-06 13:23:10,584 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,585 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,585 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,586 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,586 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,586 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:10,586 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:10,586 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'JP'}
+[2022-05-06 13:23:10,586 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,587 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:23:10,587 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,587 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'CN'}
+[2022-05-06 13:23:10,587 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:23:10,588 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'PT'}
+[2022-05-06 13:23:10,588 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:23:10,588 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'FR'}
+[2022-05-06 13:23:10,588 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:23:10,588 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'GB'}
+[2022-05-06 13:23:10,588 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,589 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'GB'}
+[2022-05-06 13:23:10,589 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'JP'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'CN'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'PT'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'FR'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'GB'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'GB'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,746 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,746 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'JP'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'CN'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'PT'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'FR'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'GB'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'GB'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,747 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:10,747 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:10,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'JP'}
+[2022-05-06 13:23:10,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:23:10,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'CN'}
+[2022-05-06 13:23:10,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:23:10,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'PT'}
+[2022-05-06 13:23:10,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:23:10,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'FR'}
+[2022-05-06 13:23:10,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:23:10,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'GB'}
+[2022-05-06 13:23:10,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'GB'}
+[2022-05-06 13:23:10,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,749 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,749 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,749 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,749 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,749 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:10,749 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:10,749 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'JP'}
+[2022-05-06 13:23:10,749 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,749 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:23:10,749 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:23:10,749 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'CN'}
+[2022-05-06 13:23:10,749 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:23:10,749 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'PT'}
+[2022-05-06 13:23:10,749 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:23:10,750 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'FR'}
+[2022-05-06 13:23:10,750 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:23:10,750 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'GB'}
+[2022-05-06 13:23:10,750 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,750 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'GB'}
+[2022-05-06 13:23:10,750 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LON to  FRA
+[2022-05-06 13:23:10,970 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,970 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,970 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:10,970 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:10,970 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:10,970 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:10,970 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:12,067 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:12,067 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:12,067 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:12,067 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:12,067 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:12,067 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:12,068 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:12,589 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:12,589 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:13,155 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:13,155 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:13,155 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:13,155 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:13,155 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:13,156 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:13,156 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:13,709 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:13,709 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:14,267 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:14,267 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:14,267 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:14,267 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:14,267 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:14,267 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:14,267 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:14,788 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:14,788 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:15,440 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:15,440 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:15,440 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:15,440 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:15,440 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:15,441 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:15,441 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:15,977 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:15,978 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:16,563 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:16,563 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:16,563 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:16,563 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:16,563 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:16,563 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:16,563 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:17,098 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:17,098 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:17,747 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:17,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:17,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:17,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:17,748 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:17,748 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:17,748 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:18,304 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:18,304 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:18,939 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:18,939 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:18,939 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:18,939 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:18,939 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:18,939 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:18,939 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:19,517 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:19,517 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:20,123 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:20,123 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:20,123 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:20,123 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:20,123 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:20,123 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:20,123 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:20,707 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:20,707 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:21,360 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:21,360 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:21,360 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:21,360 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:21,360 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:21,360 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:21,360 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:21,928 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:21,928 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:22,528 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:22,528 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:22,528 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:22,528 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:22,528 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:22,528 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:22,528 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:23,124 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:23,124 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:23,700 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:23,700 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:23,700 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:23,700 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:23,700 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:23,700 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:23,700 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:24,277 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:24,277 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:24,919 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:24,920 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:24,920 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:24,920 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:24,920 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:24,920 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:24,920 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:25,467 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:25,467 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:26,060 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:26,060 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:26,060 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:26,061 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:26,061 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:26,061 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:26,061 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:26,729 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:26,729 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:27,579 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:27,579 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:27,579 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:27,579 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:27,579 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:27,579 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:27,579 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:28,340 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:28,340 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:29,083 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:29,083 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:29,083 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:29,083 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:29,083 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:29,083 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:29,083 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:29,787 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:29,787 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:30,594 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:30,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:30,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:30,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:30,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:30,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:30,595 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:31,334 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:31,334 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:32,093 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:32,094 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:32,094 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:32,094 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:32,094 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:32,094 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:32,094 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:32,810 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:32,810 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:23:33,667 : meeting.py:710 -             plot_all() ] ietf_177: Processing plot_co2eq
+[2022-05-06 13:23:33,667 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:33,667 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:33,667 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:23:33,667 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:23:33,667 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'AL'}
+[2022-05-06 13:23:33,668 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:23:34,904 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:23:34,904 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:25:47,871 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 16, in handler
+    data = await websocket.recv()
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 553, in recv
+    await self.ensure_open()
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/protocol.py", line 930, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+[2022-05-06 13:26:51,520 : meeting.py:710 -             plot_all() ] ietf_178: Processing plot_co2eq
+[2022-05-06 13:26:51,520 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:26:51,521 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:26:51,521 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:26:51,521 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:26:51,521 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'FR'}
+[2022-05-06 13:26:51,521 : flight_utils.py:405 - country_representative_city() ] [48.856697, 2.351462] for ( France, FR, Paris )
+[2022-05-06 13:26:52,138 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:26:52,138 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:26:52,138 : flight_utils.py:405 - country_representative_city() ] [38.707751, -9.136592] for ( Portugal, PT, Lisbon )
+[2022-05-06 13:26:52,679 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:26:52,680 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:26:52,680 : flight_utils.py:405 - country_representative_city() ] [35.682839, 139.759455] for ( Japan, JP, Tokyo )
+[2022-05-06 13:26:53,272 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:26:53,272 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'JP'}
+[2022-05-06 13:26:53,272 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:26:53,272 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'AL'}
+[2022-05-06 13:26:53,272 : flight_utils.py:405 - country_representative_city() ] [41.326873, 19.818791] for ( Albania, AL, Tirana )
+[2022-05-06 13:26:53,804 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:26:53,804 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'AL'}
+[2022-05-06 13:26:53,804 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:26:53,804 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'CN'}
+[2022-05-06 13:26:53,804 : flight_utils.py:405 - country_representative_city() ] [39.906217, 116.391276] for ( China, CN, Beijing )
+[2022-05-06 13:26:54,334 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:26:54,334 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'MY'}
+[2022-05-06 13:26:54,334 : flight_utils.py:405 - country_representative_city() ] [3.151696, 101.694237] for ( Malaysia, MY, Kuala Lumpur )
+[2022-05-06 13:26:54,898 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KUL to  FRA
+[2022-05-06 13:26:54,899 : flight_utils.py:799 -     retrieve_amadeus() ] requesting amadeus round trip flight for KUL -FRA - 2022-06-03 for 1 adult(s)
+[2022-05-06 13:27:00,813 : meeting.py:182 -     build_co2eq_data() ]   - attendee 11: {'country': 'IN'}
+[2022-05-06 13:27:00,814 : flight_utils.py:405 - country_representative_city() ] [28.614179, 77.202266] for ( India, IN, New Delhi )
+[2022-05-06 13:27:01,368 : meeting.py:185 -     build_co2eq_data() ]   - Flight from DEL to  FRA
+[2022-05-06 13:27:01,368 : flight_utils.py:799 -     retrieve_amadeus() ] requesting amadeus round trip flight for DEL -FRA - 2022-06-03 for 1 adult(s)
+[2022-05-06 13:27:09,275 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,275 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,275 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,275 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,275 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'FR'}
+[2022-05-06 13:27:09,276 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:27:09,276 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:27:09,276 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:27:09,276 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:27:09,276 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,276 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'JP'}
+[2022-05-06 13:27:09,276 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,276 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'AL'}
+[2022-05-06 13:27:09,277 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,277 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'AL'}
+[2022-05-06 13:27:09,277 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,277 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'CN'}
+[2022-05-06 13:27:09,277 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:27:09,277 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'MY'}
+[2022-05-06 13:27:09,277 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KUL to  FRA
+[2022-05-06 13:27:09,277 : meeting.py:182 -     build_co2eq_data() ]   - attendee 11: {'country': 'IN'}
+[2022-05-06 13:27:09,277 : meeting.py:185 -     build_co2eq_data() ]   - Flight from DEL to  FRA
+[2022-05-06 13:27:09,278 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,278 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,278 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,278 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,279 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'FR'}
+[2022-05-06 13:27:09,279 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:27:09,279 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:27:09,279 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:27:09,279 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:27:09,279 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,280 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'JP'}
+[2022-05-06 13:27:09,280 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,280 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'AL'}
+[2022-05-06 13:27:09,280 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,280 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'AL'}
+[2022-05-06 13:27:09,280 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,281 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'CN'}
+[2022-05-06 13:27:09,281 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:27:09,281 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'MY'}
+[2022-05-06 13:27:09,281 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KUL to  FRA
+[2022-05-06 13:27:09,437 : meeting.py:182 -     build_co2eq_data() ]   - attendee 11: {'country': 'IN'}
+[2022-05-06 13:27:09,437 : meeting.py:185 -     build_co2eq_data() ]   - Flight from DEL to  FRA
+[2022-05-06 13:27:09,438 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,438 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,438 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,438 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,438 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'FR'}
+[2022-05-06 13:27:09,438 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:27:09,438 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:27:09,438 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:27:09,438 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:27:09,438 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,438 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'JP'}
+[2022-05-06 13:27:09,438 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,439 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'AL'}
+[2022-05-06 13:27:09,439 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,439 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'AL'}
+[2022-05-06 13:27:09,439 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,439 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'CN'}
+[2022-05-06 13:27:09,439 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:27:09,439 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'MY'}
+[2022-05-06 13:27:09,439 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KUL to  FRA
+[2022-05-06 13:27:09,439 : meeting.py:182 -     build_co2eq_data() ]   - attendee 11: {'country': 'IN'}
+[2022-05-06 13:27:09,439 : meeting.py:185 -     build_co2eq_data() ]   - Flight from DEL to  FRA
+[2022-05-06 13:27:09,593 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'FR'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'JP'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'AL'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'AL'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'CN'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'MY'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KUL to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 11: {'country': 'IN'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from DEL to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'FR'}
+[2022-05-06 13:27:09,594 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:27:09,594 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:27:09,595 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,595 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'JP'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,595 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'AL'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,595 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'AL'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,595 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'CN'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:27:09,595 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'MY'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KUL to  FRA
+[2022-05-06 13:27:09,595 : meeting.py:182 -     build_co2eq_data() ]   - attendee 11: {'country': 'IN'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from DEL to  FRA
+[2022-05-06 13:27:09,595 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,595 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,595 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'FR'}
+[2022-05-06 13:27:09,595 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:27:09,596 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:27:09,596 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:27:09,596 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:27:09,596 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,596 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'JP'}
+[2022-05-06 13:27:09,596 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,596 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'AL'}
+[2022-05-06 13:27:09,596 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,596 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'AL'}
+[2022-05-06 13:27:09,596 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,596 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'CN'}
+[2022-05-06 13:27:09,596 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:27:09,596 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'MY'}
+[2022-05-06 13:27:09,596 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KUL to  FRA
+[2022-05-06 13:27:09,596 : meeting.py:182 -     build_co2eq_data() ]   - attendee 11: {'country': 'IN'}
+[2022-05-06 13:27:09,596 : meeting.py:185 -     build_co2eq_data() ]   - Flight from DEL to  FRA
+[2022-05-06 13:27:09,597 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,597 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,597 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,597 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,597 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'FR'}
+[2022-05-06 13:27:09,597 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:27:09,597 : meeting.py:182 -     build_co2eq_data() ]   - attendee 4: {'country': 'PT'}
+[2022-05-06 13:27:09,597 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LIS to  FRA
+[2022-05-06 13:27:09,597 : meeting.py:182 -     build_co2eq_data() ]   - attendee 5: {'country': 'JP'}
+[2022-05-06 13:27:09,597 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,597 : meeting.py:182 -     build_co2eq_data() ]   - attendee 6: {'country': 'JP'}
+[2022-05-06 13:27:09,597 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TYO to  FRA
+[2022-05-06 13:27:09,597 : meeting.py:182 -     build_co2eq_data() ]   - attendee 7: {'country': 'AL'}
+[2022-05-06 13:27:09,597 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,598 : meeting.py:182 -     build_co2eq_data() ]   - attendee 8: {'country': 'AL'}
+[2022-05-06 13:27:09,598 : meeting.py:185 -     build_co2eq_data() ]   - Flight from TIA to  FRA
+[2022-05-06 13:27:09,598 : meeting.py:182 -     build_co2eq_data() ]   - attendee 9: {'country': 'CN'}
+[2022-05-06 13:27:09,598 : meeting.py:185 -     build_co2eq_data() ]   - Flight from BJS to  FRA
+[2022-05-06 13:27:09,598 : meeting.py:182 -     build_co2eq_data() ]   - attendee 10: {'country': 'MY'}
+[2022-05-06 13:27:09,598 : meeting.py:185 -     build_co2eq_data() ]   - Flight from KUL to  FRA
+[2022-05-06 13:27:09,598 : meeting.py:182 -     build_co2eq_data() ]   - attendee 11: {'country': 'IN'}
+[2022-05-06 13:27:09,598 : meeting.py:185 -     build_co2eq_data() ]   - Flight from DEL to  FRA
+[2022-05-06 13:27:09,839 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,839 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,839 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:09,839 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:09,839 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'FR'}
+[2022-05-06 13:27:09,839 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:27:09,839 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'
+[2022-05-06 13:27:10,845 : meeting.py:710 -             plot_all() ] ietf_178: Processing plot_co2eq
+[2022-05-06 13:27:10,846 : meeting.py:182 -     build_co2eq_data() ]   - attendee 1: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:10,846 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:10,846 : meeting.py:182 -     build_co2eq_data() ]   - attendee 2: {'country': 'US', 'iata': 'LAX'}
+[2022-05-06 13:27:10,846 : meeting.py:185 -     build_co2eq_data() ]   - Flight from LAX to  FRA
+[2022-05-06 13:27:10,846 : meeting.py:182 -     build_co2eq_data() ]   - attendee 3: {'country': 'FR'}
+[2022-05-06 13:27:10,846 : flight_utils.py:405 - country_representative_city() ] [48.856697, 2.351462] for ( France, FR, Paris )
+[2022-05-06 13:27:11,361 : meeting.py:185 -     build_co2eq_data() ]   - Flight from PAR to  FRA
+[2022-05-06 13:27:11,361 : server.py:234 -              handler() ] connection handler failed
+Traceback (most recent call last):
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/home/ps/miniconda3/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/server.py", line 44, in handler
+    plot_meeting(data_dict)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/plot_meeting.py", line 6, in plot_meeting
+    ietf_meeting_list.plot_all()
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 718, in plot_all
+    meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 409, in plot_co2eq
+    y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
+  File "/home/ps/MyData/JUB/CS/sem6/thesis/project_migault/co2eq_copy/src/co2eq/meeting.py", line 223, in build_co2eq_data
+    key = attendee[ cluster_key ]
+KeyError: 'iata'

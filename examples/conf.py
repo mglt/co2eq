@@ -8,13 +8,13 @@ CONF = {
   ## https://developers.amadeus.com/get-started/get-started-with-amadeus-apis-334
   ## You need to register and request and an API Key and an API Secret for the
   ## Flight Offers Search service.
-  'AMADEUS_ID' : "ZVCEHBaThOa3dgit8AkvVC4ATmLpcMAv",
-  'AMADEUS_SECRET' : "wKv8R9a23vuhs2uG",
+  'AMADEUS_ID' : "",
+  'AMADEUS_SECRET' : "",
 
   ## To compute the CO2 emissions associated a flight a request is sent to GO Climate
   ## Please go through https://api.goclimate.com/docs to get an account.
-  'GOCLIMATE_SECRET' :  "75a14c715582fd1613297e5c",
-  'NOMINATIM_ID' : "P2LGDAyXKBJFv34F", 
+  'GOCLIMATE_SECRET' :  "",
+  'NOMINATIM_ID' : "", 
 
   ## where logs are stored. We suggest you perform tail -f your_log_file
   ## to monitor what can possibly go wrong.
