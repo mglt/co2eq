@@ -31,7 +31,7 @@
     <div>
         <form onsubmit="return submitlocation(this);" method="post">
             <label for="location_select_country">Meeting Country*:</label>
-            <select required name="location_select_country" id="location_select_country" onchange="changeIATA(this.value, 'location_select_iata',true)">
+            <select required name="location_select_country" id="location_select_country" onChange="changeIATA(this.value, 'location_select_iata',true)">
             </select>
             <label for="location_select_iata">Airport (optional):</label>
             <select name="location_select_iata" id="location_select_iata">
@@ -45,7 +45,7 @@
     <div id="attendee_list">
         <form onsubmit="return submitAttendee(this);" method="post" id="0">
             <label for="attendee_select_country">Attendee Country*:</label>
-            <select required name="attendee_select_country" id="attendee_select_country0" onchange="changeIATA(this.value, 'attendee_select_iata0', true)">
+            <select required name="attendee_select_country" id="attendee_select_country0" onChange="changeIATA(this.value, 'attendee_select_iata0', true)">
             </select>
             <label for="attendee_select_iata">Airport (optional):</label>
             <select name="attendee_select_iata" id="attendee_select_iata0">
@@ -322,7 +322,7 @@ var countries = {
     ////////////////////////////////////////Backend Communication//////////////////////////////////////////////////
 
     // const socketURL = "ws://localhost:8000";
-    const socketURL = "ws://co2eq.herokuapp.com";
+    const socketURL = "wss://co2eq.herokuapp.com";
     
     var socket;
     let is_socket_connected = false;
@@ -498,7 +498,7 @@ var countries = {
         cloned_form[attendee_select_iata_id_old].id = attendee_select_iata_id_new;
         cloned_form[number_of_attendee_old].id = number_of_attendee_new;
         parent.appendChild(cloned_form);
-        cloned_form[attendee_select_country_id_new].setAttribute('onchange',`changeIATA(this.value, ${attendee_select_iata_id_new}, true)`);
+        cloned_form[attendee_select_country_id_new].setAttribute('onChange',`changeIATA(this.value, ${attendee_select_iata_id_new}, true)`);
         attendeeIndex++;
     }
 
