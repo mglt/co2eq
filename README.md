@@ -86,5 +86,93 @@ If you are running the server on your local machine or a different remote server
 To deploy the backend, build the Docker image and push the image to the server. 
 To deploy the frontend, upload the [src/frontend/index.html](src/frontend/index.html) file to the server.
 
+# JSON format for upload
+Format of JSON file to upload via frontend:
+```json
+{ 
+    "name" : "required", 
+    "location" : { 
+        "country" : "required", 
+        "iata": "optional"
+    },
+    "attendee_list": [
+        {
+            "country": "required",
+            "iata": "optional",
+            "number_of_attendee": required
+        }
+    ]                                    
+}
+```
+Example:
+```json
+{ 
+    "name" : "IETF_201", 
+    "location" : { 
+        "country" : "DE", 
+        "iata": "SXF"
+    },
+    "attendee_list": [
+        {
+            "country": "US",
+            "iata": "LAX",
+            "number_of_attendee": 1
+        },
+        {
+            "country": "FR",
+            "number_of_attendee": 2
+        },
+        {
+            "country": "JP",
+            "number_of_attendee": 5
+        }
+    ]                                    
+}
+
+```
+
+# JSON Format for API
+Format of data to be sent to API endpoint:
+```json
+{ 
+    "name" : "required", 
+    "location" : { 
+        "country" : "required", 
+        "iata": "optional"
+    },
+    "attendee_list": [
+        {
+            "country": "required",
+            "iata": "optional"
+        }
+    ]                                    
+}
+```
+Example:
+```json
+{ 
+    "name" : "IETF_201", 
+    "location" : { 
+        "country" : "DE", 
+        "iata": "SXF"
+    },
+    "attendee_list": [
+        {
+            "country": "US",
+            "iata": "LAX",
+        },
+        {
+            "country": "FR"
+        },
+        {
+            "country": "FR"
+        },
+        {
+            "country": "JP"
+        }
+    ]                                    
+}
+
+```
 
 

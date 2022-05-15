@@ -17,48 +17,77 @@
 <body>
 
     <h1>Co<sub>2</sub>eq</h1>
+    <fieldset>
+        <legend><b>Upload JSON File</b></legend>
+        <br/>
+        <div><a href="https://github.com/pssingh21/co2eq#json-format-for-upload">View file format</a></div>
+        <br/>
+        <form id="jsonFile" name="jsonFile" enctype="multipart/form-data" onsubmit="return loadFile(this);" method="post">
 
-    <div>
-        <form onsubmit="return submitname(this);" method="post">
-            <label for="meeting_name">Meeting name*:</label>
-            <input required type="text" id="meeting_name" name="meeting_name">
-            <input type="submit" value="Confirm" id="confirm_name">
+            
+            <input type='file' id='fileinput'>
+            <input type="submit" value='Confirm'>
+            
         </form>
-    </div>
+        <br/>
+    </fieldset>
+    
+    <table width="100%">
+        <td><hr /></td>
+        <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h3>OR</h3></td>
+        <td><hr /></td>
+    </table>
+
+    <fieldset>
+        <legend><b>Enter details manually</b></legend>
+        <br/>
+        <div>
+            <form onsubmit="return submitname(this);" method="post">
+                <label for="meeting_name">Meeting name*:</label>
+                <input required type="text" id="meeting_name" name="meeting_name">
+                <input type="submit" value="Confirm" id="confirm_name">
+            </form>
+        </div>
+
+        <br/>
+
+        <div>
+            <form onsubmit="return submitlocation(this);" method="post">
+                <label for="location_select_country">Meeting Country*:</label>
+                <select required name="location_select_country" id="location_select_country" onChange="changeIATA(this.value, 'location_select_iata',true)">
+                </select>
+                <label for="location_select_iata">Airport (optional):</label>
+                <select name="location_select_iata" id="location_select_iata">
+                </select>
+                <input type="submit" value="Confirm" id="confirm_location">
+            </form>
+        </div>
+
+        <br/>
+
+        <div id="attendee_list">
+            <form onsubmit="return submitAttendee(this);" method="post" id="0">
+                <label for="attendee_select_country">Attendee Country*:</label>
+                <select required name="attendee_select_country" id="attendee_select_country0" onChange="changeIATA(this.value, 'attendee_select_iata0', true)">
+                </select>
+                <label for="attendee_select_iata">Airport (optional):</label>
+                <select name="attendee_select_iata" id="attendee_select_iata0">
+                </select>
+                <label for="number_of_attendee">Number of attendees:</label>
+                <input required type="number" id="number_of_attendee0" name="number_of_attendee" min="1" value="1"> 
+                <input type="submit" value="Confirm" id="confirm_attendee">
+            </form>
+        </div>
+        
+        <br/>
+
+        <div>
+            <button onclick="addAttendee()">Add Attendee</button>
+        </div>
+        <br/>
+    </fieldset>
 
     <br/>
-
-    <div>
-        <form onsubmit="return submitlocation(this);" method="post">
-            <label for="location_select_country">Meeting Country*:</label>
-            <select required name="location_select_country" id="location_select_country" onChange="changeIATA(this.value, 'location_select_iata',true)">
-            </select>
-            <label for="location_select_iata">Airport (optional):</label>
-            <select name="location_select_iata" id="location_select_iata">
-            </select>
-            <input type="submit" value="Confirm" id="confirm_location">
-        </form>
-    </div>
-
-    <br/>
-
-    <div id="attendee_list">
-        <form onsubmit="return submitAttendee(this);" method="post" id="0">
-            <label for="attendee_select_country">Attendee Country*:</label>
-            <select required name="attendee_select_country" id="attendee_select_country0" onChange="changeIATA(this.value, 'attendee_select_iata0', true)">
-            </select>
-            <label for="attendee_select_iata">Airport (optional):</label>
-            <select name="attendee_select_iata" id="attendee_select_iata0">
-            </select>
-            <label for="number_of_attendee">Number of attendees:</label>
-            <input required type="number" id="number_of_attendee0" name="number_of_attendee" min="1" value="1"> 
-            <input type="submit" value="Confirm" id="confirm_attendee">
-        </form>
-    </div>
-
-    <br/>
-
-    <button onclick="addAttendee()">Add Attendee</button>
 
     <button onclick="contactServer()">Calculate</button>
     <button onclick="window.location.href=window.location.href">Reset All</button>
@@ -392,7 +421,7 @@ var countries = {
         };
 
         if(!initial_response) {
-            console.log(meeting_data_formatted);
+            console.log(JSON.stringify(meeting_data_formatted));
         }
 
         socket.send(JSON.stringify(meeting_data_formatted));
@@ -546,4 +575,40 @@ var countries = {
         newDiv.appendChild(newContent);
         element.appendChild(newDiv);
     }
+
+    function loadFile(theForm) {
+    var input, file, fr;
+
+    if (typeof window.FileReader !== 'function') {
+      alert("The file API isn't supported on this browser yet.");
+      return false;
+    }
+
+    input = document.getElementById('fileinput');
+    if (!input) {
+      alert("Um, couldn't find the fileinput element.");
+    }
+    else if (!input.files) {
+      alert("This browser doesn't seem to support the `files` property of file inputs.");
+    }
+    else if (!input.files[0]) {
+      alert("Please select a file before clicking 'Confirm'");
+    }
+    else {
+      file = input.files[0];
+      fr = new FileReader();
+      fr.onload = receivedText;
+      fr.readAsText(file);
+      appendCheckMark(theForm);
+      return false;
+    }
+
+    function receivedText(e) {
+      let lines = e.target.result;
+      var newArr = JSON.parse(lines); 
+      meeting_details = newArr;
+    }
+
+    return false;
+  }
 </script>
