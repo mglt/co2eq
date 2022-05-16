@@ -79,7 +79,7 @@ $ docker run -p8000:8000 co2eq    # Run the Docker image
 
 To run the frontend, open [src/frontend/index.html](src/frontend/index.html) on your browser.
 
-If you are running the server on your local machine or a different remote server, make sure to update the backend URL in the [src/frontend/index.html](src/frontend/index.html) file. Change [const socketUrl="ws://..."](https://github.com/pssingh21/co2eq/blob/68983eb8c7506031cb830c9e6989fca2e2028db9/src/frontend/index.html#L325) to your backend URL.
+If you are running the server on your local machine or a different remote server, make sure to update the backend URL in the [src/frontend/index.html](src/frontend/index.html) file. Change [const socketUrl="ws://..."](https://github.com/pssingh21/co2eq/blob/68983eb8c7506031cb830c9e6989fca2e2028db9/src/frontend/index.html#L354) to your backend URL.
 
 # Deploying the application
 
