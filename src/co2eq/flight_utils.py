@@ -813,7 +813,7 @@ class FlightDB(JCacheDict):
       self.logger.warning( msg )
       print( f"error: {error} / {type(error)} {error == [400] }") 
       if error != [400]:
-        self.logger( f" {error} is a service error - probably over quotat") 
+        self.logger.info( f" {error} is a service error - probably over quotat") 
       raise ValueError( error )
       
     cache_resp = { 'origin' : origin,
