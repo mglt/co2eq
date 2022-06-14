@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 #import numpy as np
 import requests
 from math import ceil
-from flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, Flight, logger
-
+from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, Flight, logger
+import co2eq.conf
 
 
 plt.rcParams.update({'figure.max_open_warning': 0})
@@ -23,8 +23,8 @@ plt.rcParams.update({'figure.max_open_warning': 0})
 class Meeting:
 
   def __init__( self, name:str, location:dict, attendee_list:str = None, \
-                base_output_dir=None, conf={},  airportDB=True, \
-                cityDB=True, flightDB=True, goclimateDB=True ):
+                base_output_dir=None, conf=co2eq.conf.Conf().CONF,  \
+                airportDB=True, cityDB=True, flightDB=True, goclimateDB=True ):
     """ Meeting class
 
     Since conf is used to generate some DB (goclimateDB), DB can either
@@ -601,7 +601,8 @@ class Meeting:
 ## inherite from Meeting
 class MeetingList(Meeting):
 
-  def __init__( self, name, conf={}, meeting_list=None, flightDB=True, airportDB=True, cityDB=True, goclimateDB=True  ):
+  def __init__( self, name, conf=co2eq.conf.Conf().CONF, meeting_list=None,\
+                flightDB=True, airportDB=True, cityDB=True, goclimateDB=True  ):
     """ instantiates a MeetingList object 
 
     Args: 
@@ -839,7 +840,7 @@ class MeetingList(Meeting):
       meeting = self.get_meeting( meeting_name )
       meeting.md( banner, toc=toc ) 
 
-def get_flight( conf, origin, destination ):
+def get_flight( origin, destination, conf=co2eq.conf.Conf().CONF ):
   """ return a flight from origin to destination
 
   The function tries with default values provided by FlightDB and in case no

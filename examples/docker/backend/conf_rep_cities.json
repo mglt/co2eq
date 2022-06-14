@@ -1,0 +1,354 @@
+{
+  "IL": {
+    "name": "Tel Aviv Yafo",
+    "iata": "TLV"
+  },
+  "PS": {
+    "name": "Tel Aviv Yafo",
+    "iata": "TLV"
+  },
+  "AU": {
+    "name": "Sydney",
+    "iata": "YQY"
+  },
+  "NZ": {
+    "name": "Auckland",
+    "iata": "AKL"
+  },
+  "CY": {
+    "name": "Larnaca",
+    "iata": "LCA"
+  },
+  "CH": {
+    "name": "Zurich",
+    "iata": "ZRH"
+  },
+  "ZA": {
+    "name": "Johannesburg",
+    "iata": "JNB"
+  },
+  "CI": {
+    "name": "Abidjan",
+    "iata": "ABJ"
+  },
+  "SK": {
+    "name": "Kosice",
+    "iata": "KSC"
+  },
+  "BO": {
+    "name": "Sao Paulo",
+    "iata": "SAO"
+  },
+  "CA": {
+    "name": "Toronto",
+    "iata": "YTO"
+  },
+  "CM": {
+    "name": "Douala",
+    "iata": "DLA"
+  },
+  "NG": {
+    "name": "Lagos",
+    "iata": "LOS"
+  },
+  "TZ": {
+    "name": "Dar Es Salaam",
+    "iata": "DAR"
+  },
+  "KZ": {
+    "name": "Almaty",
+    "iata": "ALA"
+  },
+  "BR": {
+    "name": "Sao Paulo",
+    "iata": "SAO"
+  },
+  "AD": {
+    "name": "Toulouse",
+    "iata": "TLS"
+  },
+  "VN": {
+    "name": "Ho Chi Minh",
+    "iata": "SGN"
+  },
+  "MM": {
+    "name": "Yangon",
+    "iata": "RGN"
+  },
+  "KY": {
+    "name": "Kingston",
+    "iata": "KIN"
+  },
+  "TC": {
+    "name": "Santo Domingo",
+    "iata": "SDQ"
+  },
+  "HT": {
+    "name": "Santo Domingo",
+    "iata": "SDQ"
+  },
+  "MS": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "SX": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "LC": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "BB": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "VC": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "GY": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "KN": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "GD": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "VI": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "DM": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "AW": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "AI": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "CW": {
+    "name": "San Juan",
+    "iata": "SJU"
+  },
+  "UM": {
+    "name": "Brisbane",
+    "iata": "BNE"
+  },
+  "CU": {
+    "name": "Miami",
+    "iata": "MIA"
+  },
+  "HN": {
+    "name": "Miami",
+    "iata": "MIA"
+  },
+  "BZ": {
+    "name": "Mexico City",
+    "iata": "MEX"
+  },
+  "GT": {
+    "name": "Mexico City",
+    "iata": "MEX"
+  },
+  "VE": {
+    "name": "Panama City",
+    "iata": "PTY"
+  },
+  "EC": {
+    "name": "Panama City",
+    "iata": "PTY"
+  },
+  "SR": {
+    "name": "Panama City",
+    "iata": "PTY"
+  },
+  "AS": {
+    "name": "Auckland",
+    "iata": "AKL"
+  },
+  "FJ": {
+    "name": "Auckland",
+    "iata": "AKL"
+  },
+  "NU": {
+    "name": "Auckland",
+    "iata": "AKL"
+  },
+  "CK": {
+    "name": "Auckland",
+    "iata": "AKL"
+  },
+  "TK": {
+    "name": "Auckland",
+    "iata": "AKL"
+  },
+  "TV": {
+    "name": "Auckland",
+    "iata": "AKL"
+  },
+  "TO": {
+    "name": "Auckland",
+    "iata": "AKL"
+  },
+  "KI": {
+    "name": "Auckland",
+    "iata": "AKL"
+  },
+  "AQ": {
+    "name": "Auckland",
+    "iata": "AKL"
+  },
+  "NC": {
+    "name": "Brisbane",
+    "iata": "BNE"
+  },
+  "PG": {
+    "name": "Brisbane",
+    "iata": "BNE"
+  },
+  "NR": {
+    "name": "Brisbane",
+    "iata": "BNE"
+  },
+  "VU": {
+    "name": "Sydney",
+    "iata": "YQY"
+  },
+  "FM": {
+    "name": "Quezon",
+    "iata": "MNL"
+  },
+  "GG": {
+    "name": "Paris",
+    "iata": "PAR"
+  },
+  "KM": {
+    "name": "Dar Es Salaam",
+    "iata": "DAR"
+  },
+  "GI": {
+    "name": "Malaga",
+    "iata": "AGP"
+  },
+  "GW": {
+    "name": "Dakar",
+    "iata": "DKR"
+  },
+  "GN": {
+    "name": "Dakar",
+    "iata": "DKR"
+  },
+  "SL": {
+    "name": "Dakar",
+    "iata": "DKR"
+  },
+  "TD": {
+    "name": "Lagos",
+    "iata": "LOS"
+  },
+  "BI": {
+    "name": "Nairobi",
+    "iata": "NBO"
+  },
+  "CF": {
+    "name": "Douala",
+    "iata": "DLA"
+  },
+  "LY": {
+    "name": "Tunis",
+    "iata": "TUN"
+  },
+  "SZ": {
+    "name": "Johannesburg",
+    "iata": "JNB"
+  },
+  "TF": {
+    "name": "Johannesburg",
+    "iata": "JNB"
+  },
+  "BV": {
+    "name": "Johannesburg",
+    "iata": "JNB"
+  },
+  "HM": {
+    "name": "Johannesburg",
+    "iata": "JNB"
+  },
+  "ST": {
+    "name": "Abidjan",
+    "iata": "ABJ"
+  },
+  "MG": {
+    "name": "Mauritius",
+    "iata": "MRU"
+  },
+  "YT": {
+    "name": "Mauritius",
+    "iata": "MRU"
+  },
+  "LI": {
+    "name": "Brussels",
+    "iata": "ZRH"
+  },
+  "LU": {
+    "name": "Brussels",
+    "iata": "BRU"
+  },
+  "SI": {
+    "name": "Vienna",
+    "iata": "VIE"
+  },
+  "FO": {
+    "name": "Oslo",
+    "iata": "OSL"
+  },
+  "DE": {
+    "name": "Frankfurt",
+    "iata": "FRA"
+  },
+  "PF": {
+    "name": "Tahiti",
+    "iata": "PPT"
+  },
+  "NP": {
+    "name": "Patna",
+    "iata": "PAT"
+  },
+  "BT": {
+    "name": "Patna",
+    "iata": "GAU"
+  },
+  "ID": {
+    "name": "Singapore",
+    "iata": "SIN"
+  },
+  "CC": {
+    "name": "Singapore",
+    "iata": "SIN"
+  },
+  "KP": {
+    "name": "Singapore",
+    "iata": "SEL"
+  },
+  "EH": {
+    "name": "Marrakech",
+    "iata": "RAK"
+  },
+  "YE": {
+    "name": "Muscat",
+    "iata": "MCT"
+  },
+  "SY": {
+    "name": "Beirut",
+    "iata": "BEY"
+  }
+}

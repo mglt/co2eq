@@ -4,10 +4,12 @@ README.md
 pyproject.toml
 setup.cfg
 src/co2eq/__init__.py
+src/co2eq/conf.py
 src/co2eq/flight_utils.py
 src/co2eq/ietf_meeting.py
 src/co2eq/jcache.py
 src/co2eq/meeting.py
+src/co2eq/meeting_server.py
 src/co2eq.egg-info/PKG-INFO
 src/co2eq.egg-info/SOURCES.txt
 src/co2eq.egg-info/dependency_links.txt

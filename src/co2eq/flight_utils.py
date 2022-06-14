@@ -24,7 +24,8 @@ from pip._vendor import pkg_resources
 import logging
 from climate_neutral import GoClimateNeutralAPI, Segment # Footprint
 
-from jcache import JCacheList, JCacheDict
+import co2eq.conf
+from co2eq.jcache import JCacheList, JCacheDict
 
 ## Global variable
 ## long term data are stored in DATA_DIR
@@ -202,7 +203,7 @@ class CountryDB :
   
 
 class CityDB :
-  def __init__( self, conf={}, airportDB=AirportDB() ):
+  def __init__( self, conf=co2eq.con.Conf().CONF, airportDB=AirportDB() ):
     """ This class contains function related to cities.
 
     The current use of this class is to retrieve the IATA associated to a
@@ -681,7 +682,8 @@ class AmadeusOffersSearchResponse:
 
 class FlightDB(JCacheDict):
 ## FLIGHTS_CACHE = join( CACHE_DIR, 'flights.json' )
-  def __init__( self, conf, airportDB=True, cityDB=True, goclimateDB=True):
+  def __init__( self, conf=co2eq.conf.Conf().CONF, airportDB=True, \
+                cityDB=True, goclimateDB=True):
     """ retrieve and compute flights related information such as CO2 equivalent.
 
     Since conf is used to generate some DB (goclimateDB), DB can either be
@@ -1086,7 +1088,8 @@ class Flight:
                 return_date=None, adults=None, cabin='ECONOMY',
                 segment_list=None, co2eq=None, price=None, currency=None,
                 flight_duration=None, travel_duration=None,
-                airportDB = True, cityDB = True, goclimateDB=True, conf={} ):
+                airportDB = True, cityDB = True, goclimateDB=True, \
+                conf=co2eq.conf.Conf().CONF ):
     """ computes co2eq associated to the flight
 
       Args:

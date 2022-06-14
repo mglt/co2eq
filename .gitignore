@@ -1,3 +1,15 @@
 .env
 src/co2eq/output/
 co2eq.log
+__pycache__/
+archive/
+docs/_build
+docs/_static
+docs/templates
+# C extensions
+*.so
+*.swp
+*.py[cod]
+*.swo
+*.swn
+*.der

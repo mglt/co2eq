@@ -5,6 +5,7 @@ import gzip
 import requests
 import pandas as pd
 from co2eq.meeting import Meeting, MeetingList
+import co2eq.conf 
 
 IETF_MEETING_LIST = [
   { 'name' : 'IETF72', 
@@ -337,7 +338,8 @@ ORGANIZATION_MATCH = { 'huaw' : "Huawei",
 
 class IETFMeeting ( Meeting ):
 
-  def __init__( self, name:str, base_output_dir=None, conf={},  airportDB=True,\
+  def __init__( self, name:str, base_output_dir=None, \
+                conf=co2eq.conf.Conf().CONF,  airportDB=True,\
                 cityDB=True, flightDB=True, goclimateDB=True ):
     for meeting in IETF_MEETING_LIST:
       if meeting[ 'name' ] == name:
@@ -583,8 +585,9 @@ class IETFMeeting ( Meeting ):
 
 class IETFMeetingList(MeetingList):
 
-  def __init__( self, name="IETF", conf={}, meeting_list=IETF_MEETING_LIST, \
-                 airportDB=True, cityDB=True, flightDB=True, goclimateDB=True ):
+  def __init__( self, name="IETF", conf=co2eq.conf.Conf().CONF, \
+                meeting_list=IETF_MEETING_LIST, \
+                airportDB=True, cityDB=True, flightDB=True, goclimateDB=True ):
     super().__init__( name, conf=conf, meeting_list=meeting_list )
 ##    if self.meeting_list is None:
 ###      min_ietf_nbr =  min( IETF_LOCATION.keys() )
