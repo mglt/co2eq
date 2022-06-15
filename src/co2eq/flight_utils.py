@@ -203,7 +203,7 @@ class CountryDB :
   
 
 class CityDB :
-  def __init__( self, conf=co2eq.con.Conf().CONF, airportDB=AirportDB() ):
+  def __init__( self, conf=co2eq.conf.Conf().CONF, airportDB=AirportDB() ):
     """ This class contains function related to cities.
 
     The current use of this class is to retrieve the IATA associated to a
