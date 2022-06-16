@@ -1,13 +1,11 @@
 Metadata-Version: 2.1
 Name: co2eq
-Version: 0.0.2
+Version: 0.0.3
 Summary: "Compute CO2 equivalent emissions"
 Home-page: https://github.com/mglt/co2eq
 Author: Daniel Migault
 Author-email: mglt.biz@gmail.com
-License: UNKNOWN
 Project-URL: Bug Tracker, https://github.com/mglt/co2eq/issues
-Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
@@ -63,8 +61,8 @@ To compute the CO2 using GO Climate service, the climate neutral package needs t
 git clone https://github.com/codeboten/climate_neutral
 cd climate_neutral
 sudo python3 install setup.py
+```
 
-``
 If other classes than 'economy' are used, an advanced use of co2eq may also require an updated version of climate neutral 
 
 ```
@@ -115,8 +113,6 @@ CONF = {
   'ISO3166_REPRESENTATIVE_CITY' : { }
   }
 ```
-
-
 
 
 

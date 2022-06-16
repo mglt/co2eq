@@ -143,7 +143,7 @@ class Meeting:
              'cluster_key' : cluster_key,
              'co2eq' : co2eq }
 
-  def build_co2eq_data( self, mode='flight', cluster_key=None, co2eq='myclimate' ) -> dict :
+  def build_co2eq_data( self, mode='flight', cluster_key=None, co2eq='myclimate', cabin='AVERAGE' ) -> dict :
     """ co2 equivalent based on real flights including multiple segments)
 
     The possible modes are 'attendee', 'flight', 'distance'. 
@@ -189,12 +189,24 @@ class Meeting:
         self.logger.debug( "Unable to find city for {attendee}" )
         continue
 
+      flight = None
       if mode == 'attendee' :
         if cluster_key == 'flight_segment_number':
           flight = self.flightDB.select_flight( attendee_iata_city , meeting_iata_city  )
+          ## by default Flight are set to ECONOMY
+          ## we should probably ignore the cabin for searching flight in our case.
+          ##flight[ 'cabin' ] = cabin
+          ## flight = Flight( **flight, cityDB=self.cityDB, \
+          ##                  airportDB=self.airportDB, goclimateDB=self.goclimateDB)
+          ## flight = flight.export()
       elif mode in [ 'flight' ]:
         try: 
           flight = self.flightDB.force_select_flight( attendee_iata_city , meeting_iata_city  )
+          ## flight[ 'cabin' ] = cabin
+          ## co2_eq is computed at instantiation
+          ## flight = Flight( **flight, cityDB=self.cityDB, \
+          ##                 airportDB=self.airportDB, goclimateDB=self.goclimateDB)
+          ## flight = flight.export()
         except :
           if 'country' in attendee.keys() and 'city' not in attendee.keys() and 'state' not in attendee.keys() :
             print( f"\n-----------------------------\n"\
@@ -205,9 +217,17 @@ class Meeting:
       elif mode == 'distance':
         segment_list = [ [ attendee_iata_city , meeting_iata_city  ],  \
                          [ attendee_iata_city , meeting_iata_city  ] ]
+        flight = { 'segment_list' : [ [ attendee_iata_city , meeting_iata_city  ],  \
+                                      [ attendee_iata_city , meeting_iata_city  ] ] }
         ## co2_eq is computed at instantiation
-        flight = Flight( segment_list=segment_list, cityDB=self.cityDB, \
-                         airportDB=self.airportDB, goclimateDB=self.goclimateDB)
+        ##flight = Flight( segment_list=segment_list, cabin=cabin, cityDB=self.cityDB, \
+        ##                  airportDB=self.airportDB, goclimateDB=self.goclimateDB)
+        ## flight = flight.export()
+      ## computing co2eq correpsonding to cabin when flight has been defined.
+      if flight != None :      
+        flight[ 'cabin' ] = cabin
+        flight = Flight( **flight, cityDB=self.cityDB, \
+                       airportDB=self.airportDB, goclimateDB=self.goclimateDB)
         flight = flight.export()
 
       ## clustering key k -- attendees are clustered according to k
@@ -347,7 +367,7 @@ class Meeting:
 
     if co2eq is None:
       if 'flight' in mode_list or 'distance' in mode_list :
-        co2eq_list = [ 'myclimate', 'goclimate' ]
+        co2eq_list = [ 'myclimate', 'goclimate', 'ukgov']
         kwargs[ 'co2eq' ] = 'myclimate_goclimate'
       else:
         co2eq_list = [ ]
@@ -739,7 +759,7 @@ class MeetingList(Meeting):
     plot_kwargs = { 'cluster_nbr' : 15, 'figsize' : figsize, 'column_label' : column_label, \
                     'adjust_bottom' : adjust_bottom, 'xticks_rotation' : xticks_rotation }
     for mode in [ 'flight' ]:
-      for co2eq in [ 'myclimate', 'goclimate' ]:
+      for co2eq in [ 'myclimate', 'goclimate', 'ukgov' ]:
          for cluster_key in  cluster_key_list :
            self.plot_co2eq( mode=mode, cluster_key=cluster_key, co2eq=co2eq, **plot_kwargs )
     for mode in [ 'attendee' ]:

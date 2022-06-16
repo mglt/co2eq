@@ -513,12 +513,21 @@ class CityDB :
     return distance
 
 class GoClimateDB (JCacheDict):
-  def __init__( self, conf ):
+  def __init__( self, conf,  cityDB=True, airportDB=True):
     self.key = conf[ 'GOCLIMATE_SECRET' ]
     ## list of IATA codes not accepted by goclimate
     self.IATA_SWAP = { 'ANK' : 'ESB',
                        'ZYR' : 'BRU' # brussels midi
                      }
+    if airportDB is True:
+      self.airportDB = AirportDB()
+    else:
+      self.airportDB = airportDB
+    if  cityDB is True:
+      self.cityDB = CityDB( )
+    else:
+      self.cityDB = cityDB
+    
     super().__init__( join( conf[ 'CACHE_DIR' ], 'goclimateDB', 'goclimateDB.json.gz' ) )
 
   def kwarg_to_key( self, **kwargs ):
@@ -552,6 +561,237 @@ class GoClimateDB (JCacheDict):
       raise ValueError( f"Unable to retreive CO2eq from GoClimate for {kwargs}" )
     return { "date" : date.today().isoformat(),
              "co2eq" :  footprint.tons * 1000  }
+
+  def convert_to_iata_airport_list( self, iata ) -> list:
+    """ converts IATA (city or airport) codes into a list of IATA airport code
+
+    Some application require airport code IATA
+    """
+    if iata in [ 'ZYR' ] or self.airportDB.is_iata_airport_code( iata ) == True :
+      iata_list = [ iata ]
+    elif self.cityDB.is_iata_city_code( iata ):
+      airport_list = self.cityDB.airport_list_of( { 'iata': iata } )
+      iata_list = [ airport[ 'iata' ]  for airport in airport_list ]
+    else : 
+      raise ValueError( f"Unexpected city IATA code {iata}" \
+        f"-- neither city IATA code nor airport IATA code. Consider " \
+        f"updating IATA_SWAP in iata_airport function." )
+    return iata_list
+
+  def co2eq( self, origin, destination, cabin="ECONOMY" ):
+    """ total CO2 equivalent per passenger in kg
+      
+    Args:
+      - origin (str) : origin IATA airport code   
+      - destination (str) : destination IATA airport code   
+      - cabin can be in 'ECONOMY', 'BUSINESS', 'FIRST' or 'AVERAGE'
+    """
+    #return self.get_first( origin=origin, destination=destination, cabin=cabin )[ 'co2eq' ]
+      ## business passengers are: 13.6 %
+      ## https://www.smallbizgenius.net/by-the-numbers/business-travel-statistics/#gref
+    if cabin == 'AVERAGE':
+      return 13.6 / 100 * self.co2eq( origin, destination, cabin='BUSINESS' ) +\
+             ( 1 - 13.6 / 100 ) * self.co2eq( origin, destination, cabin='ECONOMY' )
+    
+    ## goclimate only seems to take iata airport code,
+    ## so this does not work for city iata codes
+    origin_list = self.convert_to_iata_airport_list( origin )
+    destination_list  = self.convert_to_iata_airport_list( destination )
+    for origin in origin_list:
+      for destination in destination_list:
+        try:
+          co2eq = self.get_first( origin=origin, destination=destination,\
+                  cabin=cabin )[ 'co2eq' ]
+          break
+        except ValueError:
+          print( "Unable to get origin: {origin} - destination: {destination}" )
+          pass
+      else: # if no breaks occurs
+        continue
+      break # if a break occurs in the inner break the outer loop
+    else: ## no break occured
+      raise ValueError( f"GoClimate: Unable to resolve any combination of " \
+        f"origin_list: {origin_list} - destination_list: {destination_list}. " \
+        f"Consider chosing a alternative airport by updating IATA_SWAP in " \
+        f"the GoClimate class." )
+    return co2eq 
+
+class MyClimate:
+
+  def __init__( self, model='latest', cityDB=True, airportDB=True ):
+    if model == 'latest':
+      self.model = '2018'
+    else:
+      self.model = model
+    self.buisness_share = 13.6 # percentage of business
+
+    if airportDB is True:
+      self.airportDB = AirportDB()
+    else:
+      self.airportDB = airportDB
+    if  cityDB is True:
+      self.cityDB = CityDB( )
+    else:
+      self.cityDB = cityDB
+
+  def co2eq( self, origin, destination, cabin="ECONOMY" ):
+    """ total CO2 equivalent per passenger in kg
+      
+    Args:
+      - origin (str) : origin IATA airport code   
+      - destination (str) : destination IATA airport code   
+      - cabin can be in 'ECONOMY', 'BUSINESS', 'FIRST' or 'AVERAGE'
+    """
+    if self.model == "2018":
+      return  self.co2eq_2018( self.dist( origin, destination) , cabin=cabin)
+    else: 
+      raise ValueError( f"Unknown model {model} for {self.__name__}" )
+
+  def dist( self, iata_departure, iata_arrival ):
+    """ returns the distance in KM between two IATA codes
+
+    Args:
+      - iata_departure (str) : origin IATA airport code 
+      - iata_arrival (str) :  destination IATA airport code
+    """
+    coordinates = []
+    for iata in [ iata_departure, iata_arrival ]:
+      try:
+        airport = self.airportDB.get_airport_by_iata( iata )
+        coordinates.append( ( airport[ 'latitude' ], airport[ 'longitude' ] ) )
+      except KeyError:
+        try:
+          city = self.cityDB.get_city_by_iata( iata )
+          coordinates.append( ( city[ 'latitude' ], city[ 'longitude' ] ) )
+        except:
+          raise ValueError(f"{city} cannot be retrieved from {iata}: "\
+                           f"Check {iata} is proper IATA airport or city code" )
+    return great_circle( coordinates[0], coordinates[1] ).km
+
+
+
+  def co2eq_2018( self, distance, cabin='ECONOMY') :
+    """ total CO2 equivalent per passenger in kg
+
+      class can be in 'ECONOMY', 'BUSINESS', 'FIRST' or 'AVERAGE'
+    """
+    if cabin == 'AVERAGE':
+      ## business passengers are: 13.6 %
+      ## https://www.smallbizgenius.net/by-the-numbers/business-travel-statistics/#gref
+      return 13.6 / 100 * self.co2eq_2018( distance, cabin='BUSINESS' ) +\
+             ( 1 - 13.6 / 100 ) * self.co2eq_2018( distance, cabin='ECONOMY' )
+             
+    PLF = 0.82
+    DC = 95
+    EF = 3.15
+    P = 0.54
+    M = 2
+    AF = 0.00038
+    A = 11.68
+    x = distance + DC
+    if x <= 1500 :
+      S = 153.51
+      CF = 1 - 0.93
+      CW = { 'ECONOMY' : 0.96, 'BUSINESS' : 1.26, 'FIRST' : 2.4 }
+      a = 0
+      b = 2.714
+      c = 1166.52
+    elif x >= 2500:
+      S = 280.21
+      CF = 1 - 0.74
+      CW = { 'ECONOMY' : 0.80, 'BUSINESS' : 1.54, 'FIRST' : 2.4 }
+      a = 0.0001
+      b = 7.104
+      c = 5044.93
+
+    if x <= 1500 or x >= 2500:
+      E = ( a * x ** 2 + b * x + c ) / ( S * PLF ) * ( 1 - CF ) *\
+          CW[ cabin ] * ( EF * M + P ) + AF * x + A
+    elif x > 1500 and x < 2500:
+      alpha  = ( self.co2eq_2018( 2500 - DC, cabin=cabin ) - \
+               self.co2eq_2018( 1500 - DC, cabin=cabin ) ) / 1000
+      beta = self.co2eq_2018( 2500 - DC, cabin=cabin ) - alpha * ( 2500 )
+      E = alpha * x + beta
+    return E 
+
+class UKGov( MyClimate ):
+
+  def __init__( self, model='latest', cityDB=True, airportDB=True ):
+    if model == 'latest':
+      model = '2021'
+    super().__init__( model=model, cityDB=cityDB, airportDB=airportDB )
+
+  def co2eq( self, origin, destination, cabin="ECONOMY" ):
+    """ total CO2 equivalent per passenger in kg
+     
+    Args:
+      - origin (str) : origin IATA airport code   
+      - destination (str) : destination IATA airport code   
+      - cabin can be in 'ECONOMY', 'BUSINESS' or 'FIRST'
+    """
+    if self.model == "2021":
+      return  self.co2eq_2021( self.dist( origin, destination) , cabin=cabin)
+    else: 
+      raise ValueError( f"Unknown model {model} for {self.__name__}" )
+
+  def co2eq_2021( self, distance , cabin='ECONOMY' ):
+ 
+    """ 
+    2021 Government Greenhouse Gas Conversion Factors for Company Reporting
+    https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1049346/2021-ghg-conversion-factors-methodology.pdf 
+    https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2021
+   
+    Haul	Class	Unit	kg CO2e
+    Domestic, to/from UK        Average passenger	passenger.km	  0.24587 
+    Short-haul, to/from UK	Average passenger	passenger.km	  0.15353 
+   				Economy class		passenger.km	  0.15102 
+   				Business class		passenger.km	  0.22652 
+    Long-haul, to/from UK	Average passenger	passenger.km	  0.19309 
+   				Economy class		passenger.km	  0.14787 
+   				Premium economy class	passenger.km	  0.23659 
+   				Business class		passenger.km	  0.42882 
+   				First class		passenger.km	  0.59147 
+    Internatio, to/from non-UK	Average passenger	passenger.km	  0.18362 
+   				Economy class		passenger.km	  0.140625
+   				Premium economy class	passenger.km	  0.225   
+   				Business class		passenger.km	  0.40781 
+   				First class		passenger.km	  0.56251 
+ 
+    Note that the initial model i svery UK centric. More specifically, it does not make 
+    any difference for short long distances that are outside the UK. All of these goes 
+    into the international flight category. 
+    We instead translate this into distance as detailled in https://flygrn.com/blog/carbon-emission-factors-used-by-flygrn
+      - Domestic / regional flights (In UK or < 700 km): 0.26744 kg CO2e/pkm
+      - Short-haul flights (Europe or < 3700 km): 0.15845 kg CO2e/pkm
+      - Long-haul flights (To non-European destinations or > 3700 km): 0.15119 kg CO2e/pkm
+    """
+  
+ 
+    if distance <= 700 :     #'Domestic'
+      e = 0.24587 
+    elif distance <= 3700 :  #'Short-haul'
+      if cabin == 'ECONOMY' :
+        e = 0.15102 
+      elif cabin in [ 'BUSINESS', 'FIRST' ] :
+        e = 0.22652 
+      elif cabin == 'AVERAGE' :
+        e = 0.15353
+      else: 
+        raise ValueError( f"Unknown cabin {cabin} for {self.__name__}" )
+    else:                   # 'Long-haul'
+      if cabin == 'ECONOMY':
+        ## E = 0.23659  * distance  (Premium economy)
+        e = 0.14787
+      elif cabin == 'BUSINESS':
+        e = 0.42882
+      elif cabin == 'FIRST' :
+        e = 0.59147
+      elif cabin == 'AVERAGE' :
+        e = 0.18362
+      else: 
+        raise ValueError( f"Unknown cabin {cabin} for {self.__name__}" )
+    return e * distance 
+
 
 def is_iso8601( str_date:str):
   """ checks the date is of format ISO8601 """
@@ -1075,10 +1315,11 @@ class FlightDB(JCacheDict):
 class Flight:
 
   def __init__( self, origin=None, destination=None, departure_date=None,
-                return_date=None, adults=None, cabin='ECONOMY',
+                return_date=None, adults=1, cabin='ECONOMY',
                 segment_list=None, co2eq=None, price=None, currency=None,
                 flight_duration=None, travel_duration=None,
                 airportDB = True, cityDB = True, goclimateDB=True, conf={} ):
+##                airportDB = True, cityDB = True, goclimateDB=True, conf=co2eq.conf.Conf().CONF ):
     """ computes co2eq associated to the flight
 
       Args:
@@ -1120,99 +1361,99 @@ class Flight:
     else:
       self.cityDB = cityDB
     if goclimateDB is True:
-      self.goclimateDB=GoClimateDB( conf )
+      self.goclimateDB=GoClimateDB( conf, cityDB=self.cityDB, airportDB=self.airportDB )
     else :
       self.goclimateDB = goclimateDB
+    self.myclimate = MyClimate( model='2018', cityDB=self.cityDB, airportDB=self.airportDB )
+    self.ukgov = UKGov( model='2021',  cityDB=self.cityDB, airportDB=self.airportDB )
     if segment_list is not None and co2eq is None:
       self.co2eq = self.compute_co2eq( )
 
 
-## amadeux provides means to compute Co2
-## https://amadeus.readthedocs.io/en/latest/usage.html#co2-emissions
 
 
-  def dist( self, iata_departure, iata_arrival ):
-    ## collecting information from airport can be made via:
-    ## https://pypi.org/project/Flighter/
-    ## https://github.com/matthewgall/ourairports
-    ## we choose ourairport API as it also provides a airport location API.
+##  def dist( self, iata_departure, iata_arrival ):
+##    ## collecting information from airport can be made via:
+##    ## https://pypi.org/project/Flighter/
+##    ## https://github.com/matthewgall/ourairports
+##    ## we choose ourairport API as it also provides a airport location API.
+##
+##    coordinates = []
+##    for iata in [ iata_departure, iata_arrival ]:
+##      try:
+##        airport = self.airportDB.get_airport_by_iata( iata )
+##        coordinates.append( ( airport[ 'latitude' ], airport[ 'longitude' ] ) )
+##      except KeyError:
+##        try:
+##          city = self.cityDB.get_city_by_iata( iata )
+##          coordinates.append( ( city[ 'latitude' ], city[ 'longitude' ] ) )
+##        except:
+##          raise ValueError(f"{city} cannot be retrieved from {iata}: "\
+##                           f"Check {iata} is proper IATA airport or city code" )
+##    return great_circle( coordinates[0], coordinates[1] ).km
+##
+##  ## myclimate2018_co2
+##  def co2eq_myclimate2018( self, distance, cabin='ECONOMY') :
+##    """ total CO2 equivalent per passenger in kg
+##
+##      class can be in 'ECONOMY', 'BUSINESS' or 'FIRST'
+##    """
+##    PLF = 0.82
+##    DC = 95
+##    EF = 3.15
+##    P = 0.54
+##    M = 2
+##    AF = 0.00038
+##    A = 11.68
+##    x = distance + DC
+##    if x <= 1500 :
+##      S = 153.51
+##      CF = 1 - 0.93
+##      CW = { 'ECONOMY' : 0.96, 'BUSINESS' : 1.26, 'FIRST' : 2.4 }
+##      a = 0
+##      b = 2.714
+##      c = 1166.52
+##    elif x >= 2500:
+##      S = 280.21
+##      CF = 1 - 0.74
+##      CW = { 'ECONOMY' : 0.80, 'BUSINESS' : 1.54, 'FIRST' : 2.4 }
+##      a = 0.0001
+##      b = 7.104
+##      c = 5044.93
+##
+##    if x <= 1500 or x >= 2500:
+##      E = ( a * x ** 2 + b * x + c ) / ( S * PLF ) * ( 1 - CF ) *\
+##          CW[ cabin ] * ( EF * M + P ) + AF * x + A
+##    elif x > 1500 and x < 2500:
+##      alpha  = ( self.co2eq_myclimate2018( 2500 - DC, cabin=cabin ) - \
+##               self.co2eq_myclimate2018( 1500 - DC, cabin=cabin ) ) / 1000
+##      beta = self.co2eq_myclimate2018( 2500 - DC, cabin=cabin ) - alpha * ( 2500 )
+##      E = alpha * x + beta
+##    return E
+##
 
-    coordinates = []
-    for iata in [ iata_departure, iata_arrival ]:
-      try:
-        airport = self.airportDB.get_airport_by_iata( iata )
-        coordinates.append( ( airport[ 'latitude' ], airport[ 'longitude' ] ) )
-      except KeyError:
-        try:
-          city = self.cityDB.get_city_by_iata( iata )
-          coordinates.append( ( city[ 'latitude' ], city[ 'longitude' ] ) )
-        except:
-          raise ValueError(f"{city} cannot be retrieved from {iata}: "\
-                           f"Check {iata} is proper IATA airport or city code" )
-    return great_circle( coordinates[0], coordinates[1] ).km
-
-  ## myclimate2018_co2
-  def co2eq_myclimate2018( self, distance, cabin='ECONOMY') :
-    """ total CO2 equivalent per passenger in kg
-
-      class can be in 'ECONOMY', 'BUSINESS' or 'FIRST'
-    """
-    PLF = 0.82
-    DC = 95
-    EF = 3.15
-    P = 0.54
-    M = 2
-    AF = 0.00038
-    A = 11.68
-    x = distance + DC
-    if x <= 1500 :
-      S = 153.51
-      CF = 1 - 0.93
-      CW = { 'ECONOMY' : 0.96, 'BUSINESS' : 1.26, 'FIRST' : 2.4 }
-      a = 0
-      b = 2.714
-      c = 1166.52
-    elif x >= 2500:
-      S = 280.21
-      CF = 1 - 0.74
-      CW = { 'ECONOMY' : 0.80, 'BUSINESS' : 1.54, 'FIRST' : 2.4 }
-      a = 0.0001
-      b = 7.104
-      c = 5044.93
-
-    if x <= 1500 or x >= 2500:
-      E = ( a * x ** 2 + b * x + c ) / ( S * PLF ) * ( 1 - CF ) *\
-          CW[ cabin ] * ( EF * M + P ) + AF * x + A
-    elif x > 1500 and x < 2500:
-      alpha  = ( self.co2eq_myclimate2018( 2500 - DC, cabin=cabin ) - \
-               self.co2eq_myclimate2018( 1500 - DC, cabin=cabin ) ) / 1000
-      beta = self.co2eq_myclimate2018( 2500 - DC, cabin=cabin ) - alpha * ( 2500 )
-      E = alpha * x + beta
-    return E
-
-
-  def convert_to_iata_airport_list( self, iata ) -> list:
-    """ converts IATA (city or airport) codes into a list of IATA airport code
-
-    Some application require airport code IATA
-    """
-    if iata in [ 'ZYR' ] or self.airportDB.is_iata_airport_code( iata ) == True :
-      iata_list = [ iata ]
-    elif self.cityDB.is_iata_city_code( iata ):
-      airport_list = self.cityDB.airport_list_of( { 'iata': iata } )
-      iata_list = [ airport[ 'iata' ]  for airport in airport_list ]
-    else : 
-      raise ValueError( f"Unexpected city IATA code {iata}" \
-        f"-- neither city IATA code nor airport IATA code. Consider " \
-        f"updating IATA_SWAP in iata_airport function." )
-    return iata_list
+##  def convert_to_iata_airport_list( self, iata ) -> list:
+##    """ converts IATA (city or airport) codes into a list of IATA airport code
+##
+##    Some application require airport code IATA
+##    """
+##    if iata in [ 'ZYR' ] or self.airportDB.is_iata_airport_code( iata ) == True :
+##      iata_list = [ iata ]
+##    elif self.cityDB.is_iata_city_code( iata ):
+##      airport_list = self.cityDB.airport_list_of( { 'iata': iata } )
+##      iata_list = [ airport[ 'iata' ]  for airport in airport_list ]
+##    else : 
+##      raise ValueError( f"Unexpected city IATA code {iata}" \
+##        f"-- neither city IATA code nor airport IATA code. Consider " \
+##        f"updating IATA_SWAP in iata_airport function." )
+##    return iata_list
 
   ## icao2018
-
+ 
   def compute_co2eq( self ):
     ## for amadeus CO2 computation
     ## https://amadeus.readthedocs.io/en/latest/usage.html
-    co2eq = { 'myclimate' : 0 }
+    co2eq = { 'myclimate' : 0, 'ukgov' : 0 }
     if self.goclimateDB is not None:
       co2eq[ 'goclimate' ] = 0
     for seg in self.segment_list:
@@ -1220,30 +1461,34 @@ class Flight:
       destination = seg[1]
       for co2_computation in co2eq.keys() :
         if co2_computation == 'myclimate':
-          distance = self.dist( origin, destination )
-          added_co2 = self.co2eq_myclimate2018( distance, cabin=self.cabin )
+          ##distance = self.dist( origin, destination )
+          ##added_co2 = self.co2eq_myclimate2018( distance, cabin=self.cabin )
+          added_co2 = self.adults * self.myclimate.co2eq( origin, destination, cabin=self.cabin )
+        elif co2_computation == 'ukgov':
+          added_co2 = self.adults * self.ukgov.co2eq( origin, destination, cabin=self.cabin )
         elif co2_computation == 'goclimate':
+          added_co2 = self.adults * self.goclimateDB.co2eq( origin, destination, cabin=self.cabin )
           ## goclimate only seems to take iata airport code,
           ## so this does not work for city iata codes
-          origin_list = self.convert_to_iata_airport_list( origin )
-          destination_list  = self.convert_to_iata_airport_list( destination )
-          for origin in origin_list:
-            for destination in destination_list:
-              try:
-                added_co2 = self.goclimateDB.get_first( origin=origin, \
-                              destination=destination, cabin=self.cabin )[ 'co2eq' ]
-                break
-              except ValueError:
-                print( "Unable to get origin: {origin} - destination: {destination}" )
-                pass
-            else: # if no breaks occurs
-              continue
-            break # if a break occurs in the inner break the outer loop
-          else: ## no break occured
-            raise ValueError( f"GoClimate: Unable to resolve any combination of " \
-              f"origin_list: {origin_list} - destination_list: {destination_list}. " \
-              f"Consider chosing a alternative airport by updating IATA_SWAP in " \
-              f"the GoClimate class." )
+##          origin_list = self.convert_to_iata_airport_list( origin )
+##          destination_list  = self.convert_to_iata_airport_list( destination )
+##          for origin in origin_list:
+##            for destination in destination_list:
+##              try:
+##                added_co2 = self.goclimateDB.get_first( origin=origin, \
+##                              destination=destination, cabin=self.cabin )[ 'co2eq' ]
+##                break
+##              except ValueError:
+##                print( "Unable to get origin: {origin} - destination: {destination}" )
+##                pass
+##            else: # if no breaks occurs
+##              continue
+##            break # if a break occurs in the inner break the outer loop
+##          else: ## no break occured
+##            raise ValueError( f"GoClimate: Unable to resolve any combination of " \
+##              f"origin_list: {origin_list} - destination_list: {destination_list}. " \
+##              f"Consider chosing a alternative airport by updating IATA_SWAP in " \
+##              f"the GoClimate class." )
         co2eq[ co2_computation ] += added_co2
     return co2eq
 
