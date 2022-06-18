@@ -1,0 +1,22 @@
+{ 
+    "name" : "IETF_201", 
+    "location" : { 
+        "country" : "DE", 
+        "iata": "SXF"
+    },
+    "attendee_list": [
+        {
+            "country": "US",
+            "iata": "LAX",
+            "number_of_attendee": 1
+        },
+        {
+            "country": "FR",
+            "number_of_attendee": 2
+        },
+        {
+            "country": "JP",
+            "number_of_attendee": 5
+        }
+    ]                                    
+}

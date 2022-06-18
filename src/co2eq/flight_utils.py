@@ -4,6 +4,7 @@ import gzip
 #from datetime import timedelta
 from glob import glob
 from os.path import join, isfile, realpath, dirname # getsize, isfile
+from os import path
 from statistics import median
 from random import random
 from datetime import date, timedelta, datetime
@@ -21,9 +22,9 @@ from geopy.distance import geodesic
 from geopy.distance import great_circle
 from pip._vendor import pkg_resources
 import logging
-
 from climate_neutral import GoClimateNeutralAPI, Segment # Footprint
 
+import co2eq.conf
 from co2eq.jcache import JCacheList, JCacheDict
 
 ## Global variable
@@ -88,8 +89,7 @@ class AirportDB( OurAirports ):
                            'icao' : airport.icao }
 
           if airport.iata in iata_dict.keys():
-            raise ValueError( f"IATA {airport.iata} assigned to multiple airports" \
-                              f"{airport_json} and { iata_dict[ airport.iata ] }" )
+            continue;
           iata_dict[ airport.iata ] = airport_json 
       with gzip.open( file_name, 'wt', encoding="utf8" ) as f:
         f.write( json.dumps( iata_dict, indent=2 ) )
@@ -154,12 +154,13 @@ class CountryDB :
         with open(file_path, encoding='utf-8') as f:
 #          print( f"file_path : {file_path}" )
           country_info = json.load( f )
-        key_list = [ country_info[ 'name' ].lower() ]
-        if 'altSpellings' in country_info.keys() :
-          for k in country_info[ 'altSpellings' ]:
-            key_list.append( k.lower() )
-        for k in key_list :
-          self.countryDB[ k ] = country_info
+        if 'name' in country_info:
+          key_list = [ country_info[ 'name' ].lower() ]
+          if 'altSpellings' in country_info.keys() :
+            for k in country_info[ 'altSpellings' ]:
+              key_list.append( k.lower() )
+          for k in key_list :
+            self.countryDB[ k ] = country_info
 #    self.country_info = CountryInfo()  
 
   def input_clean_up( self, country_name ):
@@ -202,7 +203,7 @@ class CountryDB :
   
 
 class CityDB :
-  def __init__( self, conf={}, airportDB=AirportDB() ):
+  def __init__( self, conf=co2eq.conf.Conf().CONF, airportDB=AirportDB() ):
     """ This class contains function related to cities.
 
     The current use of this class is to retrieve the IATA associated to a
@@ -921,7 +922,8 @@ class AmadeusOffersSearchResponse:
 
 class FlightDB(JCacheDict):
 ## FLIGHTS_CACHE = join( CACHE_DIR, 'flights.json' )
-  def __init__( self, conf, airportDB=True, cityDB=True, goclimateDB=True):
+  def __init__( self, conf=co2eq.conf.Conf().CONF, airportDB=True, \
+                cityDB=True, goclimateDB=True):
     """ retrieve and compute flights related information such as CO2 equivalent.
 
     Since conf is used to generate some DB (goclimateDB), DB can either be
@@ -947,6 +949,7 @@ class FlightDB(JCacheDict):
     self.cache_amadeus_dir = join( self.cache_dir, 'flightDB', 'amadeus' )
     self.amadeus_id = conf[ 'AMADEUS_ID' ]
     self.amadeus_secret = conf[ 'AMADEUS_SECRET' ]
+    self.output = conf['OUTPUT_DIR']
     if airportDB is True:
       self.airportDB = AirportDB()
     else:
@@ -1037,6 +1040,8 @@ class FlightDB(JCacheDict):
       else:
         self.logger.info( f"requesting amadeus round trip flight for {origin} " \
                           f"-{destination} - {departure_date} for {adults} adult(s)" )
+        print( f"requesting amadeus round trip flight for {origin} " \
+                          f"-{destination} - {departure_date} for {adults} adult(s)" )
         response = self.amadeus.shopping.flight_offers_search.get(
           originLocationCode=origin,
           destinationLocationCode=destination,
@@ -1050,10 +1055,12 @@ class FlightDB(JCacheDict):
     except ResponseError as error:
       msg = f"Unable to retrieve Amadeus response {error} for "\
             f"{origin} -{destination} - {departure_date} for {adults} adult(s)"
+      print(msg)
       self.logger.warning( msg )
       print( f"error: {error} / {type(error)} {error == [400] }") 
       if error != [400]:
-        self.logger.info( f" {error} is a service error - probably over quotat") 
+        self.logger.info( f" {error} is a service error - probably over quota") 
+        print( " {error} is a service error - probably over quotat") 
       raise ValueError( error )
       
     cache_resp = { 'origin' : origin,
@@ -1181,6 +1188,9 @@ class FlightDB(JCacheDict):
     """
     key = self.kwarg_to_key( origin=origin, destination=destination )
     amadeus_file = join( self.cache_amadeus_dir, f"{key}.json.gz" )
+    amadeus_file = path.join(self.output,amadeus_file)
+    print(amadeus_file)
+
     ## look for amadeus files
     try:
       with gzip.open( amadeus_file, 'rt', encoding="utf8" ) as f:
@@ -1204,8 +1214,8 @@ class FlightDB(JCacheDict):
     if amadeus_offer_list != []:
       search_offer = amadeus_offer_list[ 0 ]
     else:
-#      print( f"    - retrieve amadeus : {origin} - {destination} "\
-#             f"(departure_date, return_date) : {str((departure_date, return_date))}" )
+      print( f"    - retrieve amadeus : {origin} - {destination} "\
+            f"(departure_date, return_date) : {str((departure_date, return_date))}" )
       search_offer = self.retrieve_amadeus(origin, destination, \
                        departure_date=departure_date, return_date=return_date, \
                        adults=adults )
@@ -1318,8 +1328,8 @@ class Flight:
                 return_date=None, adults=1, cabin='ECONOMY',
                 segment_list=None, co2eq=None, price=None, currency=None,
                 flight_duration=None, travel_duration=None,
-                airportDB = True, cityDB = True, goclimateDB=True, conf={} ):
-##                airportDB = True, cityDB = True, goclimateDB=True, conf=co2eq.conf.Conf().CONF ):
+                airportDB = True, cityDB = True, goclimateDB=True, \
+                conf=co2eq.conf.Conf().CONF ):
     """ computes co2eq associated to the flight
 
       Args:
