@@ -1379,87 +1379,6 @@ class Flight:
     if segment_list is not None and co2eq is None:
       self.co2eq = self.compute_co2eq( )
 
-
-
-
-##  def dist( self, iata_departure, iata_arrival ):
-##    ## collecting information from airport can be made via:
-##    ## https://pypi.org/project/Flighter/
-##    ## https://github.com/matthewgall/ourairports
-##    ## we choose ourairport API as it also provides a airport location API.
-##
-##    coordinates = []
-##    for iata in [ iata_departure, iata_arrival ]:
-##      try:
-##        airport = self.airportDB.get_airport_by_iata( iata )
-##        coordinates.append( ( airport[ 'latitude' ], airport[ 'longitude' ] ) )
-##      except KeyError:
-##        try:
-##          city = self.cityDB.get_city_by_iata( iata )
-##          coordinates.append( ( city[ 'latitude' ], city[ 'longitude' ] ) )
-##        except:
-##          raise ValueError(f"{city} cannot be retrieved from {iata}: "\
-##                           f"Check {iata} is proper IATA airport or city code" )
-##    return great_circle( coordinates[0], coordinates[1] ).km
-##
-##  ## myclimate2018_co2
-##  def co2eq_myclimate2018( self, distance, cabin='ECONOMY') :
-##    """ total CO2 equivalent per passenger in kg
-##
-##      class can be in 'ECONOMY', 'BUSINESS' or 'FIRST'
-##    """
-##    PLF = 0.82
-##    DC = 95
-##    EF = 3.15
-##    P = 0.54
-##    M = 2
-##    AF = 0.00038
-##    A = 11.68
-##    x = distance + DC
-##    if x <= 1500 :
-##      S = 153.51
-##      CF = 1 - 0.93
-##      CW = { 'ECONOMY' : 0.96, 'BUSINESS' : 1.26, 'FIRST' : 2.4 }
-##      a = 0
-##      b = 2.714
-##      c = 1166.52
-##    elif x >= 2500:
-##      S = 280.21
-##      CF = 1 - 0.74
-##      CW = { 'ECONOMY' : 0.80, 'BUSINESS' : 1.54, 'FIRST' : 2.4 }
-##      a = 0.0001
-##      b = 7.104
-##      c = 5044.93
-##
-##    if x <= 1500 or x >= 2500:
-##      E = ( a * x ** 2 + b * x + c ) / ( S * PLF ) * ( 1 - CF ) *\
-##          CW[ cabin ] * ( EF * M + P ) + AF * x + A
-##    elif x > 1500 and x < 2500:
-##      alpha  = ( self.co2eq_myclimate2018( 2500 - DC, cabin=cabin ) - \
-##               self.co2eq_myclimate2018( 1500 - DC, cabin=cabin ) ) / 1000
-##      beta = self.co2eq_myclimate2018( 2500 - DC, cabin=cabin ) - alpha * ( 2500 )
-##      E = alpha * x + beta
-##    return E
-##
-
-##  def convert_to_iata_airport_list( self, iata ) -> list:
-##    """ converts IATA (city or airport) codes into a list of IATA airport code
-##
-##    Some application require airport code IATA
-##    """
-##    if iata in [ 'ZYR' ] or self.airportDB.is_iata_airport_code( iata ) == True :
-##      iata_list = [ iata ]
-##    elif self.cityDB.is_iata_city_code( iata ):
-##      airport_list = self.cityDB.airport_list_of( { 'iata': iata } )
-##      iata_list = [ airport[ 'iata' ]  for airport in airport_list ]
-##    else : 
-##      raise ValueError( f"Unexpected city IATA code {iata}" \
-##        f"-- neither city IATA code nor airport IATA code. Consider " \
-##        f"updating IATA_SWAP in iata_airport function." )
-##    return iata_list
-
-  ## icao2018
- 
   def compute_co2eq( self ):
     ## for amadeus CO2 computation
     ## https://amadeus.readthedocs.io/en/latest/usage.html
@@ -1471,34 +1390,11 @@ class Flight:
       destination = seg[1]
       for co2_computation in co2eq.keys() :
         if co2_computation == 'myclimate':
-          ##distance = self.dist( origin, destination )
-          ##added_co2 = self.co2eq_myclimate2018( distance, cabin=self.cabin )
           added_co2 = self.adults * self.myclimate.co2eq( origin, destination, cabin=self.cabin )
         elif co2_computation == 'ukgov':
           added_co2 = self.adults * self.ukgov.co2eq( origin, destination, cabin=self.cabin )
         elif co2_computation == 'goclimate':
           added_co2 = self.adults * self.goclimateDB.co2eq( origin, destination, cabin=self.cabin )
-          ## goclimate only seems to take iata airport code,
-          ## so this does not work for city iata codes
-##          origin_list = self.convert_to_iata_airport_list( origin )
-##          destination_list  = self.convert_to_iata_airport_list( destination )
-##          for origin in origin_list:
-##            for destination in destination_list:
-##              try:
-##                added_co2 = self.goclimateDB.get_first( origin=origin, \
-##                              destination=destination, cabin=self.cabin )[ 'co2eq' ]
-##                break
-##              except ValueError:
-##                print( "Unable to get origin: {origin} - destination: {destination}" )
-##                pass
-##            else: # if no breaks occurs
-##              continue
-##            break # if a break occurs in the inner break the outer loop
-##          else: ## no break occured
-##            raise ValueError( f"GoClimate: Unable to resolve any combination of " \
-##              f"origin_list: {origin_list} - destination_list: {destination_list}. " \
-##              f"Consider chosing a alternative airport by updating IATA_SWAP in " \
-##              f"the GoClimate class." )
         co2eq[ co2_computation ] += added_co2
     return co2eq
 
@@ -1517,3 +1413,27 @@ class Flight:
       'flight_duration' : str( self.flight_duration ),
       'co2eq' : self.co2eq }
 
+
+def get_flight( origin, destination, conf=co2eq.conf.Conf().CONF ):
+  """ return a flight from origin to destination
+
+  The function tries with default values provided by FlightDB and in case no
+  offer is provided performs another lookup with different dates.
+  In our cases, the dates are 5 days latter.
+  """
+  airportDB = AirportDB()
+  cityDB = CityDB( conf, airportDB=airportDB )
+  goclimateDB = GoClimateDB( conf )
+  flightDB = FlightDB( conf, cityDB=cityDB, airportDB=airportDB, goclimateDB=goclimateDB)
+  try:
+    flight = flightDB.select_flight( origin, destination )
+  except ( ValueError ) :
+    ## retry with other dates - in this case 5 days later
+    departure_date = flightDB.departure_date
+    return_date = flightDB.return_date
+    alt_departure = datetime.strptime( departure_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
+    alt_departure = ( alt_departure + timedelta( days=5 ) ).isoformat()
+    alt_return = datetime.strptime( return_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
+    alt_return = ( alt_return + timedelta( days=5 ) ).isoformat()
+    flight = flightDB.select_flight( origin, destination, departure_date=alt_departure, return_date=alt_return )
+  return flight

@@ -1,11 +1,16 @@
 from os.path import join, isfile, isdir
-from os.path import join, isfile, isdir
 import json
 import gzip 
 import requests
+import pkg_resources
 import pandas as pd
 from co2eq.meeting import Meeting, MeetingList
 import co2eq.conf 
+
+## Global variable
+## long term data are stored in DATA_DIR
+## example: iata_city_codes publishe din 2015
+IETF_DATA_DIR = pkg_resources.resource_filename( 'co2eq', 'data/ietf' )
 
 IETF_MEETING_LIST = [
   { 'name' : 'IETF72', 
@@ -348,8 +353,9 @@ class IETFMeeting ( Meeting ):
         break 
     super().__init__( name, location, base_output_dir=base_output_dir, conf=conf, \
                       cityDB=cityDB, flightDB=flightDB, airportDB=airportDB )
-    self.attendee_list_html = join( self.output_dir,  'attendee_list.html.gz' )
-    self.attendee_list_json = join( self.output_dir,  'attendee_list.json.gz' )
+    self.file_name_base =  f"ietf{self.ietf_nbr}_attendee_list"
+    self.attendee_list_html = join( self.output_dir,  f"{self.file_name_base}.html.gz" )
+    self.attendee_list_json = join( self.output_dir,  f"{self.file_name_base}.json.gz" )
     self.attendee_list = self.get_attendee_list()
 
 #  def get_location( self ):
@@ -379,6 +385,11 @@ class IETFMeeting ( Meeting ):
     with gzip.open(self.attendee_list_html, 'wt', encoding="utf8" ) as f:
       f.write( txt )
 
+
+  ## to do we need to updatethe parsing from 108.
+  ## "https://registration.ietf.org/108/participants/remote/
+  ## all type of participants are listed under https://registration.ietf.org/108/participants, in which cas ethe type of particip[ation in a cloums. 
+  ## We coudl also go to specific URLs remoyte/ onsite and avoid parsng the column. This is the current option for "remote".
   def parse_htm_remote( self ) :
     """ parses remote meeting  108, 109, 110, 111 
  
@@ -564,8 +575,22 @@ class IETFMeeting ( Meeting ):
     return org_value
 
   def get_attendee_list( self ):
+    """ generates attendee_list from various sources. 
+    
+    Originally the function was relying only on the ietf web site. 
+    However, we were not able to find the data associated to meeting 72 - 108. 
+    As a result, the json files are also included in the co2eq package.
+    """
     if self.attendee_list is not None:
       return self.attendee_list
+    ## check json file is in the package
+    data_attendee_list_json = join( IETF_DATA_DIR,  f"{self.file_name_base}.json.gz" )
+    if isfile( data_attendee_list_json ) is True:
+      with gzip.open( data_attendee_list_json, 'rt', encoding="utf8" ) as f:
+        attendee_list = json.loads( f.read() )
+      return attendee_list
+
+    ## else go to the generic html/json object generated
     if isfile( self.attendee_list_json ) is False:
       if isfile( self.attendee_list_html ) is False:
         self.get_attendee_list_html( )

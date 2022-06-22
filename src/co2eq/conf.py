@@ -50,7 +50,9 @@ class Conf:
       ##'ISO3166_REPRESENTATIVE_CITY' : env.dict( 'ISO3166_REPRESENTATIVE_CITY',  parsed_key=str, parsed_value=dict) 
       'ISO3166_REPRESENTATIVE_CITY' : self.json_file_content( 'ISO3166_REPRESENTATIVE_CITY' )
       }
-    print( self.env.dump() )
+
+  def show( self ): 
+    print( json.dumps( self.env.dump(), indent=2 ) )
  
   def json_file_content( self, conf_key, default={} ):
     file_path = self.env.path( conf_key, None )

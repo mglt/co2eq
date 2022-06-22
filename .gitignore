@@ -1,15 +1,25 @@
-.env
-src/co2eq/output/
-co2eq.log
-__pycache__/
-archive/
+# Sphinx documentation
+sphinx/_build/
 docs/_build
 docs/_static
 docs/templates
+archive/
+
+# co2eq
+.env
+src/co2eq/output/
+co2eq.log
+
+#python
+__pycache__/
+*.py[cod]
+*$py.class
+
 # C extensions
 *.so
+
+# vim 
 *.swp
-*.py[cod]
 *.swo
 *.swn
 *.der

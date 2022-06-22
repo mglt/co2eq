@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 #import numpy as np
 import requests
 from math import ceil
-from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, Flight, logger
+from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, CountryDB, Flight, logger
 import co2eq.conf
 
 
@@ -47,6 +47,8 @@ class Meeting:
     """
     self.name = name
     self.conf = conf
+    print( f"Computing CO2eq for {self.name}\n" )
+    print( f"Configuration:\n {self.conf}" )
     if airportDB is True:
       self.airportDB = AirportDB()
     else:
@@ -66,6 +68,8 @@ class Meeting:
       flightDB = FlightDB( conf, cityDB=self.cityDB, airportDB=self.airportDB, \
                            goclimateDB=self.goclimateDB)
     self.flightDB = flightDB
+
+    self.countryDB = CountryDB()
     # print( f"meeting iata location: {self.iata_location}" )
     if base_output_dir is None:
       base_output_dir = self.conf[ 'OUTPUT_DIR' ]
@@ -75,6 +79,7 @@ class Meeting:
       os.makedirs( self.output_dir )
     self.logger = logger( conf, __name__ )     
     self.attendee_list = attendee_list
+    self.flight_list = None
 
   def get_attendee_list( self ):
     """ return a python list of attendees """
@@ -91,15 +96,83 @@ class Meeting:
       raise ValueError( f"Unable to generate attendee_list from {self.attendee_list}" )
     return attendee_list 
 
-  def sanity_check_args( self, mode=None, cluster_key=None, co2eq=None  ):
+  def get_attendee_flight( self, index, mode='flight', cabin='ECONOMY' )-> dict:
+    """ return the flight that corresponds to index-th attendee """
+    if mode == 'distance':
+      attendee_list = self.get_attendee_list( )
+      attendee = attendee_list[ index ]
+      if attendee[ 'country' ] is None :
+        self.logger.debug( "Undefined attendee country {attendee}" )
+        return  None
+      attendee_iata_city = self.cityDB.representative_city( attendee )[ 'iata' ]
+      meeting_iata_city = self.cityDB.representative_city( self.location )[ 'iata' ]
+      self.logger.debug( f"  - Flight from {attendee_iata_city} to  {meeting_iata_city}" )
+#      if attendee_iata_city in [ '', None ]:
+#        self.logger.debug( "Unable to find city for {attendee}" )
+#        continue
+      segment_list = [ [ attendee_iata_city , meeting_iata_city  ],  \
+                       [ attendee_iata_city , meeting_iata_city  ] ]
+      flight = { 'segment_list' : [ [ attendee_iata_city , meeting_iata_city  ],  \
+                                    [ attendee_iata_city , meeting_iata_city  ] ] }
+    else: 
+      flight_list = self.get_flight_list( ) 
+      flight = flight_list[ index ]
+    ## computing co2eq correpsonding to cabin when flight has been defined.
+    if flight != None :      
+      flight[ 'cabin' ] = cabin 
+      flight[ 'co2eq' ] = None ## force computation for the defined parameter including the cabin 
+      flight = Flight( **flight, cityDB=self.cityDB, \
+                     airportDB=self.airportDB, goclimateDB=self.goclimateDB)
+      return flight.export() 
+    return None
+
+  def get_flight_list( self ):
+    """ generates the list of flights that correspond to the attendees """
+    if isinstance( self.flight_list, list ):
+      return self.flight_list
+    else:
+      self.flight_list = []
+      attendee_nbr = 0
+      for attendee in self.get_attendee_list():
+        attendee_nbr += 1
+        self.logger.debug( f"  - attendee {attendee_nbr}: {attendee}" )
+        if attendee[ 'country' ] is None :
+          self.flight_list.append( None ) 
+          continue
+        attendee_iata_city = self.cityDB.representative_city( attendee )[ 'iata' ]
+        meeting_iata_city = self.cityDB.representative_city( self.location )[ 'iata' ]
+        self.logger.debug( f"  - Flight from {attendee_iata_city} to  {meeting_iata_city}" )
+        if attendee_iata_city == meeting_iata_city :
+          self.flight_list.append( None ) 
+          continue
+        if attendee_iata_city in [ '', None ]:
+          self.logger.debug( "Unable to find city for {attendee}" )
+          self.flight_list.append( None )  
+          continue
+        try: 
+          self.flight_list.append( self.flightDB.force_select_flight( attendee_iata_city , meeting_iata_city  ) )
+        except :
+          if 'country' in attendee.keys() and 'city' not in attendee.keys() and 'state' not in attendee.keys() :
+            print( f"\n-----------------------------\n"\
+                   f"Unable to retrieve flight: FROM: {attendee_iata_city} "\
+                   f"TO: {meeting_iata_city}\n" ) 
+            self.debug_country_info( attendee[ 'country' ] )
+          raise ValueError( "unable top retrieve flight")
+      return self.flight_list
+
+
+  def sanity_check_args( self, mode=None, cluster_key=None, co2eq=None, cabin=None  ):
     """ perfoms sanity check for inputs 
  
     """
-    if mode in [ 'distance', 'flight' ] and co2eq is None :
-      raise ValueError( f"{kwargs}: co2eq cannot be None with mode set to 'distance' or 'flight'" )
+    if mode in [ 'distance', 'flight' ] : 
+      if co2eq is None :
+        raise ValueError( f"{kwargs}: co2eq cannot be None with mode set to 'distance' or 'flight'" )
+      elif cabin not in [ 'AVERAGE', 'ECONOMY', 'BUSINESS', 'FIRST' ]:
+        raise ValueError( f"{kwargs}: unknown cabin class - mandatory for mode 'distance' or 'flight'" )
     if mode in [ 'attendee' ]:
       co2eq = None
-    return mode, cluster_key, co2eq 
+    return mode, cluster_key, co2eq, cabin 
 
   def kwargs_to_file_name( self, suffix:str, extension:str, kwargs:dict ) -> str:
     """ build a file name string from kwargs """
@@ -125,6 +198,7 @@ class Meeting:
     cluster_key = None
     co2eq = None
     mode = None
+    cabin = None
     for seg in file_name.split('-'):
       if 'mode' in seg:
         mode = seg.split( '_' )[1]
@@ -138,10 +212,12 @@ class Meeting:
           cluster_key = cluster_key_split
       elif 'co2eq_' in seg:
         co2eq = seg.split( '_' )[1]
- 
+      elif 'cabin' in seg:
+        cabin = seg.split( '_' )[1]
     return { 'mode' : mode,
              'cluster_key' : cluster_key,
-             'co2eq' : co2eq }
+             'co2eq' : co2eq, 
+             'cabin' : cabin }
 
   def build_co2eq_data( self, mode='flight', cluster_key=None, co2eq='myclimate', cabin='AVERAGE' ) -> dict :
     """ co2 equivalent based on real flights including multiple segments)
@@ -152,13 +228,13 @@ class Meeting:
     cluster_key can be any key mention in the participant object withthe additional key 'flight_segment_number'.
 
     Todo:
-    * current distance does not work with goclimate as goclimate seems to only
-      take iata airport code, while we provide iata city code.
+      * we are doing now a lot of measurements and each time we retrieves
+        the flights. We need to be able to comput ea attendee_flight_list once. 
     """
 
-    mode, cluster_key, co2eq = self.sanity_check_args( mode=mode, \
-                                                        cluster_key=cluster_key, co2eq=co2eq )
-    kwargs = { 'mode' : mode, 'cluster_key' : cluster_key, 'co2eq' : co2eq }
+    mode, cluster_key, co2eq, cabin = self.sanity_check_args( mode=mode, \
+                                                        cluster_key=cluster_key, co2eq=co2eq, cabin=cabin )
+    kwargs = { 'mode' : mode, 'cluster_key' : cluster_key, 'co2eq' : co2eq, 'cabin' : cabin }
 
     data_file = join( self.output_dir, self.kwargs_to_file_name( 'co2eq', 'json.gz', kwargs ) )
     if isfile( data_file ) is True:
@@ -179,67 +255,25 @@ class Meeting:
     attendee_nbr = 0
     for attendee in self.get_attendee_list( ):
       attendee_nbr +=1 
-      self.logger.debug( f"  - attendee {attendee_nbr}: {attendee}" )
-      attendee_iata_city = self.cityDB.representative_city( attendee )[ 'iata' ]
-      meeting_iata_city = self.cityDB.representative_city( self.location )[ 'iata' ]
-      self.logger.debug( f"  - Flight from {attendee_iata_city} to  {meeting_iata_city}" )
-      if attendee_iata_city == meeting_iata_city :
-        continue
-      if attendee_iata_city in [ '', None ]:
-        self.logger.debug( "Unable to find city for {attendee}" )
-        continue
-
-      flight = None
-      if mode == 'attendee' :
-        if cluster_key == 'flight_segment_number':
-          flight = self.flightDB.select_flight( attendee_iata_city , meeting_iata_city  )
-          ## by default Flight are set to ECONOMY
-          ## we should probably ignore the cabin for searching flight in our case.
-          ##flight[ 'cabin' ] = cabin
-          ## flight = Flight( **flight, cityDB=self.cityDB, \
-          ##                  airportDB=self.airportDB, goclimateDB=self.goclimateDB)
-          ## flight = flight.export()
-      elif mode in [ 'flight' ]:
-        try: 
-          flight = self.flightDB.force_select_flight( attendee_iata_city , meeting_iata_city  )
-          ## flight[ 'cabin' ] = cabin
-          ## co2_eq is computed at instantiation
-          ## flight = Flight( **flight, cityDB=self.cityDB, \
-          ##                 airportDB=self.airportDB, goclimateDB=self.goclimateDB)
-          ## flight = flight.export()
-        except :
-          if 'country' in attendee.keys() and 'city' not in attendee.keys() and 'state' not in attendee.keys() :
-            print( f"\n-----------------------------\n"\
-                   f"Unable to retrieve flight: FROM: {attendee_iata_city} "\
-                   f"TO: {meeting_iata_city}\n" ) 
-            self.debug_country_info( attendee[ 'country' ] )
-          raise ValueError( "unable top retrieve flight") 
-      elif mode == 'distance':
-        segment_list = [ [ attendee_iata_city , meeting_iata_city  ],  \
-                         [ attendee_iata_city , meeting_iata_city  ] ]
-        flight = { 'segment_list' : [ [ attendee_iata_city , meeting_iata_city  ],  \
-                                      [ attendee_iata_city , meeting_iata_city  ] ] }
-        ## co2_eq is computed at instantiation
-        ##flight = Flight( segment_list=segment_list, cabin=cabin, cityDB=self.cityDB, \
-        ##                  airportDB=self.airportDB, goclimateDB=self.goclimateDB)
-        ## flight = flight.export()
-      ## computing co2eq correpsonding to cabin when flight has been defined.
-      if flight != None :      
-        flight[ 'cabin' ] = cabin
-        flight = Flight( **flight, cityDB=self.cityDB, \
-                       airportDB=self.airportDB, goclimateDB=self.goclimateDB)
-        flight = flight.export()
-
+      if ( mode == 'attendee' and cluster_key == 'flight_segment_number' ) or mode in [ 'distance', 'flight' ]:  
+        flight = self.get_attendee_flight( attendee_nbr - 1, mode=mode, cabin=cabin )
+        if flight is None: 
+          continue
       ## clustering key k -- attendees are clustered according to k
-      if cluster_key is None:
+      if cluster_key is None : 
         if mode == 'attendee' :
           key = 'total attendee'
         else:
           key = 'total co2eq'
+      ## eventually the value of cluster_key is computed  
       elif cluster_key == 'flight_segment_number':
-        attendee[ 'flight_segment_number' ]  = len( flight[ 'segment_list' ] )
-        key = attendee[ cluster_key ]
-      else:
+        key = len( flight[ 'segment_list' ] )
+      elif cluster_key == 'subregion':
+        if attendee[ 'country' ] is None:
+          continue
+        country_info = self.countryDB.get_country_info( attendee[ 'country' ] ) 
+        key = country_info.subregion()  
+      else: 
         key = attendee[ cluster_key ]
 
       ## computing y depending on the co2eq input
@@ -338,7 +372,7 @@ class Meeting:
     ax.set_title( title, pad=20 )
     return fig, ax
 
-  def plot_co2eq_default_kwargs( self, mode, cluster_key:str, cluster_nbr:int, co2eq:str ) -> list :
+  def plot_co2eq_default_kwargs( self, mode, cluster_key:str, cluster_nbr:int, co2eq:str, cabin:str ) -> list :
     """ returns the default arguments, i.e. when there values is set to None 
       
      This function is only used by plot_co2eq and operates two functions:
@@ -348,7 +382,7 @@ class Meeting:
 
     kwargs = locals()
     del kwargs[ 'self' ]
-    if mode is None: # by defult the focus is on co2eq
+    if mode is None: # by default the focus is on co2eq
       mode_list = [ 'flight', 'distance' ]
     elif isinstance( mode, list ):
       mode_list = mode
@@ -365,22 +399,39 @@ class Meeting:
       mode_str += f"_{m}"
     kwargs[ 'mode' ] = mode_str
 
-    if co2eq is None:
+    if co2eq is None: # if unspecified
       if 'flight' in mode_list or 'distance' in mode_list :
         co2eq_list = [ 'myclimate', 'goclimate', 'ukgov']
-        kwargs[ 'co2eq' ] = 'myclimate_goclimate'
+        kwargs[ 'co2eq' ] = 'myclimate_goclimate_ukgov'
       else:
         co2eq_list = [ ]
-    elif isinstance( co2eq , list ) :
+    elif isinstance( co2eq , list ) : # if co2eq is provided as a list
       co2eq_list = co2eq
-    elif isinstance( co2eq , str ) :
+    elif isinstance( co2eq , str ) : # if co2eq is provided as a str (one value)
       co2eq_list = [ co2eq ]
-    if len( co2eq_list ) != 0:
+    if len( co2eq_list ) != 0: # generates string out of the list
       co2eq_str = co2eq_list[ 0 ]
       for c in co2eq_list[1:]:
         co2eq_str += f"_{c}"
       kwargs[ 'co2eq' ] = co2eq_str
-    return mode_list, cluster_key, cluster_nbr, co2eq_list, kwargs
+
+    if cabin is None:
+     if co2eq_list == [ ]:
+       cabin_list = []
+     else: 
+       cabin_list = [ 'ECONOMY', 'AVERAGE' ]
+       kwargs[ 'cabin' ] = 'ECONOMY_AVERAGE'
+    elif isinstance( cabin , list ) : # if cabin is provided as a list
+      cabin_list = cabin
+    elif isinstance( cabin , str ) : # if cabin is provided as a str (one value)
+      cabin_list = [ cabin ]
+    if len( cabin_list ) != 0: # generates string out of the list
+      cabin_str = cabin_list[ 0 ]
+      for c in cabin_list[1:]:
+        cabin_str += f"_{c}"
+
+
+    return mode_list, cluster_key, cluster_nbr, co2eq_list, cabin_list, kwargs
 
   def plot_title( self, mode, cluster_key ):
     """return title and ylabel associated to the figure """
@@ -397,7 +448,7 @@ class Meeting:
 
     return title, y_label
 
-  def plot_co2eq( self, mode=None, cluster_key=None, cluster_nbr=None, co2eq=None) :
+  def plot_co2eq( self, mode=None, cluster_key=None, cluster_nbr=None, co2eq=None, cabin=None) :
     """ plots data 
 
     mode 'attendee' represents on y a number of person while 'flight' and 'distance' represents CO2. 
@@ -409,8 +460,8 @@ class Meeting:
 ##    https://www.statology.org/matplotlib-stacked-bar-chart/
 ##
     
-    mode_list, cluster_key, cluster_nbr, co2eq_list, kwargs = \
-      self.plot_co2eq_default_kwargs( mode, cluster_key, cluster_nbr, co2eq )
+    mode_list, cluster_key, cluster_nbr, co2eq_list, cabin_list, kwargs = \
+      self.plot_co2eq_default_kwargs( mode, cluster_key, cluster_nbr, co2eq, cabin )
     fig_file = join( self.output_dir, self.kwargs_to_file_name( 'co2eq', 'svg', kwargs  ) )
     if isfile( fig_file ) is True:
       return
@@ -423,12 +474,13 @@ class Meeting:
     ## and need to be plot separately 
     col_dict = {}  
     col_label = []
-    for mode in mode_list : #, 'distance' ]:
+    for mode in mode_list :
       if mode in [ 'flight', 'distance' ]:
         for co2eq in co2eq_list:
-          y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
-          col_dict[ ( mode, co2eq ) ] = y
-          col_label.append( f"{mode}\n{co2eq}" ) 
+          for cabin in cabin_list:
+            y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq, cabin=cabin )
+            col_dict[ ( mode, co2eq, cabin ) ] = y
+            col_label.append( f"{mode}\n{co2eq}-{cabin[:3]}." ) 
       elif mode in [ 'attendee' ]:
         y = self.build_co2eq_data( mode=mode, cluster_key=cluster_key, co2eq=co2eq )
         col_dict[ mode ] = y
@@ -436,11 +488,16 @@ class Meeting:
 
     line_list, stack_label = self.reduce_and_transpose( col_dict, cluster_nbr )
 
+   
+#    figsize=(10,4) ## width, heigh (inch) of the figure
+    figsize=( 2 * len( col_label ), 4) ## width, heigh (inch) of the figure
+    adjust_bottom = 0.4 ## make sure we have enough space to read the xticks
+
     title, y_label = self.plot_title( mode_list[0], cluster_key )
     title = title + f" for {self.name} ({len( self.get_attendee_list( ) )} participants)"
 
     fig, ax = self.plot_stack( line_list, stack_label=stack_label, \
-                               column_label=col_label, title=title )
+                               column_label=col_label, title=title, figsize=figsize )
     ax.set_ylabel( y_label ) 
 
     if len( stack_label ) >= 2:
@@ -459,7 +516,6 @@ class Meeting:
     This function helps to find why a flight cannot be retrieved. 
     It is limited to the case where only the country has been provided.
     """
-##    countryDB = CountryDB()
     ## Step 1: checking the capital returned by country info
     country_info = self.cityDB.countryDB.get_country_info( country )
     print( f"-- step 1: Capital of {country_info.name()} ({country}) is "\
@@ -679,11 +735,11 @@ class MeetingList(Meeting):
                       goclimateDB=self.goclimateDB )
 
   def plot_co2eq( self, mode=None, cluster_key=None, cluster_nbr=None, \
-                  co2eq=None, figsize=(10,4), column_label=None, \
+                  co2eq=None, cabin=None, figsize=(10,4), column_label=None, \
                   xticks_rotation='vertical', adjust_bottom=0.4, ) :
 
     kwargs = { 'mode' : mode, 'cluster_key' : cluster_key, \
-               'cluster_nbr' : cluster_nbr, 'co2eq' : co2eq }
+               'cluster_nbr' : cluster_nbr, 'co2eq' : co2eq, 'cabin' : cabin}
 
     ## checking mode values
     if mode not in [ 'flight', 'distance', 'attendee' ]:
@@ -691,8 +747,17 @@ class MeetingList(Meeting):
     ## in mode attendee co2eq is set to None
     if mode == 'attendee' and co2eq != None:
       raise ValueError( f"Unacceptable value {co2eq} for co2eq with mode {mode}. Must be None in mode 'attendee'" )
-    if co2eq not in [ 'goclimate', 'myclimate', None ]:
-      raise ValueError( f"Unacceptable value {co2eq} for co2eq. Accepted values are 'goclimate', 'myclimate', None." )
+    if co2eq not in [ 'goclimate', 'myclimate', 'ukgov', None ]:
+      raise ValueError( f"Unacceptable value {co2eq} for co2eq. Accepted values are 'goclimate', 'myclimate', 'ukgov', None." )
+    if cabin not in [ 'AVERAGE', 'ECONOMY', 'BUSINESS', 'FIRST', None ]:
+      raise ValueError( f"Unacceptable value {cabin} for cabin. Accepted values are 'AVERAGE', 'ECONOMY', 'BUSINESS', 'FIRST'." )
+    if ( co2eq != None and cabin is None ) :
+      raise ValueError( f"Unacceptable value for co2eq {co2eq} and cabin {cabin}. These MUST be either set both to None or both set to a non-None value." )
+    ## the generation of flight - even used in attendee mode - requires the a cabin 
+    ## we maybe coudl fix it elsewhere.
+    if co2eq is None and cabin is None:
+      cabin = 'ECONOMY'
+
     if kwargs[ 'cluster_key' ] is not None and not isinstance( kwargs[ 'cluster_key' ], str ):
       raise ValueError( f"Unacceptable arguments. cluster_key must be string or None. {kwargs}" )
     if kwargs[ 'cluster_nbr' ] is not None and not isinstance( kwargs[ 'cluster_nbr' ], int ):
@@ -706,7 +771,7 @@ class MeetingList(Meeting):
     for meeting in self.meeting_list:
       meeting = self.get_meeting( meeting )
       column_dict[ meeting.name ] = meeting.build_co2eq_data( mode=mode, cluster_key=cluster_key,\
-                                                              co2eq=co2eq )
+                                                              co2eq=co2eq, cabin=cabin )
     line_list, stack_label = self.reduce_and_transpose( column_dict, cluster_nbr )
     
     title, y_label = self.plot_title( mode, cluster_key )
@@ -729,14 +794,16 @@ class MeetingList(Meeting):
     for meeting in self.meeting_list:
       meeting = self.get_meeting( meeting )
       self.logger.info( f"{meeting.name}: Processing plot_co2eq" )
-      meeting.plot_co2eq( )
+#      meeting.plot_co2eq( )
       ## evaluation the cluster_keys by reading those of the first 
       ## attendee
       cluster_key_list = list( meeting.get_attendee_list()[0].keys() )
       cluster_key_list.append( 'flight_segment_number' )
+      cluster_key_list.append( 'subregion' )
       cluster_key_list.append( None )
       for cluster_key in  cluster_key_list :
-        meeting.plot_co2eq( mode=None, cluster_key=cluster_key, cluster_nbr=15)
+        meeting.plot_co2eq( mode=[ 'flight', 'distance' ], cluster_key=cluster_key, cluster_nbr=15)
+        meeting.plot_co2eq( mode='attendee', cluster_key=cluster_key, cluster_nbr=15)
 ##      meeting.plot_co2eq( mode=None, cluster_key='organization', cluster_nbr=15)
 ##      meeting.plot_co2eq( mode=None, cluster_key='presence' )
 ##      meeting.plot_co2eq( mode=None, cluster_key='country', cluster_nbr=15 )
@@ -761,8 +828,9 @@ class MeetingList(Meeting):
                     'adjust_bottom' : adjust_bottom, 'xticks_rotation' : xticks_rotation }
     for mode in [ 'flight' ]:
       for co2eq in [ 'myclimate', 'goclimate', 'ukgov' ]:
-         for cluster_key in  cluster_key_list :
-           self.plot_co2eq( mode=mode, cluster_key=cluster_key, co2eq=co2eq, **plot_kwargs )
+         for cabin in [ 'ECONOMY', 'AVERAGE' ]:
+           for cluster_key in  cluster_key_list :
+             self.plot_co2eq( mode=mode, cluster_key=cluster_key, co2eq=co2eq, cabin=cabin, **plot_kwargs )
     for mode in [ 'attendee' ]:
        for cluster_key in  cluster_key_list :
          self.plot_co2eq( mode=mode, cluster_key=cluster_key, **plot_kwargs )
@@ -860,27 +928,27 @@ class MeetingList(Meeting):
       meeting = self.get_meeting( meeting_name )
       meeting.md( banner, toc=toc ) 
 
-def get_flight( origin, destination, conf=co2eq.conf.Conf().CONF ):
-  """ return a flight from origin to destination
-
-  The function tries with default values provided by FlightDB and in case no
-  offer is provided performs another lookup with different dates.
-  In our cases, the dates are 5 days latter.
-  """
-  cityDB = CityDB( conf, airportDB=airportDB )
-  airportDB = AirportDB()
-  goclimateDB = GoClimateDB( conf )
-  flightDB = FlightDB( conf, cityDB=cityDB, airportDB=airportDB, goclimateDB=goclimateDB)
-  try:
-    flight = flightDB.select_flight( origin, destination )
-  except ( ValueError ) :
-    ## retry with other dates - in this case 5 days later
-    departure_date = flightDB.departure_date
-    return_date = flightDB.return_date
-    alt_departure = datetime.strptime( departure_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
-    alt_departure = ( alt_departure + timedelta( days=5 ) ).isoformat()
-    alt_return = datetime.strptime( return_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
-    alt_return = ( alt_return + timedelta( days=5 ) ).isoformat()
-    flight = flightDB.select_flight( origin, destination, departure_date=alt_departure, return_date=alt_return )
-  return flight
+##def get_flight( origin, destination, conf=co2eq.conf.Conf().CONF ):
+##  """ return a flight from origin to destination
+##
+##  The function tries with default values provided by FlightDB and in case no
+##  offer is provided performs another lookup with different dates.
+##  In our cases, the dates are 5 days latter.
+##  """
+##  cityDB = CityDB( conf, airportDB=airportDB )
+##  airportDB = AirportDB()
+##  goclimateDB = GoClimateDB( conf )
+##  flightDB = FlightDB( conf, cityDB=cityDB, airportDB=airportDB, goclimateDB=goclimateDB)
+##  try:
+##    flight = flightDB.select_flight( origin, destination )
+##  except ( ValueError ) :
+##    ## retry with other dates - in this case 5 days later
+##    departure_date = flightDB.departure_date
+##    return_date = flightDB.return_date
+##    alt_departure = datetime.strptime( departure_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
+##    alt_departure = ( alt_departure + timedelta( days=5 ) ).isoformat()
+##    alt_return = datetime.strptime( return_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
+##    alt_return = ( alt_return + timedelta( days=5 ) ).isoformat()
+##    flight = flightDB.select_flight( origin, destination, departure_date=alt_departure, return_date=alt_return )
+##  return flight
 

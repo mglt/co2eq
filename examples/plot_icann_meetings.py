@@ -88,7 +88,7 @@ meeting_list = [
 
 from co2eq.meeting import Meeting, MeetingList
 
-meeting_list = meeting_list[ :2 ]
+#meeting_list = meeting_list[ :2 ]
 
 ## ======= illustrative =======
 ## This is not necessary to generate teh meeting objects 
@@ -98,7 +98,7 @@ for meeting in meeting_list :
   m = Meeting( **meeting )
   print( f"Processing meeting {m.name}" )
   for mode in [ None, 'distance', 'flight', 'attendee' ]:
-    for cluster_key in [ None, 'country', 'flight_segment_number' ]:
+    for cluster_key in [ None, 'country', 'flight_segment_number', 'subregion' ]:
       m.plot_co2eq( mode=mode, cluster_key=cluster_key, cluster_nbr=15)
 ## ========================
 
