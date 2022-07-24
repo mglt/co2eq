@@ -400,9 +400,9 @@ class IETFMeeting ( Meeting ):
     """
     with gzip.open( self.attendee_list_html, 'rt', encoding="utf8" ) as f:
       dfs = pd.read_html(f.read(), header=0 )
-      print( f"dfs ({len(dfs)}): {dfs}" )
-      for i in range( len(dfs)):
-        print( f"dfs[i]: {dfs[i]}" )
+#      print( f"dfs ({len(dfs)}): {dfs}" )
+#      for i in range( len(dfs)):
+#        print( f"dfs[i]: {dfs[i]}" )
       
       json_obj = json.loads( dfs[0].to_json( orient="records" ) )
       for attendee in json_obj:
@@ -420,7 +420,7 @@ class IETFMeeting ( Meeting ):
         if attendee[ 'presence' ] == 'Onsite':
           attendee[ 'presence' ] = 'on-site'
         elif attendee[ 'presence' ] == 'Remote':
-          attendee[ 'presence' ] == 'remote'
+          attendee[ 'presence' ] = 'remote'
       return json_obj
 
 

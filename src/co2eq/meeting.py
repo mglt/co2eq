@@ -281,11 +281,6 @@ class Meeting:
         except:
           y [ key ] = 1
       elif mode in [ 'distance', 'flight' ]:
-        print( f"flight: {flight}" )
-        print( f"key: {key}" )
-        print( f"y: {y}" )
-        print( f"co2eq: {co2eq}" )
-        print( f"data_file: {data_file}" )
         try:
           y [ key ] += flight[ 'co2eq' ][ co2eq ]
         except:
