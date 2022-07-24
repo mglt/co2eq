@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 #import numpy as np
 import requests
 from math import ceil
-from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, CountryDB, Flight, logger
+from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, CountryDB, Flight, logger, MyClimate
 import co2eq.conf
 
 
@@ -80,6 +80,7 @@ class Meeting:
     self.logger = logger( conf, __name__ )     
     self.attendee_list = attendee_list
     self.flight_list = None
+    self.km = None
 
   def get_attendee_list( self ):
     """ return a python list of attendees """
@@ -107,9 +108,6 @@ class Meeting:
       attendee_iata_city = self.cityDB.representative_city( attendee )[ 'iata' ]
       meeting_iata_city = self.cityDB.representative_city( self.location )[ 'iata' ]
       self.logger.debug( f"  - Flight from {attendee_iata_city} to  {meeting_iata_city}" )
-#      if attendee_iata_city in [ '', None ]:
-#        self.logger.debug( "Unable to find city for {attendee}" )
-#        continue
       segment_list = [ [ attendee_iata_city , meeting_iata_city  ],  \
                        [ attendee_iata_city , meeting_iata_city  ] ]
       flight = { 'segment_list' : [ [ attendee_iata_city , meeting_iata_city  ],  \
@@ -283,6 +281,11 @@ class Meeting:
         except:
           y [ key ] = 1
       elif mode in [ 'distance', 'flight' ]:
+        print( f"flight: {flight}" )
+        print( f"key: {key}" )
+        print( f"y: {y}" )
+        print( f"co2eq: {co2eq}" )
+        print( f"data_file: {data_file}" )
         try:
           y [ key ] += flight[ 'co2eq' ][ co2eq ]
         except:
@@ -671,7 +674,22 @@ class Meeting:
       else: 
         f.write( f"{header}\n{banner}\n{toc_md}\n{md}" )
 
+  def get_flight_km( self):
+    """ return the total flight distance in km """
+    if self.km is  None:
+      self.km = 0
+      myclimate = MyClimate( cityDB=self.cityDB, airportDB=self.airportDB )
+      for flight in self.get_flight_list( ):
+        if flight is None:
+          continue
+        for seg in flight[ 'segment_list' ] : 
+          self.km += myclimate.dist( seg[ 0 ], seg[ 1 ] )
+    return self.km
 
+  def co2eq_per_passenger_per_km( self, cabin='AVERAGE', co2eq='myclimate' ):
+    """ reports the average co2eq per passenger per km """
+    kg_co2eq = self.build_co2eq_data( mode='flight', cluster_key=None, co2eq=co2eq, cabin=cabin )[ 'total co2eq' ]
+    return kg_co2eq / self.get_flight_km( ) 
 
 
 ## inherite from Meeting
@@ -926,29 +944,17 @@ class MeetingList(Meeting):
     self.md( banner, toc=toc )
     for meeting_name in self.meeting_list:
       meeting = self.get_meeting( meeting_name )
-      meeting.md( banner, toc=toc ) 
+      meeting.md( banner, toc=toc )
 
-##def get_flight( origin, destination, conf=co2eq.conf.Conf().CONF ):
-##  """ return a flight from origin to destination
-##
-##  The function tries with default values provided by FlightDB and in case no
-##  offer is provided performs another lookup with different dates.
-##  In our cases, the dates are 5 days latter.
-##  """
-##  cityDB = CityDB( conf, airportDB=airportDB )
-##  airportDB = AirportDB()
-##  goclimateDB = GoClimateDB( conf )
-##  flightDB = FlightDB( conf, cityDB=cityDB, airportDB=airportDB, goclimateDB=goclimateDB)
-##  try:
-##    flight = flightDB.select_flight( origin, destination )
-##  except ( ValueError ) :
-##    ## retry with other dates - in this case 5 days later
-##    departure_date = flightDB.departure_date
-##    return_date = flightDB.return_date
-##    alt_departure = datetime.strptime( departure_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
-##    alt_departure = ( alt_departure + timedelta( days=5 ) ).isoformat()
-##    alt_return = datetime.strptime( return_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
-##    alt_return = ( alt_return + timedelta( days=5 ) ).isoformat()
-##    flight = flightDB.select_flight( origin, destination, departure_date=alt_departure, return_date=alt_return )
-##  return flight
+
+  def co2eq_per_passenger_per_km( self, cabin='AVERAGE', co2eq='myclimate' ):
+    """ reports the average co2eq per passenger per km """
+    km = 0
+    kg_co2eq = 0
+    myclimate = MyClimate( cityDB=self.cityDB, airportDB=self.airportDB )
+    for meeting in self.meeting_list:
+      meeting = self.get_meeting( meeting )
+      kg_co2eq += meeting.build_co2eq_data( mode='flight', cluster_key=None, co2eq=co2eq, cabin=cabin )[ 'total co2eq' ]
+      km += meeting.get_flight_km( )
+    return kg_co2eq / km 
 

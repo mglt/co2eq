@@ -263,7 +263,19 @@ IETF_MEETING_LIST = [
       'country' : 'ES', 
       'city' : 'Madrid', 
     }
-  } 
+  }, 
+  { 'name' : 'IETF113',
+    'location' : {
+      'country' : 'AT', 
+      'city' : 'Vienna', 
+    }
+  },
+  { 'name' : 'IETF114',
+    'location' : {
+      'country' : 'US', 
+      'city' : 'Philadelphia', 
+    }
+  }
 ]
 
 ORGANIZATION_MATCH = { 'huaw' : "Huawei",
@@ -358,16 +370,10 @@ class IETFMeeting ( Meeting ):
     self.attendee_list_json = join( self.output_dir,  f"{self.file_name_base}.json.gz" )
     self.attendee_list = self.get_attendee_list()
 
-#  def get_location( self ):
-#    return IETF_LOCATION[ self.name ]
-#
-#  def attendee_location( self, attendee ):
-#    return attendee[ 'country' ]
-
   def get_attendee_list_html( self ):
     self.logger.info( f"{self.name}: Getting HTML file" )
     if self.ietf_nbr >= 108 :
-      url = "https://registration.ietf.org/" + str( self.ietf_nbr ) + "/participants/remote/"
+      url = "https://registration.ietf.org/" + str( self.ietf_nbr ) + "/participants/"
     else:
       url = "https://www.ietf.org/registration/ietf" + str( self.ietf_nbr ) + \
           "/attendance.py"
@@ -385,13 +391,8 @@ class IETFMeeting ( Meeting ):
     with gzip.open(self.attendee_list_html, 'wt', encoding="utf8" ) as f:
       f.write( txt )
 
-
-  ## to do we need to updatethe parsing from 108.
-  ## "https://registration.ietf.org/108/participants/remote/
-  ## all type of participants are listed under https://registration.ietf.org/108/participants, in which cas ethe type of particip[ation in a cloums. 
-  ## We coudl also go to specific URLs remoyte/ onsite and avoid parsng the column. This is the current option for "remote".
-  def parse_htm_remote( self ) :
-    """ parses remote meeting  108, 109, 110, 111 
+  def parse_htm_108( self ) :
+    """ parses remote meeting  >= 108
  
     Parsing function returns an input list for meetings. 
     The attendee_list is a list of attendee JSON object where:
@@ -399,6 +400,10 @@ class IETFMeeting ( Meeting ):
     """
     with gzip.open( self.attendee_list_html, 'rt', encoding="utf8" ) as f:
       dfs = pd.read_html(f.read(), header=0 )
+      print( f"dfs ({len(dfs)}): {dfs}" )
+      for i in range( len(dfs)):
+        print( f"dfs[i]: {dfs[i]}" )
+      
       json_obj = json.loads( dfs[0].to_json( orient="records" ) )
       for attendee in json_obj:
         try:
@@ -406,14 +411,18 @@ class IETFMeeting ( Meeting ):
           attendee[ 'firstname' ] = attendee.pop( 'First Name' )
           attendee[ 'lastname' ] = attendee.pop( 'Last Name' )
           attendee[ 'organization' ] = attendee.pop( 'Organization' )
-####          attendee[ 'presence' ] = attendee.pop( 'On-Site' )
+          attendee[ 'presence' ] = attendee.pop( 'Reg Type' )
         except:
           self.logger.info( f"Cannot create attendee: {attendee}" )
       for attendee in json_obj:
         del attendee[ 'firstname' ]
         del attendee[ 'lastname' ]
-        attendee[ 'presence' ] = 'remote'
+        if attendee[ 'presence' ] == 'Onsite':
+          attendee[ 'presence' ] = 'on-site'
+        elif attendee[ 'presence' ] == 'Remote':
+          attendee[ 'presence' ] == 'remote'
       return json_obj
+
 
   def parse_htm_104( self ):
     """ new IETF 103 meeting """
@@ -460,21 +469,6 @@ class IETFMeeting ( Meeting ):
         self.logger.debug( f"{json_obj[:5]}" )
         if json_obj[ 0 ][ 'country' ] == 'ISO 3166 Code' :
           del json_obj[ 0 ]
-##      header = { "country": "ISO 3166 Code",
-##                 "firstname": "First Name",
-##                 "lastname": "Last Name",
-##                 "organization": "Organization",
-##                 "presence": "on-site" }
-#      print( f"{json_obj_1 [:5]}" )
-##      json_obj_1.remove( header )
-##      header[ 'presence' ] = 'not-arrived'
-##      json_obj_2.remove( header )
-##      header[ 'presence' ] = 'remote'
-##      json_obj_3.remove( header )
-
-##      json_obj_1.extend( json_obj_2 )
-##      json_obj_1.extend( json_obj_3 )
-##      json_obj = json_obj_1
       json_obj_1.extend( json_obj_2 )
       json_obj_1.extend( json_obj_3 )
       for attendee in json_obj_1:
@@ -507,9 +501,6 @@ class IETFMeeting ( Meeting ):
             attendee[ 'presence' ] = attendee.pop( 'On-Site' )
         except:
           self.logger.info( f"Cannot create attendee: {attendee}" )
-#      for attendee in json_obj:
-#        del attendee[ 'firstname' ]
-#        del attendee[ 'lastname' ]
         presence = attendee[ 'presence' ]
         if presence in [ 'Yes', 'Comp', 'Comp - Host' ]:
           presence = 'on-site'
@@ -525,15 +516,14 @@ class IETFMeeting ( Meeting ):
                                 'organization' : organization,
                                 'presence' : presence } )
       return attendee_list 
-#      return json_obj
 
   def get_attendee_list_json( self ):
 
     self.logger.info( f"{self.name}: Parsing HTML file" )
     if self.ietf_nbr <= 103 :
       json_obj = self.parse_htm_72()
-    elif self.ietf_nbr in [ 108, 109, 110, 111, 112 ] : #remote meetings
-      json_obj = self.parse_htm_remote( )
+    elif self.ietf_nbr >= 108:
+      json_obj = self.parse_htm_108( )
     elif self.ietf_nbr > 103 and self.ietf_nbr <= 107:
       json_obj = self.parse_htm_104( )
     else:
@@ -614,12 +604,6 @@ class IETFMeetingList(MeetingList):
                 meeting_list=IETF_MEETING_LIST, \
                 airportDB=True, cityDB=True, flightDB=True, goclimateDB=True ):
     super().__init__( name, conf=conf, meeting_list=meeting_list )
-##    if self.meeting_list is None:
-###      min_ietf_nbr =  min( IETF_LOCATION.keys() )
-###      max_ietf_nbr = max( IETF_LOCATION.keys() )
-###      self.meeting_list = [ min_ietf_nbr + i for i in  range( max_ietf_nbr - min_ietf_nbr + 1 ) ]
-##      self.meeting_list = list( IETF_LOCATION.keys() )
-##      self.meeting_list.sort( key = lambda meeting_name: int( meeting_name[4:] ) )
 
   def get_meeting( self, meeting ):
     """ returns a meeting object from various representation used to designate that object """

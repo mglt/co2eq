@@ -492,8 +492,10 @@ class CityDB :
     elif 'country' in location.keys() and 'city' in location.keys():
       city_list = self.get_city( name=location[ 'city' ], \
                                  country=location[ 'country' ] )
-#      print( f"city_list : {city_list} - location {location}" )
-      city = city_list[ 0 ] 
+      try:
+        city = city_list[ 0 ]
+      except IndexError:
+        raise ValueError( f"Unable to retrieve city_list {city_list} from {location}" ) 
     elif 'country' in location.keys() :
       city = self.country_representative_city( location[ 'country' ] )
     return city

@@ -3,8 +3,21 @@ import json
 from co2eq.ietf_meeting import IETFMeeting, IETFMeetingList
 from conf import CONF
 
+## computing co2eq per passenger per km 
+## building a meeting serie 
+ietf_meeting_list = IETFMeetingList( ) 
 
-CONF[ 'OUTPUT_DIR' ] = "/home/emigdan/gitlab/ietf/co2eq/examples/IETF"
+## computing co2eq  per passenger per km
+cabin='ECONOMY'
+co2eq_list = [ 'myclimate', 'goclimate', 'ukgov' ]
+
+for cabin in [ 'ECONOMY', 'AVERAGE' ]:
+  for co2eq in co2eq_list:
+    co2eq_per_passenger_per_km [ cabin ][ co2eq ] = ietf_meeting_list.co2eq_per_passenger_per_km( cabin=cabin, co2eq=co2eq )
+print( f"co2eq / passenger /  km: {co2eq_per_passenger_per_km}" )
+
+
+#CONF[ 'OUTPUT_DIR' ] = "/home/emigdan/gitlab/ietf/co2eq/examples/output/IETF"
 
 # Example 1: Getting the Total CO2 Emissions
 ## retrieving the Total amount of CO2 for a meeting computed with go climate

@@ -10,6 +10,7 @@ src/co2eq/ietf_meeting.py
 src/co2eq/jcache.py
 src/co2eq/meeting.py
 src/co2eq/meeting_server.py
+src/co2eq/test_ietf_parsing.py
 src/co2eq.egg-info/PKG-INFO
 src/co2eq.egg-info/SOURCES.txt
 src/co2eq.egg-info/dependency_links.txt
