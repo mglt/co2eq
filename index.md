@@ -1,5 +1,27 @@
 # Estimating Air Flight Emissions with *CO2eq*
 
+
+  <html>
+  <style>
+  table, th, td {
+    border: 0px none;
+    padding: 0px;
+  }
+  </style>
+  <body>
+    <table style="width:100%">
+          <tr>
+<td><a href='https://mglt.github.io/co2eq/IETF/IETF'> CO2eq data for IETF</a></td>
+<td><a href='https://mglt.github.io/co2eq/ICANN/ICANN'> CO2eq data for ICANN</a></td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+
 <!--
 ## Table of Contents 
 
@@ -26,8 +48,8 @@ For each mode, the CO2 emission associated to each leg is computed using *myclim
 
 *CO2eq* has been experimented for:
 
-*  Internet Engineering Task Force ([IETF](https://www.ietf.org)) with *CO2eq* [measurements](https://mglt.github.io/co2eq/IETF/IETF) available online as well as an analysis [ [4](#coe2eq-aid) ] for meetings from IETF72 to IETF113. 
-* Internet Corporation for Assigned Names and Numbers ([ICANN ](https://www.icann.org/)) with *CO2eq* [measurements](https://mglt.github.io/co2eq/ICANN/ICANN) available online for meetings from ICANN55 to ICANN66.
+*  Internet Engineering Task Force ([IETF](https://www.ietf.org)) with *CO2eq* [data and results](https://mglt.github.io/co2eq/IETF/IETF) available online as well as an analysis [ [4](#coe2eq-aid) ] for meetings from IETF72 to IETF113. 
+* Internet Corporation for Assigned Names and Numbers ([ICANN ](https://www.icann.org/)) with *CO2eq* [data and results](https://mglt.github.io/co2eq/ICANN/ICANN) available online for meetings from ICANN55 to ICANN66.
 
 ## II Conclusion for IETF meetings
 
@@ -58,4 +80,8 @@ More specifically related to CO2 emissions, the IETF should consider adhering to
 <div id="coe2eq-aid"> </div>
 * [4]  Daniel Migault *CO2eq*: "Estimating Meetings' Air Flight CO2 Equivalent Emissions - An Illustrative Example with IETF meetings", Show me the numbers: Workshop on Analyzing IETF Data (AID), 2021. [https://www.iab.org/wp-content/IAB-uploads/2021/11/Migault.pdf](https://www.iab.org/wp-content/IAB-uploads/2021/11/Migault.pdf). 
 
+## IV. Publications
 
+* Estimating Air Flight Emissions with CO2eq, IETF 113 Stay Home Meet Occasionally Online (shmoo) 25/03/2022 [slides](https://datatracker.ietf.org/meeting/113/materials/slides-113-shmoo-air-flight-co-2-emissions-associated-to-ietf-meetings-00), [video](https://www.youtube.com/watch?v=JnnPIBmSD28)
+* Air Flight CO2 Emissions associated to in-person IETF meetings, IETF113 Hot RFC Lightning Talks, 20/03/2022 [slides](https://datatracker.ietf.org/meeting/113/materials/slides-113-hotrfc-sessa-migault-00), [video](https://www.youtube.com/watch?v=rt-2H_AAucc)
+* Daniel Migault *CO2eq*: "Estimating Meetings' Air Flight CO2 Equivalent Emissions - An Illustrative Example with IETF meetings", Show me the numbers: Workshop on Analyzing IETF Data (AID), 2021. [https://www.iab.org/wp-content/IAB-uploads/2021/11/Migault.pdf](https://www.iab.org/wp-content/IAB-uploads/2021/11/Migault.pdf).

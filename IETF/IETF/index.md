@@ -63,8 +63,8 @@
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF110'>IETF110</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF111'>IETF111</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF112'>IETF112</a></td>
-<td> </td>
-<td> </td>
+<td><a href='https://mglt.github.io/co2eq/IETF/IETF113'>IETF113</a></td>
+<td><a href='https://mglt.github.io/co2eq/IETF/IETF114'>IETF114</a></td>
 <td> </td>
 <td> </td>
 <td> </td>
@@ -82,32 +82,62 @@
 <div id="flight-None"></div>
 ### No Clustering
 
-![](co2eq-mode_flight-cluster_nbr_15-co2eq_goclimate.svg)
-![](co2eq-mode_flight-cluster_nbr_15-co2eq_myclimate.svg)
+![](co2eq-mode_flight-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
 
-<div id="flight- presence"></div>
-### Clustering by  presence
+<div id="flight- subregion"></div>
+### Clustering by  subregion
 
-![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_myclimate.svg)
-![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_goclimate.svg)
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
 
 <div id="flight- country"></div>
 ### Clustering by  country
 
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_goclimate.svg)
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_myclimate.svg)
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+
+<div id="flight- presence"></div>
+### Clustering by  presence
+
+![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
 
 <div id="flight- flight segment number"></div>
 ### Clustering by  flight segment number
 
-![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate.svg)
-![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_goclimate.svg)
+![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
 
 <div id="flight- organization"></div>
 ### Clustering by  organization
 
-![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_myclimate.svg)
-![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_goclimate.svg)
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
 
 <div id="attendee"></div>
 ## Number of Attendees
@@ -117,15 +147,20 @@
 
 ![](co2eq-mode_attendee-cluster_nbr_15.svg)
 
-<div id="attendee- presence"></div>
-### Clustering by  presence
+<div id="attendee- subregion"></div>
+### Clustering by  subregion
 
-![](co2eq-mode_attendee-cluster_key_presence-cluster_nbr_15.svg)
+![](co2eq-mode_attendee-cluster_key_subregion-cluster_nbr_15.svg)
 
 <div id="attendee- country"></div>
 ### Clustering by  country
 
 ![](co2eq-mode_attendee-cluster_key_country-cluster_nbr_15.svg)
+
+<div id="attendee- presence"></div>
+### Clustering by  presence
+
+![](co2eq-mode_attendee-cluster_key_presence-cluster_nbr_15.svg)
 
 <div id="attendee- flight segment number"></div>
 ### Clustering by  flight segment number
