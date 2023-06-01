@@ -1,0 +1,14 @@
+amadeus==8.0.0
+climate_neutral==0.1.dev0
+countryinfo==0.1.2
+environs==9.5.0
+geopy==2.3.0
+iso8601==1.1.0
+isodate==0.6.1
+matplotlib==3.7.1
+ourairports==1.1.0.20221011
+pandas==2.0.2
+pip==22.0.2
+requests==2.28.1
+setuptools==59.6.0
+websockets==11.0.3

@@ -1,0 +1,111 @@
+Spain	942
+United States of America	446
+United Kingdom	109
+Germany	82
+France	78
+Canada	69
+People's Republic of China	55
+Belgium	55
+Netherlands	50
+Switzerland	36
+Australia	36
+India	33
+Russian Federation	28
+Sweden	28
+Japan	28
+Argentina	24
+Brazil	23
+Indonesia	22
+Italy	22
+Nigeria	21
+Denmark	21
+Luxembourg	18
+Turkey	17
+New Zealand	14
+Ireland	13
+Uruguay	12
+Ukraine	11
+South Africa	11
+Finland	11
+Austria	10
+Malaysia	9
+Romania	9
+Egypt	8
+Portugal	8
+Hong Kong	8
+Norway	7
+Colombia	7
+Mexico	7
+Czech Republic	7
+Pakistan	6
+Tunisia	6
+Iran	6
+Armenia	6
+Serbia	6
+Palestine	6
+Israel	6
+Côte d'Ivoire	5
+Benin	5
+Mauritius	5
+Uganda	5
+Guinea	5
+Lithuania	5
+South Korea	5
+Chile	5
+United Arab Emirates	5
+Vietnam	5
+Montenegro	5
+Belarus	5
+Venezuela	4
+Saudi Arabia	4
+Trinidad and Tobago	4
+Singapore	4
+Gibraltar	4
+Bulgaria	4
+Greece	4
+Latvia	4
+Macedonia	4
+Congo	3
+Côte d'Ivoire	3
+Cameroon	3
+Togo	3
+Morocco	3
+Mali	3
+Sudan	3
+Spain	3
+Thailand	3
+Slovenia	3
+Burundi	3
+Iceland	3
+Poland	3
+Haiti	3
+Oman	3
+Cayman Islands	3
+Estonia	3
+Faroe Islands	3
+Bahrain	3
+Côte d'Ivoire	3
+Kenya	2
+Bangladesh	2
+Algeria	2
+Peru	2
+Albania	2
+Panama	2
+Tanzania	2
+Georgia	2
+Fiji	2
+Jordan	2
+Scotland	2
+U.S. Virgin Islands	2
+Rwanda	2
+Kuwait	2
+Cuba	2
+Paraguay	2
+Barbados	2
+Cook Islands	2
+Kazakhstan	2
+Guatemala	2
+Botswana	2
+Korea	2
+Lesotho	2
+

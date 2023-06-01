@@ -1416,26 +1416,26 @@ class Flight:
       'co2eq' : self.co2eq }
 
 
-def get_flight( origin, destination, conf=co2eq.conf.Conf().CONF ):
-  """ return a flight from origin to destination
-
-  The function tries with default values provided by FlightDB and in case no
-  offer is provided performs another lookup with different dates.
-  In our cases, the dates are 5 days latter.
-  """
-  airportDB = AirportDB()
-  cityDB = CityDB( conf, airportDB=airportDB )
-  goclimateDB = GoClimateDB( conf )
-  flightDB = FlightDB( conf, cityDB=cityDB, airportDB=airportDB, goclimateDB=goclimateDB)
-  try:
-    flight = flightDB.select_flight( origin, destination )
-  except ( ValueError ) :
-    ## retry with other dates - in this case 5 days later
-    departure_date = flightDB.departure_date
-    return_date = flightDB.return_date
-    alt_departure = datetime.strptime( departure_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
-    alt_departure = ( alt_departure + timedelta( days=5 ) ).isoformat()
-    alt_return = datetime.strptime( return_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
-    alt_return = ( alt_return + timedelta( days=5 ) ).isoformat()
-    flight = flightDB.select_flight( origin, destination, departure_date=alt_departure, return_date=alt_return )
-  return flight
+#def get_flight( origin, destination, conf=co2eq.conf.Conf().CONF ):
+#  """ return a flight from origin to destination
+#
+#  The function tries with default values provided by FlightDB and in case no
+#  offer is provided performs another lookup with different dates.
+#  In our cases, the dates are 5 days latter.
+#  """
+#  airportDB = AirportDB()
+#  cityDB = CityDB( conf, airportDB=airportDB )
+#  goclimateDB = GoClimateDB( conf )
+#  flightDB = FlightDB( conf, cityDB=cityDB, airportDB=airportDB, goclimateDB=goclimateDB)
+#  try:
+#    flight = flightDB.select_flight( origin, destination )
+#  except ( ValueError ) :
+#    ## retry with other dates - in this case 5 days later
+#    departure_date = flightDB.departure_date
+#    return_date = flightDB.return_date
+#    alt_departure = datetime.strptime( departure_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
+#    alt_departure = ( alt_departure + timedelta( days=5 ) ).isoformat()
+#    alt_return = datetime.strptime( return_date + 'T16:41:24+0200', "%Y-%m-%dT%H:%M:%S%z")
+#    alt_return = ( alt_return + timedelta( days=5 ) ).isoformat()
+#    flight = flightDB.select_flight( origin, destination, departure_date=alt_departure, return_date=alt_return )
+#  return flight

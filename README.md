@@ -57,14 +57,14 @@ To compute the CO2 using GO Climate service, the climate neutral package needs t
 ```bash
 git clone https://github.com/codeboten/climate_neutral
 cd climate_neutral
-sudo python3 install setup.py
+sudo python3 setup.py install
 If other classes than 'economy' are used, an advanced use of co2eq may also require an updated version of climate neutral
 ```
 
 ```bash
 git clone https://github.com/mglt/climate_neutral
 cd climate_neutral
-sudo python3 install setup.py
+sudo python3 setup.py install
 ```
 
 ## Local installation

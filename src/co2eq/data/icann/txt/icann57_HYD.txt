@@ -1,0 +1,103 @@
+India	2465
+United States of America	252
+Canada	32
+Germany	27
+United Kingdom of Great Britain and Northern Ireland	26
+Argentina	22
+Australia	22
+Belgium	19
+China	18
+France	17
+Netherlands	16
+Japan	13
+Nigeria	13
+Singapore	12
+Switzerland	12
+Kenya	11
+Russian Federation	11
+Spain	9
+Turkey	9
+Brazil	8
+Denmark	8
+Austria	6
+Sweden	6
+Taipei, Chinese	6
+Korea, Republic of	5
+Egypt	4
+Finland	4
+Nepal	4
+New Zealand	4
+Pakistan	4
+Tunisia	4
+Czechia	3
+Hong Kong, China	3
+Iran, Islamic Republic of	3
+Norway	3
+Peru	3
+Puerto Rico	3
+South Africa	3
+Thailand	3
+Trinidad and Tobago	3
+United Arab Emirates	3
+Venezuela, Bolivarian Republic of	3
+Afghanistan	2
+Armenia	2
+Barbados	2
+Benin	2
+Cameroon	2
+Costa Rica	2
+Côte d'Ivoire	2
+Estonia	2
+Ethiopia	2
+Côte d'Ivoire	2
+Italy	2
+Jamaica	2
+Jordan	2
+Luxembourg	2
+Malaysia	2
+Mauritius	2
+Montenegro	2
+Palestine	2
+Portugal	2
+Viet Nam	2
+American Samoa	1
+Bahrain	1
+Bangladesh	1
+Bolivia, Plurinational State of	1
+Botswana	1
+Burundi	1
+Cayman Islands	1
+Chile	1
+Colombia	1
+Congo, Democratic Republic of the	1
+Cook Islands	1
+Cuba	1
+Dominican Republic	1
+El Salvador	1
+Fiji	1
+Gambia	1
+Ghana	1
+Guatemala	1
+Guinea-Bissau	1
+Indonesia	1
+Ireland	1
+Latvia	1
+Lithuania	1
+Madagascar	1
+Malawi	1
+Mexico	1
+Morocco	1
+Mozambique	1
+Namibia	1
+Niger	1
+Niue	1
+North Macedonia	1
+Rwanda	1
+Saint Lucia	1
+Senegal	1
+Serbia	1
+Somalia	1
+Tanzania, United Republic of	1
+Uruguay	1
+Zimbabwe	1
+

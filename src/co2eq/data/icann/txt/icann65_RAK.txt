@@ -1,0 +1,140 @@
+United States of America	281
+Morocco	205
+France	45
+United Kingdom of Great Britain and Northern Ireland	40
+Canada	29
+Nigeria	29
+China	25
+Australia	24
+Belgium	23
+Brazil	22
+Netherlands	22
+Germany	21
+South Africa	16
+Argentina	14
+Kenya	14
+Taipei, Chinese	14
+India	13
+Russian Federation	13
+Japan	12
+Italy	11
+Spain	11
+Sweden	11
+Austria	9
+Senegal	9
+Switzerland	9
+Turkey	9
+Portugal	7
+Romania	7
+Egypt	6
+Korea (Republic of)	6
+New Zealand	6
+Tunisia	6
+Uruguay	6
+Armenia	5
+Burkina Faso	5
+Denmark	5
+Singapore	5
+Sudan	5
+Cambodia	4
+Chile	4
+Costa Rica	4
+Finland	4
+Luxembourg	4
+Norway	4
+Puerto Rico	4
+Zimbabwe	4
+Benin	3
+Burundi	3
+Chad	3
+Colombia	3
+Congo (Democratic Republic of the)	3
+CÙte d'Ivoire?	3
+Iraq	3
+Jordan	3
+Lithuania	3
+Malaysia	3
+Mali	3
+Mauritius	3
+Namibia	3
+Côte d'Ivoire	3
+Trinidad and Tobago	3
+Albania	2
+Azerbaijan	2
+Bahrain	2
+Bangladesh	2
+Botswana	2
+Comoros	2
+Cook Islands	2
+Cote d'Ivoire	2
+Czech Republic	2
+Estonia	2
+Ethiopia	2
+Faroe Islands	2
+Fiji	2
+Ghana	2
+Guinea	2
+Hong Kong	2
+Ireland	2
+Latvia	2
+Mauritania	2
+Mexico	2
+Oman	2
+Pakistan	2
+Palestine	2
+Poland	2
+Somalia	2
+Tanzania	2
+Uganda	2
+Ukraine	2
+United Arab Emirates	2
+Venezuela	2
+Vietnam	2
+Algeria	1
+American Samoa	1
+Bulgaria	1
+Cameroon	1
+El Salvador	1
+Gambia	1
+Georgia	1
+Global	1
+Greece	1
+Guadeloupe	1
+Guatemala	1
+Guinea-Bissau	1
+Guyana	1
+Haiti	1
+Indonesia	1
+Iran	1
+Iran (Islamic Republic of)	1
+Jamaica	1
+Lao People's Democratic Republic	1
+Liberia	1
+LIberia	1
+Libya	1
+Madagascar	1
+Malta	1
+Mozambique	1
+Multiple Countries	1
+Nepal	1
+Niger	1
+Panama	1
+Papua New Guinea	1
+Peru	1
+Philippines	1
+Qatar	1
+Sao Tome and Principe	1
+Saudi Arabia	1
+Serbia	1
+Sierra Leone	1
+Slovenia	1
+Sri Lanka	1
+St. Vincent and the Grenadines	1
+Tanzania, United Republic of	1
+Thailand	1
+Timor-Leste	1
+Togo	1
+Vatican City	1
+Venezuela (Bolivarian Republic of)	1
+Zambia	1
+

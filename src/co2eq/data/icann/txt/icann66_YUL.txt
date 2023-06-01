@@ -1,0 +1,140 @@
+United States of America	597
+Canada	406
+France	66
+United Kingdom of Great Britain and Northern Ireland	64
+Germany	54
+India	35
+Belgium	34
+Australia	33
+Netherlands	29
+China	26
+Japan	25
+Taipei, Chinese	25
+Brazil	24
+Sweden	18
+Switzerland	18
+Nigeria	16
+Spain	15
+Argentina	13
+Austria	13
+New Zealand	12
+Russian Federation	11
+Kenya	10
+South Africa	10
+Turkey	10
+Ireland	9
+Cameroon	8
+Indonesia	8
+Korea (Republic of)	8
+Mali	8
+United Arab Emirates	8
+Colombia	7
+Denmark	7
+Italy	7
+Uruguay	7
+Chile	6
+Egypt	6
+Ghana	6
+Puerto Rico	6
+Singapore	6
+Chad	5
+Finland	5
+Hong Kong	5
+Mexico	5
+Philippines	5
+Portugal	5
+Serbia	5
+Tunisia	5
+Ukraine	5
+Armenia	4
+Bulgaria	4
+Cayman Islands	4
+Czechia	4
+Israel	4
+Latvia	4
+Luxembourg	4
+Norway	4
+Poland	4
+Trinidad and Tobago	4
+Uganda	4
+Viet Nam	4
+Bangladesh	3
+Cambodia	3
+Congo (Democratic Republic of the)	3
+Gabon	3
+Holy See [Vatican City State]	3
+Lithuania	3
+Morocco	3
+Nepal	3
+Panama	3
+Romania	3
+Senegal	3
+Tanzania, United Republic of	3
+Togo	3
+Barbados	2
+Benin	2
+Burkina Faso	2
+Burundi	2
+Congo	2
+Croatia	2
+Estonia	2
+Gambia	2
+Haiti	2
+Jamaica	2
+Korea, Republic of	2
+Libya	2
+Malaysia	2
+Mauritius	2
+Montenegro	2
+Myanmar	2
+Namibia	2
+No Country Given	2
+Peru	2
+Qatar	2
+Slovakia	2
+Slovenia	2
+Thailand	2
+Turks and Caicos Islands	2
+Zimbabwe	2
+American Samoa	1
+Andorra	1
+Azerbaijan	1
+Bahrain	1
+Bolivia, Plurinational State of	1
+Bosnia and Herzegovina	1
+Botswana	1
+Cook Islands	1
+Costa Rica	1
+CÙte d'Ivoire?	1
+Cuba	1
+Dominica	1
+Dominican Republic	1
+Ecuador	1
+El Salvador	1
+Faroe Islands	1
+Global	1
+Greece	1
+Guatemala	1
+Guernsey	1
+Hungary	1
+Iceland	1
+Iran (Islamic Republic of)	1
+Jordan	1
+Kuwait	1
+Lao People's Democratic Republic	1
+Lebanon	1
+Malawi	1
+Mozambique	1
+Nicaragua	1
+Niger	1
+North Macedonia	1
+Pakistan	1
+Palestine	1
+Paraguay	1
+Saint Kitts and Nevis	1
+Saint Lucia	1
+Saint Vincent and the Grenadines	1
+Somalia	1
+Sri Lanka	1
+Sudan	1
+

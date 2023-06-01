@@ -1,0 +1,111 @@
+United States of America	272
+Malaysia	187
+Indonesia	50
+Australia	40
+India	37
+United Kingdom of Great Britain and Northern Ireland	33
+Germany	32
+Bangladesh	28
+China	27
+Canada	25
+Brazil	22
+Singapore	22
+Netherlands	21
+Belgium	20
+Japan	20
+Argentina	18
+Nigeria	16
+France	13
+South Africa	12
+Türkiye	12
+Sweden	11
+Spain	10
+Kenya	9
+Pakistan	9
+Nepal	8
+Serbia	7
+Denmark	6
+Egypt	6
+Philippines	6
+Switzerland	6
+Thailand	6
+Uruguay	6
+Armenia	5
+Iraq	5
+Mexico	5
+New Zealand	5
+Tunisia	5
+Uganda	5
+Austria	4
+Benin	4
+Bulgaria	4
+Finland	4
+Italy	4
+Mauritius	4
+Portugal	4
+Russian Federation	4
+Sudan	4
+Bahrain	3
+Colombia	3
+Ghana	3
+Mali	3
+Norway	3
+Puerto Rico	3
+Romania	3
+Saudi Arabia	3
+Somalia	3
+Tanzania, United Republic of	3
+Trinidad and Tobago	3
+Ukraine	3
+United Arab Emirates	3
+Azerbaijan	2
+Botswana	2
+Chad, Republic of	2
+Czech Republic	2
+Ireland	2
+Korea, Republic of	2
+Namibia	2
+Oman	2
+Panama, Republic of	2
+Togo	2
+Vanuatu	2
+Zambia	2
+Afghanistan	1
+Burundi	1
+Cambodia	1
+Chile	1
+Congo, Democratic Republic of the	1
+Cook Islands	1
+Cote d'Ivoire	1
+Eswatini?	1
+Ethiopia	1
+Faroe Islands	1
+Greece	1
+Guatemala	1
+Guernsey	1
+Iran, Islamic Republic of	1
+Isle of Man	1
+Jordan	1
+Korea, Democratic People's Republic of	1
+Latvia	1
+Lebanon	1
+Lesotho	1
+Liberia	1
+Libya	1
+Luxembourg	1
+Maldives	1
+Morocco	1
+Mozambique	1
+Myanmar, Republic of the Union of	2
+Palestine	1
+Paraguay	1
+Peru	1
+Poland	1
+Rwanda	1
+Sao Tome and Principe	1
+Senegal	1
+Sri Lanka	1
+Tokelau	1
+Viet Nam	1
+Yemen	1
+

@@ -1,0 +1,111 @@
+Panama	315
+United States of America	281
+Germany	30
+United Kingdom	28
+People's Republic of China	27
+Argentina	27
+Canada	27
+Brazil	23
+France	20
+Australia	16
+Japan	14
+Belgium	11
+Colombia	10
+Netherlands	10
+Uruguay	10
+Russian Federation	9
+Switzerland	9
+Nigeria	8
+Kenya	8
+South Africa	8
+Sweden	8
+India	7
+Turkey	7
+Costa Rica	7
+Finland	7
+Denmark	6
+Mexico	6
+New Zealand	6
+Trinidad and Tobago	6
+Tunisia	5
+Chile	5
+Singapore	5
+Romania	5
+Venezuela	5
+Serbia	5
+Spain	4
+Egypt	4
+Ireland	4
+Lithuania	4
+Italy	4
+Luxembourg	4
+Peru	4
+Austria	3
+Cameroon	3
+South Korea	3
+Jamaica	3
+Côte d'Ivoire	3
+Portugal	3
+Congo	2
+Pakistan	2
+Nepal	2
+Morocco	2
+Cote d'Ivoire	2
+United Arab Emirates	2
+Vietnam	2
+Mali	2
+Jordan	2
+Paraguay	2
+Hong Kong	2
+Zimbabwe	2
+Thailand	2
+Cook Islands	2
+Barbados	2
+Albania	2
+Armenia	2
+Czech Republic	2
+Palestine	2
+Cuba	2
+Senegal	2
+Estonia	2
+Papua New Guinea	2
+Haiti	2
+Ghana	1
+Uganda	1
+Indonesia	1
+Ukraine	1
+Iran	1
+Cambodia	1
+Benin	1
+Lebanon	1
+Philippines	1
+Malawi	1
+Spain	1
+Namibia	1
+Nicaragua	1
+Honduras	1
+Dominican Republic	1
+Guyana	1
+Fiji	1
+Rwanda	1
+Guatemala	1
+El Salvador	1
+Mozambique	1
+Guernsey	1
+Tuvalu	1
+Latvia	1
+American Samoa	1
+Hungary	1
+Bolivia	1
+Botswana	1
+Madagascar	1
+Saint Kitts and Nevis	1
+St. Vincent and the Grenadines	1
+Scotland	1
+Saint Lucia	1
+Bahrain	1
+Turks and Caicos Islands	1
+Korea	1
+Ethiopia	1
+U.S. Virgin Islands	1
+

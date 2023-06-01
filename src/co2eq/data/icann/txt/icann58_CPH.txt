@@ -1,0 +1,120 @@
+Denmark	1024
+United States of America	338
+United Kingdom of Great Britain and Northern Ireland	61
+France	48
+Canada	45
+Belgium	41
+Germany	39
+Netherlands	36
+Australia	29
+Argentina	24
+Switzerland	22
+Sweden	21
+Brazil	16
+Russian Federation	15
+China	13
+Japan	13
+Spain	13
+Turkey	13
+India	12
+Austria	10
+Kenya	10
+Italy	9
+Uruguay	8
+South Africa	7
+Ireland	6
+Serbia	6
+United Arab Emirates	6
+New Zealand	5
+Norway	5
+Thailand	5
+Tunisia	5
+Ukraine	5
+Armenia	4
+Benin	4
+Czechia	4
+Egypt	4
+Georgia	4
+Iran, Islamic Republic of	4
+Israel	4
+Korea, Republic of	4
+Côte d'Ivoire	4
+Nepal	4
+Poland	4
+Portugal	4
+Puerto Rico	4
+Singapore	4
+Taipei, Chinese	4
+Trinidad and Tobago	4
+Burundi	3
+Cayman Islands	3
+Chile	3
+Côte d'Ivoire	3
+Finland	3
+Indonesia	3
+Malaysia	3
+Mauritius	3
+Peru	3
+Romania	3
+Senegal	3
+Albania	2
+Bangladesh	2
+Bulgaria	2
+Cameroon	2
+Congo, Democratic Republic of the	2
+Costa Rica	2
+Estonia	2
+Ethiopia	2
+Faroe Islands	2
+Hong Kong, China	2
+Jamaica	2
+Jordan	2
+Lithuania	2
+Mexico	2
+Mongolia	2
+Montenegro	2
+Morocco	2
+North Macedonia	2
+Rwanda	2
+Slovenia	2
+Venezuela, Bolivarian Republic of	2
+Viet Nam	2
+American Samoa	1
+Andorra	1
+Antigua and Barbuda	1
+Bahrain	1
+Botswana	1
+Cambodia	1
+Colombia	1
+Cook Islands	1
+Cuba	1
+El Salvador	1
+Fiji	1
+Ghana	1
+Greece	1
+Guatemala	1
+Guernsey	1
+Guinea	1
+Guyana	1
+Holy See [Vatican City State]	1
+Latvia	1
+Madagascar	1
+Malawi	1
+Mali	1
+Mozambique	1
+Namibia	1
+Niger	1
+Nigeria	1
+Niue	1
+Palestine	1
+Paraguay	1
+Philippines	1
+Sao Tome and Principe	1
+Sudan	1
+Tanzania, United Republic of	1
+Timor-Leste	1
+Togo	1
+Turks and Caicos Islands	1
+Uganda	1
+Zimbabwe	1
+
