@@ -72,7 +72,7 @@ class Meeting:
     self.countryDB = CountryDB()
     # print( f"meeting iata location: {self.iata_location}" )
     if base_output_dir is None:
-      base_output_dir = self.conf[ 'OUTPUT_DIR' ]
+      base_output_dir = './output'  
     self.output_dir = join( base_output_dir, self.name )
 
     if isdir( self.output_dir ) is False:
@@ -691,6 +691,7 @@ class Meeting:
 class MeetingList(Meeting):
 
   def __init__( self, name, conf=co2eq.conf.Conf().CONF, meeting_list=None,\
+                base_output_dir=None,
                 flightDB=True, airportDB=True, cityDB=True, goclimateDB=True  ):
     """ instantiates a MeetingList object 
 
@@ -709,7 +710,11 @@ class MeetingList(Meeting):
     self.name = name
     self.conf = conf
     self.meeting_list = meeting_list
-    self.output_dir = join( conf[ 'OUTPUT_DIR' ], self.name )
+    if base_output_dir is None:
+      base_output_dir = './output'
+    self.base_output_dir = base_output_dir  
+    self.output_dir = join( self.base_output_dir, self.name )
+
     if isdir( self.output_dir ) is False:
       os.makedirs( self.output_dir )
     if airportDB is True:
@@ -743,6 +748,7 @@ class MeetingList(Meeting):
       else: 
         attendee_list = None
       return Meeting( name, location, attendee_list=attendee_list, \
+                      base_output_dir=self.base_output_dir,
                       conf=self.conf, flightDB=self.flightDB, \
                       airportDB=self.airportDB, cityDB=self.cityDB, \
                       goclimateDB=self.goclimateDB )

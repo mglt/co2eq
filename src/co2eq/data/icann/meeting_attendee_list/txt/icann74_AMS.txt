@@ -1,4 +1,4 @@
-Netherlands	149
+Netherlands	150
 United States of America	121
 Ghana	43
 United Kingdom of Great Britain and Northern Ireland	41
@@ -61,7 +61,7 @@ Burkina Faso	2
 Cameroon	2
 Cayman Islands	2
 Eswatini	2
-Gambia, Republic of	2
+The Gambia, Republic of	2
 Greece	2
 Holy See [Vatican City State]	2
 Lithuania	2
@@ -99,9 +99,8 @@ Puerto Rico	1
 Romania	1
 Somalia	1
 Tanzania, United Republic of	1
-Tchad, RÈpublique de	1
+Tchad, République du	1
 Thailand	1
-The Netherlands	1
 Turkmenistan	1
 United Kingdom	1
 Zimbabwe	1

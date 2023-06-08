@@ -1,23 +1,136 @@
-# CO<sub>2</sub>eq
- ## [Live App](https://co2eq.netlify.app) Deployment Status:&nbsp; [![Netlify Status](https://api.netlify.com/api/v1/badges/d8891a86-be1d-4e5a-8789-b4592385910a/deploy-status)](https://app.netlify.com/sites/co2eq/deploys)
-
-`co2eq` estimates the CO2 emissions associated to air flights.
-It is currently focused on a single meeting. 
-CO2 emissions can be estimated according to the flying distance between each attendee and the meeting place (distance mode). 
-However, CO2 emissions are highly dependent on the number of legs of a given flight itineraries. 
-The originality of `co2eq` is that for each participant, `co2eq` derive an effective flight and estimates the CO2 emissions considering each of these legs (flight mode).
-
-`co2eq` plots the repartitions of CO2 emissions according to any criteria associated to each attendee.
-
-While the focus is on C02 `co2eq` also performs more standard representations of attendance in number of participants (attendee mode).
-
-A detailed description of `co2eq` can be found here:
-
-* Daniel Migault *CO2eq*: "Estimating Meetings' Air Flight CO2 Equivalent Emissions - An Illustrative Example with IETF meetings", Show me the numbers: Workshop on Analyzing IETF Data (AID), 2021. [https://www.iab.org/wp-content/IAB-uploads/2021/11/Migault.pdf](https://www.iab.org/wp-content/IAB-uploads/2021/11/Migault.pdf). 
 
 
-A example of the outputs of `co2eq` outputs can be found on the `co2eq` web site https://mglt.github.io/co2eq/, 
-where CO2 emissions have been computed for the [IETF](https://mglt.github.io/co2eq/IETF/IETF/) meetings and the [ICANN](https://mglt.github.io/co2eq/ICANN/ICANN/).
+# `co2eq` Overview
+
+`co2eq` estimates the CO2 equivalent of air flight and is especially targeting international meetings. 
+
+Estimating the CO2 emission from flying from location A to location B requires:
+
+1. Estimating a realistic flight which might be direct of composed of multiple segments. To do so we select flights based on existing flight using the Amadeus API.
+2. Estimating the emission for each segments. To do so we implemented the methodology of myclimate, as well as teh UK governement rely on the online service proposed by goclimate.  
+
+[CO2eq: "Estimating Meetings' Air Flight CO2eq - An Illustrative Example with IETF meetings](https://www.iab.org/wp-content/IAB-uploads/2021/11/Migault.pdf) provides a more detailled description of teh methodology. [co2eq-IETF](https://mglt.github.io/co2eq/IETF/IETF/) and [co2eq-ICANN](https://mglt.github.io/co2eq/ICANN/ICANN/) show `co2eq` outputs for IETF and ICANN meetings.
+
+The `co2eq` package contains a few command lines.
+
+`co2eq-get-flight` can estimate a realistic flight from Los Angeles (LAX) to Paris (PAR). In the example below, the flight consisted of 4 segment flight and the corresponding emissions are 3081 kg (resp. 3900 kg) when estimated with myclimate  (resp. goclimate). 
+
+```
+co2eq-get-flight LAX PAR
+  {
+  "origin": "PAR",
+  "destination": "LAX",
+  "departure_date": "2021-11-18",
+  "return_date": "2021-11-25",
+  "cabin": "ECONOMY",
+  "adults": 1,
+  "segment_list": [
+    [
+      "CDG",
+      "FRA"
+    ],
+    [
+      "FRA",
+      "LAX"
+    ],
+    [
+      "LAX",
+      "YUL"
+    ],
+    [
+      "YUL",
+      "CDG"
+    ]
+  ],
+  "price": "719.98",
+  "currency": "EUR",
+  "travel_duration": "1 day, 5:50:00",
+  "flight_duration": "1 day, 0:53:00",
+  "co2eq": {
+    "myclimate": 3081.790499572582,
+    "goclimate": 3900.0
+  }
+}
+```
+
+For international meetings, we generaly do not know the exact origin of each attendee, but in many case we know the country of origin and the (exact) closest airport of the meeting. 
+`co2eq-plot-meeting` estimate the origin of the participant. In general the participant is considered flying from the capitalk of the country, but in some cases, the capital is not the most important city. In addition, in the US, we split attendees between Est and West coast, to better reflect the air flight distance. 
+
+If ietf72.json.gz lists the participants of the meeting IETF72, various representations of the estimation of the CO2 can be generated as follows:
+
+```
+co2eq-plot-meeting   --output_dir  ./output --meeting_name IETF72 --meeting_attendee_list ./ietf72.json.gz --meeting_location_iata 'DUB'
+```
+
+The attendee list is stored in ietf72.json.gz as follows:
+
+```
+[
+  {
+    "country": "US",
+    "organization": "Cisco",
+    "presence": "on-site"
+  },
+  {
+    "country": "FR",
+    "organization": "Nokia",
+    "presence": "remote"
+  },
+  {
+    "country": "US",
+    "organization": "Google",
+    "presence": "on-site"
+  },
+  {
+    "country": "IN",
+    "organization": "indian career welfare society",
+    "presence": "remote"
+  },
+  {
+    "country": "JP",
+    "organization": "japan registry services co., ltd.",
+    "presence": "on-site"
+  }
+]
+```
+
+Note that as, this package is maintained for IETF and ICANN meetings, `co2eq-plot-meeting   --output_dir  ./output --meeting_name IETF72` is sufficient.
+
+In addition, international meetings often consist in a serie of meetings. Typically IETF and ICANN meetings occur 3 time a year.   
+The serie of meetings (including all individual meetings) is plot as follows:
+
+```
+co2eq-plot-meeting   --output_dir  ./output --meeting_list_conf meeting_list_conf.json.gz
+```
+
+where meeting_list_conf.json.gz contains all information related to the meetings:
+
+```
+{
+  "name": "IETF",
+  "meeting_list": [
+    {
+      "name": "IETF72",
+      "location": {
+        "country": "IE",
+        "city": "Dublin"
+      },
+      "attendee_list": "ietf/meeting_attendee_list/json/ietf72.json.gz"
+    },
+    {
+      "name": "IETF73",
+      "location": {
+        "country": "US",
+        "city": "Minneapolis"
+      },
+      "attendee_list": "ietf/meeting_attendee_list/json/ietf73.json.gz"
+    },
+   ...
+```
+
+Note that for IETF and ICANN meeting, these pieces of information are provided by the package and `co2eq-plot-meeting   --output_dir  ./output --meeting_template IETF` is sufficient. 
+
+
 
 
 ## Contributors: 
@@ -33,18 +146,6 @@ Installation of co2eq can be done directly from github
 ```bash
 pip3 install co2eq
 ```
-or directly from github
-
-```bash
-$ git clone https://github.com/mglt/co2eq
-$ cd co2eq
-
-## To install using pip3 please make sure the <version> of your package is appropriately configured in the setup.cfg 
-$ python3 -m build && pip3 install --force-reinstall  dist/co2eq-0.0.<version>.tar.gz 
-
-Eventually, you may need to install dependencies 
-$ pip3 install -r ./examples/docker/backend/requirements.txt    # Install dependencies
-```
 The development of co2eq have lead to the data of the country_info package to be updated. Before this modification being released in the country_info release, the updated version of country_info can be installed as follows:
 
 ```bash
@@ -52,13 +153,6 @@ git clone https://github.com/mglt/countryinfo
 cd country_info
 python3 setup.py install
 To compute the CO2 using GO Climate service, the climate neutral package needs to be installed.
-```
-
-```bash
-git clone https://github.com/codeboten/climate_neutral
-cd climate_neutral
-sudo python3 setup.py install
-If other classes than 'economy' are used, an advanced use of co2eq may also require an updated version of climate neutral
 ```
 
 ```bash
@@ -107,15 +201,6 @@ NOMINATIM_ID = "ietf"
 ## to monitor what can possibly go wrong.
 log = './co2eq.log'
 
-## Directory where all outputs are stored
-#OUTPUT_DIR=/app/src/co2eq/output                            #For docker images
-#OUTPUT_DIR=/home/your_path_to_project_folder/output         #For local development
-OUTPUT_DIR = "/home/emigdan/gitlab/ietf/co2eq/examples/output"
-
-## in this case this is the directory of the jekyl web server.
-#  'OUTPUT_DIR' : "/home/emigdan/gitlab/ietf/article-co2eq/www/co2eq/IETF", 
-#  'OUTPUT_DIR' : "/home/emigdan/gitlab/ietf/article-co2eq/www/co2eq/ICANN",
-
 ## CityDB specific parameters
 ## ISO3166_REPRESENTATIVE_CITY enable to indicate a specific
 ## representative city for that country.
@@ -127,7 +212,9 @@ ISO3166_REPRESENTATIVE_CITY = './conf_rep_cities.json'
 ```
 
 
-# Running docker container (examples/docker)
+# [Live App](https://co2eq.netlify.app) Deployment Status:&nbsp; [![Netlify Status](https://api.netlify.com/api/v1/badges/d8891a86-be1d-4e5a-8789-b4592385910a/deploy-status)](https://app.netlify.com/sites/co2eq/deploys)
+
+## Running docker container (examples/docker)
 
 ```bash
 $ docker build --tag co2eq .      # Build the image using Docker
@@ -354,8 +441,121 @@ meeting_list = [
 ]
 ```
 
+
+
 ### Working on data
 
 Once the graphs have been generated, it is often not sufficient, and further analysis require to perform some operation such as computing the mean CO2eq across the meetings for example. 
 
 `meeting_data_manipulation.py` is an attempt to achieve this, but remains largely a work in progress.
+
+
+
+### CLI
+
+### co2eq-get-attendee-list
+
+co2-attendee-list is a tool to output the attende-list into an appropriated format for co2eq.
+The current `txt` template enables to output json files out of the following files:
+These is the format we use to convert files we receive from ICANN.
+
+```
+Japan   680
+United States of America        372
+United Kingdom of Great Britain and Northern Ireland    44
+Canada  41
+Australia       38
+Germany 38
+Belgium 29
+...
+```  
+The json attendee list are output as follows:
+
+```
+co2eq-get-attendee-list --template txt icann64_KIX.txt 
+
+```
+
+By default the output file is icann64_KIX.json.gz, that is to say the same as the input_file with a different extensions llocated in the same directory.
+
+
+The IETF attendee list are collected from the IETF website.
+
+```
+co2eq-get-attendee-list ietf114 
+co2eq-get-attendee-list --template ietf ietf114 
+```
+By default the output file is ./ietf114.json.gz but you can specify the specific output file as follows:
+
+### co2eq-plot-meeting
+
+The `co2eq-plot-meeting` displays the COeq emissions for the meetings. It enables to plot a single meeting or the CO2 emissions for a serie of meetings.
+The package contains the data for IETF and ICANN meeting, that is the package co2eq provided the list of attendees as well as the location associated to each meetings. As a result, these argument do not need to be provided. 
+
+To plot a specific meeting in this example ICANN55:
+ 
+```
+co2eq-plot-meeting --output_dir  ./output_test/ --meeting_type ICANN --meeting_name ICANN55
+co2eq-plot-meeting --output_dir  ./output_test/ --meeting_name ICANN55
+```
+This will result in :
+
+```
+  output_test
+    +- ICANN55 
+```
+
+To plot all ICANN meetings:
+
+```
+co2eq-plot-meeting --output_dir  ./output_test --meeting_type ICANN 
+co2eq-plot-meeting --output_dir  ./output_test --meeting_name ICANN
+```
+
+```
+  output_test
+    +- ICANN 
+    +- ICANN55
+    +- ...
+    +-ICANN76 
+```
+
+
+To generate all our web site
+
+```
+co2eq-plot-meeting --output_dir  ./IETF --meeting_type IETF 
+co2eq-plot-meeting --output_dir  ./ICANN --meeting_type ICANN
+```
+
+As a developper, this is how to update th eco2eq package and generate an additional IETF meeting for example
+
+```
+## 1. configure package with new data
+## vim co2eq/src/co2eq/data/meeting_list_conf.json.gz
+## 2. generates the attendee_list for that IETFXX
+cd co2eq/src/co2eq/data/ietf/meeting_attendee_list/json/
+co2eq-get-attendee-list ietfXXX 
+## 3. update package
+cd co2eq/
+python3 -m build && pip3 install --force-reinstall  dist/co2eq-0.0.4.tar.gz
+## git branch gh-pages
+## 4. plot the new graph and generate the web site
+co2eq-plot-meeting --output_dir  ./IETF --meeting_type IETF 
+``` 
+
+Without updating the package 
+
+```
+## 1. generates the attendee_list for that IETFXX
+co2eq-get-attendee-list ietfXX
+## 2) generates meeting_list_conf.json.gz by adding
+## {'name' : 'IETFXX',
+##    'location' : {
+##      'country' : 'Country',
+##      'city' : 'City',
+##      'iata' : 'IATA' },
+##    'attendee_list' : './ietfXX.json.gz'
+##  }
+co2eq-plot-meeting --output_dir  ./IETF --meeting_type IETF --meeting_list_conf meeting_list_conf.json.gz 
+

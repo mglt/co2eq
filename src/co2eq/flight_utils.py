@@ -520,7 +520,8 @@ class GoClimateDB (JCacheDict):
     self.key = conf[ 'GOCLIMATE_SECRET' ]
     ## list of IATA codes not accepted by goclimate
     self.IATA_SWAP = { 'ANK' : 'ESB',
-                       'ZYR' : 'BRU' # brussels midi
+                       'ZYR' : 'BRU', # brussels midi
+                       'NLU' : 'MEX'
                      }
     if airportDB is True:
       self.airportDB = AirportDB()
@@ -607,7 +608,7 @@ class GoClimateDB (JCacheDict):
                   cabin=cabin )[ 'co2eq' ]
           break
         except ValueError:
-          print( "Unable to get origin: {origin} - destination: {destination}" )
+          print( f"Unable to get origin: {origin} - destination: {destination}" )
           pass
       else: # if no breaks occurs
         continue

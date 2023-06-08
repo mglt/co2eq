@@ -77,7 +77,7 @@ Chile	1
 Congo, Democratic Republic of the	1
 Cook Islands	1
 Cote d'Ivoire	1
-Eswatini?	1
+Eswatini	1
 Ethiopia	1
 Faroe Islands	1
 Greece	1

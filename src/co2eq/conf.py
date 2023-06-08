@@ -2,7 +2,9 @@
 from environs import Env
 import json 
 import os
-import os.path 
+import gzip
+import pathlib
+#import os.path 
 
 class Conf:
   
@@ -17,7 +19,9 @@ class Conf:
           break
     self.env.read_env( env_file )  # read .env file, if it exists
 #    self.env.read_env( os.path.join( os.getcwd(), '.env' ) )  # read .env file, if it exists
-
+    
+    ISO3166_REPRESENTATIVE_CITY_file_path = self.env.path( 'ISO3166_REPRESENTATIVE_CITY', 
+             os.path.expanduser( '~/.config/co2eq/ISO3166_REPRESENTATIVE_CITY.json.gz' ) )
     self.CONF = {
       ## The directory where air flights, or CO2 emissions for a given air flight
       ## requested to GO Climate are stored after it has been requested.
@@ -38,7 +42,7 @@ class Conf:
       ##  'GOCLIMATE_SECRET' :  config('GOCLIMATE_SECRET'),
       'GOCLIMATE_SECRET' :  self.env.str( 'GOCLIMATE_SECRET', "" ),
       ##  'NOMINATIM_ID' : config('GOCLIMATE_SECRET'), 
-      'NOMINATIM_ID' : self.env.str( 'GOCLIMATE_SECRET', "" ), 
+      'NOMINATIM_ID' : self.env.str( 'NOMINATIM_ID', "" ), 
 
       ## where logs are stored. We suggest you perform tail -f your_log_file
       ## to monitor what can possibly go wrong.
@@ -53,18 +57,26 @@ class Conf:
       ## This is usually useful when the capital is not the main 
       ## representative city or when no flight can be retrieved from 
       ## that country
-      ##'ISO3166_REPRESENTATIVE_CITY' : env.dict( 'ISO3166_REPRESENTATIVE_CITY',  parsed_key=str, parsed_value=dict) 
-      'ISO3166_REPRESENTATIVE_CITY' : self.json_file_content( os.path.expanduser( '~/.config/co2eq/ISO3166_REPRESENTATIVE_CITY.json' ) )
+      ##'ISO3166_REPRESENTATIVE_CITY' : env.dict( 'ISO3166_REPRESENTATIVE_CITY',  parsed_key=str, parsed_value=dict)  
+      'ISO3166_REPRESENTATIVE_CITY' : self.json_file_content( ISO3166_REPRESENTATIVE_CITY_file_path )
       }
 
   def show( self ): 
     print( json.dumps( self.env.dump(), indent=2 ) )
  
-  def json_file_content( self, conf_key, default={} ):
-    file_path = self.env.path( conf_key, None )
+  def json_file_content( self, file_path, default={} ):
+##  def json_file_content( self, conf_key, default={} ):
+   ## file_path =  os.path.expanduser( self.env.path( conf_key, None )
     if file_path != None:
-      with open( file_path, 'rt', encoding='utf8' ) as f:
-        json_dict = json.load( f ) 
+      suffixes = pathlib.PurePath( file_path ).suffixes
+      if suffixes == [ '.json', '.gz']:
+        with gzip.open( file_path, 'rt', encoding='utf8' ) as f:
+          json_dict = json.load( f )
+      elif suffixes == [ '.json' ]:
+        with open( file_path, 'rt', encoding='utf8' ) as f:
+          json_dict = json.load( f )
+      else:
+        raise ValueError( f"Unexpected file: {file_path} must be '.json' or '.json.gz'" ) 
     else: 
       json_dict = default
     return json_dict
