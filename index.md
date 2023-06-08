@@ -32,7 +32,7 @@
 * [III. References](#sec-ref)
 -->
 
-* TOC
+1. TOC
 {:toc}
 
 ## I. *CO2eq* Overview
