@@ -1,7 +1,5 @@
 # IETF Data
 
-
-
   <html>
   <style>
   table, th, td {
@@ -12,32 +10,33 @@
   <body>
     <table style="width:100%">
           <tr>
-<td><a href='https://mglt.github.io/co2eq' style='font-size: 30px; text-decoration: none' >⌂</a></td>
+<td><a href='https://mglt.github.io/co2eq/' style='font-size: 30px; text-decoration: none' >⌂</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF'>IETF</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF72'>IETF72</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF73'>IETF73</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF74'>IETF74</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF75'>IETF75</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF76'>IETF76</a></td>
+      </tr>
+      <tr>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF77'>IETF77</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF78'>IETF78</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF79'>IETF79</a></td>
-      </tr>
-      <tr>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF80'>IETF80</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF81'>IETF81</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF82'>IETF82</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF83'>IETF83</a></td>
+      </tr>
+      <tr>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF84'>IETF84</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF85'>IETF85</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF86'>IETF86</a></td>
-<td><a href='https://mglt.github.io/co2eq/IETF/IETF87'>IETF87</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF88'>IETF88</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF89'>IETF89</a></td>
-      </tr>
-      <tr>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF90'>IETF90</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF91'>IETF91</a></td>
+      </tr>
+      <tr>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF92'>IETF92</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF93'>IETF93</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF94'>IETF94</a></td>
@@ -45,28 +44,30 @@
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF96'>IETF96</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF97'>IETF97</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF98'>IETF98</a></td>
-<td><a href='https://mglt.github.io/co2eq/IETF/IETF99'>IETF99</a></td>
       </tr>
       <tr>
+<td><a href='https://mglt.github.io/co2eq/IETF/IETF99'>IETF99</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF100'>IETF100</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF101'>IETF101</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF102'>IETF102</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF103'>IETF103</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF104'>IETF104</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF105'>IETF105</a></td>
+      </tr>
+      <tr>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF106'>IETF106</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF107'>IETF107</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF108'>IETF108</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF109'>IETF109</a></td>
-      </tr>
-      <tr>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF110'>IETF110</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF111'>IETF111</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF112'>IETF112</a></td>
+      </tr>
+      <tr>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF113'>IETF113</a></td>
 <td><a href='https://mglt.github.io/co2eq/IETF/IETF114'>IETF114</a></td>
-<td> </td>
-<td> </td>
+<td><a href='https://mglt.github.io/co2eq/IETF/IETF115'>IETF115</a></td>
+<td><a href='https://mglt.github.io/co2eq/IETF/IETF116'>IETF116</a></td>
 <td> </td>
 <td> </td>
 <td> </td>
@@ -76,99 +77,139 @@
   </body>
   </html>
     
-<div id="flight"></div>
-## CO2 Estimation in flight mode
+## I. CO2 Estimation in flight mode
 
-<div id="flight-None"></div>
-### No Clustering
+### II.1 No Clustering for cabin ECONOMY
 
-![](co2eq-mode_flight-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.17005047274959265 kg/passenger/Km
 ![](co2eq-mode_flight-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.2191415276693453 kg/passenger/Km
 ![](co2eq-mode_flight-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.15596220168046118 kg/passenger/Km
+![](co2eq-mode_flight-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
 
-<div id="flight- subregion"></div>
-### Clustering by  subregion
+### II.2 No Clustering for cabin AVERAGE
 
-![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
-![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
-![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
-![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.18912986873020982 kg/passenger/Km
+![](co2eq-mode_flight-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.2428498604953341 kg/passenger/Km
+![](co2eq-mode_flight-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.18582133518153246 kg/passenger/Km
+![](co2eq-mode_flight-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
 
-<div id="flight- country"></div>
-### Clustering by  country
+### II.3 Clustering by presence for cabin ECONOMY
 
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
-
-<div id="flight- presence"></div>
-### Clustering by  presence
-
+Resulting CO2eq per passenger per Km: 0.17005047274959265 kg/passenger/Km
 ![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
-![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
-![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.2191415276693453 kg/passenger/Km
 ![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.15596220168046118 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
 
-<div id="flight- flight segment number"></div>
-### Clustering by  flight segment number
+### II.4 Clustering by presence for cabin AVERAGE
 
-![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
-![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.18912986873020982 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.2428498604953341 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.18582133518153246 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_presence-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+
+### II.5 Clustering by organization for cabin ECONOMY
+
+Resulting CO2eq per passenger per Km: 0.17005047274959265 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.2191415276693453 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.15596220168046118 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
+
+### II.6 Clustering by organization for cabin AVERAGE
+
+Resulting CO2eq per passenger per Km: 0.18912986873020982 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.2428498604953341 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.18582133518153246 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+
+### II.7 Clustering by country for cabin ECONOMY
+
+Resulting CO2eq per passenger per Km: 0.17005047274959265 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.2191415276693453 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.15596220168046118 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
+
+### II.8 Clustering by country for cabin AVERAGE
+
+Resulting CO2eq per passenger per Km: 0.18912986873020982 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.2428498604953341 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.18582133518153246 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+
+### II.9 Clustering by subregion for cabin ECONOMY
+
+Resulting CO2eq per passenger per Km: 0.17005047274959265 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.2191415276693453 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.15596220168046118 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
+
+### II.10 Clustering by subregion for cabin AVERAGE
+
+Resulting CO2eq per passenger per Km: 0.18912986873020982 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.2428498604953341 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.18582133518153246 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_subregion-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
+
+### II.11 Clustering by flight_segment_number for cabin ECONOMY
+
+Resulting CO2eq per passenger per Km: 0.17005047274959265 kg/passenger/Km
 ![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.2191415276693453 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.15596220168046118 kg/passenger/Km
 ![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
 
-<div id="flight- organization"></div>
-### Clustering by  organization
+### II.12 Clustering by flight_segment_number for cabin AVERAGE
 
-![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_ukgov-cabin_ECONOMY.svg)
-![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_myclimate-cabin_ECONOMY.svg)
-![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
-![](co2eq-mode_flight-cluster_key_organization-cluster_nbr_15-co2eq_goclimate-cabin_ECONOMY.svg)
+Resulting CO2eq per passenger per Km: 0.18912986873020982 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.2428498604953341 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_goclimate-cabin_AVERAGE.svg)
+Resulting CO2eq per passenger per Km: 0.18582133518153246 kg/passenger/Km
+![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_ukgov-cabin_AVERAGE.svg)
 
-<div id="attendee"></div>
-## Number of Attendees
+## II. Number of Attendees
 
-<div id="attendee-None"></div>
-### No Clustering
+### III.13 No Clustering
 
 ![](co2eq-mode_attendee-cluster_nbr_15.svg)
 
-<div id="attendee- subregion"></div>
-### Clustering by  subregion
-
-![](co2eq-mode_attendee-cluster_key_subregion-cluster_nbr_15.svg)
-
-<div id="attendee- country"></div>
-### Clustering by  country
-
-![](co2eq-mode_attendee-cluster_key_country-cluster_nbr_15.svg)
-
-<div id="attendee- presence"></div>
-### Clustering by  presence
+### III.14 Clustering by presence
 
 ![](co2eq-mode_attendee-cluster_key_presence-cluster_nbr_15.svg)
 
-<div id="attendee- flight segment number"></div>
-### Clustering by  flight segment number
-
-![](co2eq-mode_attendee-cluster_key_flight_segment_number-cluster_nbr_15.svg)
-
-<div id="attendee- organization"></div>
-### Clustering by  organization
+### III.15 Clustering by organization
 
 ![](co2eq-mode_attendee-cluster_key_organization-cluster_nbr_15.svg)
+
+### III.16 Clustering by country
+
+![](co2eq-mode_attendee-cluster_key_country-cluster_nbr_15.svg)
+
+### III.17 Clustering by subregion
+
+![](co2eq-mode_attendee-cluster_key_subregion-cluster_nbr_15.svg)
+
+### III.18 Clustering by flight_segment_number
+
+![](co2eq-mode_attendee-cluster_key_flight_segment_number-cluster_nbr_15.svg)
 

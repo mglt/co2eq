@@ -1,7 +1,5 @@
 # ICANN63 Data
 
-
-
   <html>
   <style>
   table, th, td {
@@ -29,66 +27,57 @@
 <td><a href='https://mglt.github.io/co2eq/ICANN/ICANN65'>ICANN65</a></td>
 <td><a href='https://mglt.github.io/co2eq/ICANN/ICANN66'>ICANN66</a></td>
       </tr>
+      <tr>
+<td><a href='https://mglt.github.io/co2eq/ICANN/ICANN74'>ICANN74</a></td>
+<td><a href='https://mglt.github.io/co2eq/ICANN/ICANN75'>ICANN75</a></td>
+<td><a href='https://mglt.github.io/co2eq/ICANN/ICANN76'>ICANN76</a></td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+      </tr>
 
     </table>
   </body>
   </html>
     
-<div id="flight"></div>
-## CO2 Estimation in flight mode
+## I. CO2 Estimation in flight mode
 
-<div id="flight-None"></div>
-### No Clustering
+### II.1 No Clustering for cabin ECONOMY
 
-![](co2eq-mode_flight_distance-co2eq_myclimate_goclimate.svg)
-![](co2eq-mode_flight_distance-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
-![](co2eq-mode_flight-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
+Resulting CO2eq per passenger per Km: 0.14941421016544368 kg/passenger/Km
+![](co2eq-mode_flight_distance-cluster_nbr_15-co2eq_myclimate_goclimate_ukgov-cabin_ECONOMY_AVERAGE.svg)
 
-<div id="flight- flight segment number"></div>
-### Clustering by  flight segment number
+### II.2 Clustering by country for cabin ECONOMY
 
-![](co2eq-mode_flight-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
-![](co2eq-mode_flight_distance-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
+Resulting CO2eq per passenger per Km: 0.14941421016544368 kg/passenger/Km
+![](co2eq-mode_flight_distance-cluster_key_country-cluster_nbr_15-co2eq_myclimate_goclimate_ukgov-cabin_ECONOMY_AVERAGE.svg)
 
-<div id="flight- country"></div>
-### Clustering by  country
+### II.3 Clustering by subregion for cabin ECONOMY
 
-![](co2eq-mode_flight_distance-cluster_key_country-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
-![](co2eq-mode_flight-cluster_key_country-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
+Resulting CO2eq per passenger per Km: 0.14941421016544368 kg/passenger/Km
+![](co2eq-mode_flight_distance-cluster_key_subregion-cluster_nbr_15-co2eq_myclimate_goclimate_ukgov-cabin_ECONOMY_AVERAGE.svg)
 
-<div id="distance"></div>
-## CO2 Estimation in distance mode
+### II.4 Clustering by flight_segment_number for cabin ECONOMY
 
-<div id="distance-None"></div>
-### No Clustering
+Resulting CO2eq per passenger per Km: 0.14941421016544368 kg/passenger/Km
+![](co2eq-mode_flight_distance-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate_goclimate_ukgov-cabin_ECONOMY_AVERAGE.svg)
 
-![](co2eq-mode_distance-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
+## II. Number of Attendees
 
-<div id="distance- flight segment number"></div>
-### Clustering by  flight segment number
-
-![](co2eq-mode_distance-cluster_key_flight_segment_number-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
-
-<div id="distance- country"></div>
-### Clustering by  country
-
-![](co2eq-mode_distance-cluster_key_country-cluster_nbr_15-co2eq_myclimate_goclimate.svg)
-
-<div id="attendee"></div>
-## Number of Attendees
-
-<div id="attendee-None"></div>
-### No Clustering
+### III.5 No Clustering
 
 ![](co2eq-mode_attendee-cluster_nbr_15.svg)
 
-<div id="attendee- flight segment number"></div>
-### Clustering by  flight segment number
-
-![](co2eq-mode_attendee-cluster_key_flight_segment_number-cluster_nbr_15.svg)
-
-<div id="attendee- country"></div>
-### Clustering by  country
+### III.6 Clustering by country
 
 ![](co2eq-mode_attendee-cluster_key_country-cluster_nbr_15.svg)
+
+### III.7 Clustering by subregion
+
+![](co2eq-mode_attendee-cluster_key_subregion-cluster_nbr_15.svg)
+
+### III.8 Clustering by flight_segment_number
+
+![](co2eq-mode_attendee-cluster_key_flight_segment_number-cluster_nbr_15.svg)
 
