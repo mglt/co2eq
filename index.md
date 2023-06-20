@@ -23,16 +23,7 @@
   </body>
   </html>
 
-<!--
-## Table of Contents 
-
-* [I. *CO2eq* Overview](#sec-overview)
-* [II. Application to International Meetings](#sec-applications)
-  * [II.1. Internet Engineering Task Force (IETF)](#sec-ietf)
-* [III. References](#sec-ref)
--->
-
-1. TOC
+* TOC
 {:toc}
 
 ## I. *CO2eq* Overview
@@ -40,24 +31,22 @@
 The IPCC Working Group I contribution to the Sixth Assessment Report AR6-WG1 [ [1](#ar6-wg1) ] urged every sectors to reduce its CO2 emissions to keep the target of 1.5 C. 
 While we are currently on track to a 2.4 C increase of temperature, the 1.5 C remains possible to reach. 
 
-[*CO2eq*](https://github.com/mglt/co2eq) estimates the CO2 equivalent emission of organizations relying on frequent or multiple flight travels. 
-*CO2eq* is expected to help these organization's leadership to move their community toward a more responsible community. 
-
-The current focus is limited to the estimation of flight emission associated to international meetings where hundreds of persons are flying from all around the world to meet at one given location. 
-
+[*co2eq*](https://github.com/mglt/co2eq) estimates the CO2 equivalent (CO2eq) emission associated to international meetings where hundreds of persons are flying from all around the world to meet at one given location. 
+The CO2eq depends on the flying distance as well as the number of flight segments and these parameters are retrieved  by `co2eq` via the [Amadeus API](https://developers.amadeus.com/get-started/get-started-with-amadeus-apis-334). The corresponding CO2eq is then estimated for each leg using different methodologies such as [myclimate](https://www.myclimate.org/), the one provided by the UK government or the online service proposed by [GoClimate](https://www.goclimate.com/).
+ 
 The CO2 emissions are estimated using two modes: the *distance* and the *flight* modes. 
 The *distance* mode considers a single and direct flight from the location of the meeting attendee to the meeting. This estimation is largely underestimated and as such only informative. 
 The *flight* mode, on the other hand, considers a real flight that may be composed of multiple segments.  
-For each mode, the CO2 emission associated to each leg is computed using *myclimate2018* [ [2](#myclimate) ] and *goclimate2018* [ [3](#goclimate) ]. 
+For each mode, the CO2 emission associated to each leg is computed using *myclimate2018* [ [2](#myclimate) ], *goclimate2018* [ [3](#goclimate) ] and *2021 Government Greenhouse Gas Conversion Factors for Company Reporting*  [ [4](#ukgov) ]. 
 
 *CO2eq* has been experimented for:
 
-*  Internet Engineering Task Force ([IETF](https://www.ietf.org)) with *CO2eq* [data and results](https://mglt.github.io/co2eq/IETF/IETF) available online as well as an analysis [ [4](#coe2eq-aid) ] for meetings from IETF72 to IETF113. 
-* Internet Corporation for Assigned Names and Numbers ([ICANN ](https://www.icann.org/)) with *CO2eq* [data and results](https://mglt.github.io/co2eq/ICANN/ICANN) available online for meetings from ICANN55 to ICANN66.
+*  Internet Engineering Task Force ([IETF](https://www.ietf.org)) with *CO2eq* [data and results](https://mglt.github.io/co2eq/IETF/IETF) available online as well as an analysis [ [5](#coe2eq-aid) ]. 
+* Internet Corporation for Assigned Names and Numbers ([ICANN ](https://www.icann.org/)) with *CO2eq* [data and results](https://mglt.github.io/co2eq/ICANN/ICANN).
 
 ## II Conclusion for IETF meetings
 
-The recommendations from *CO2eq* [measurements](https://mglt.github.io/co2eq/IETF/IETF) and associated analysis [ [4](#coe2eq-aid) ] are:
+The recommendations from *CO2eq* [measurements](https://mglt.github.io/co2eq/IETF/IETF) and associated analysis [ [5](#coe2eq-aid) ] are:
 
 1. The IETF should limit the frequency of its meeting to 1 per year.
 2. The IETT should consider corporate sustainability by adhering to the [caring for climate initiative](https://d306pr3pise04h.cloudfront.net/docs/publications%2FC4C_Statement.pdf) led by the Global Compact, UN Environment Program (UNEP) and the secretariat of the UN Framework Convention on Climate Change (UNFCCC). 
@@ -81,8 +70,11 @@ More specifically related to CO2 emissions, the IETF should consider adhering to
 * [2] “The myclimate Flight Emission Calculator.” 2019. Foundation myclimate. [https://www.myclimate.org](https://www.myclimate.org).
 <div id="goclimate"></div> 
 * [3] “GO. Climate Neutral: Calculations in the GoClimateNeutral Flight Footprint API” 2019) [https://api.goclimateneutral.org/docs](https://api.goclimateneutral.org/docs).
+<div id="ukgov"></div> 
+* [4] “2021 Government Greenhouse Gas Conversion Factors for Company Reporting” 2021) [PDF]( https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1049346/2021-ghg-conversion-factors-methodology.pdf), [WEB](https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2021).
 <div id="coe2eq-aid"> </div>
-* [4]  Daniel Migault *CO2eq*: "Estimating Meetings' Air Flight CO2 Equivalent Emissions - An Illustrative Example with IETF meetings", Show me the numbers: Workshop on Analyzing IETF Data (AID), 2021. [https://www.iab.org/wp-content/IAB-uploads/2021/11/Migault.pdf](https://www.iab.org/wp-content/IAB-uploads/2021/11/Migault.pdf). 
+* [5]  Daniel Migault *CO2eq*: "Estimating Meetings' Air Flight CO2 Equivalent Emissions - An Illustrative Example with IETF meetings", Show me the numbers: Workshop on Analyzing IETF Data (AID), 2021. [https://arxiv.org/pdf/2212.03172](https://arxiv.org/pdf/2212.03172). 
+
 
 ## IV. Publications
 
