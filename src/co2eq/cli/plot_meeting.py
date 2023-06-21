@@ -114,7 +114,7 @@ def plot_meeting( output_dir='./co2eq_output', meeting_type=None, \
       meeting_list = co2eq.meeting.MeetingList( meeting_list_name, meeting_list=meeting_list, \
         base_output_dir=output_dir )
       meeting_list.plot_all( )
-      meeting_list.www_md( f"https://mglt.github.io/co2eq/{meeting_list_name}/", col_nbr=7, toc=False, \
+      meeting_list.www_md( f"https://mglt.github.io/co2eq/{meeting_list_name}/", col_nbr=7, toc=True, \
                            home_url='https://mglt.github.io/co2eq/')
     else:
       raise ValueError( "A meeting_name or a meeting_list_conf MUST be specified" )

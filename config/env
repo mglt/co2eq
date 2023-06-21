@@ -1,0 +1,35 @@
+## The directory where air flights, or CO2 emissions for a given air flight
+## requested to GO Climate are stored after it has been requested.
+## The main purpose if to prevent co2eq to resolve the same request multiple time
+CACHE_DIR = "~/.cache/co2eq"
+
+## co2eq retrieves flight offers to estimate a real flight and uses the AMADEUS API:
+## https://developers.amadeus.com/get-started/get-started-with-amadeus-apis-334
+## You need to register and request and an API Key and an API Secret for the
+## Flight Offers Search service.
+AMADEUS_ID = 'XXXXXXXXXXXXXXXXXXXXX'
+AMADEUS_SECRET = 'XXXXXXXXXXXXXXXXX'
+
+## To compute the CO2 emissions associated a flight a request is sent to GO Climate
+## Please go through https://api.goclimate.com/docs to get an account.
+GOCLIMATE_SECRET =  'XXXXXXXXXXXXXXXXXXXXXX'
+NOMINATIM_ID = "ietf" 
+
+## where logs are stored. We suggest you perform tail -f your_log_file
+## to monitor what can possibly go wrong.
+log = '/tmp/co2eq.log'
+
+## Directory where all outputs are stored
+OUTPUT_DIR = "./output/"
+
+## in this case this is the directory of the jekyl web server.
+#  'OUTPUT_DIR' : "/home/emigdan/gitlab/ietf/article-co2eq/www/co2eq/IETF", 
+#  'OUTPUT_DIR' : "/home/emigdan/gitlab/ietf/article-co2eq/www/co2eq/ICANN",
+
+## CityDB specific parameters
+## ISO3166_REPRESENTATIVE_CITY enable to indicate a specific
+## representative city for that country.
+## This is usually useful when the capital is not the main 
+## representative city or when no flight can be retrieved from 
+## that country
+ISO3166_REPRESENTATIVE_CITY = '~/.config/co2eq/ISO3166_REPRESENTATIVE_CITY.json.gz'

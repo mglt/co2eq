@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 #import numpy as np
 import requests
 from math import ceil
+import roman
+
 from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, CountryDB, Flight, logger, MyClimate
 import co2eq.conf
 
@@ -191,12 +193,27 @@ class Meeting:
     return file_name + f".{extension}"
 
   def file_name_to_kwargs( self, file_name ): 
-    """ retrieves kwargs from a file name """
+    """ retrieves kwargs from a file name 
+
+    This is the reverse function of kwargs_to_file_name. 
+
+    Args:
+      file_name (str): the file name
+
+    Returns:
+      arg_dict (dict): the various characteristics of the file
+        { 'mode' : mode,
+          'cluster_key' : cluster_key,
+          'co2eq' : co2eq,
+          'cabin' : cabin }
+    """
     
     cluster_key = None
     co2eq = None
     mode = None
     cabin = None
+    if file_name[ -4: ] == '.svg' :
+      file_name = file_name[: -4 ]    
     for seg in file_name.split('-'):
       if 'mode' in seg:
         mode = seg.split( '_' )[1]
@@ -206,6 +223,9 @@ class Meeting:
           cluster_key = ""
           for word in cluster_key_split:
             cluster_key += f" {word}"
+          cluster_key = cluster_key.strip() 
+          if cluster_key == 'flight segment number':
+            cluster_key = 'flight_segment_number'    
         else:
           cluster_key = cluster_key_split
       elif 'co2eq_' in seg:
@@ -615,59 +635,219 @@ class Meeting:
     return attendee_list   
 
   def md( self, banner="" , toc=True):
-    """ generates the md page with all figures"""
+    """ generates the md page with all figures
 
-    svg_dict = { 'flight' : "", 'distance' : "", 'attendee' : "" }
-    mode_list = []
-    cluster_key_list = []
+    This function generates the markdown pages to display the generated sgv figures.
+    The page looks like:
+    
+    ```
+    # <Page title>
+    <banner>
+
+    <optional toc>
+
+    ## "CO2 Estimation in flight mode <-- section
+    
+    ### cluster_key A - cabin ECONOMY <--subsection 
+    co2eq myclimate 
+    co2eq goclimate
+    co2eq ukgov
+
+    ### cluster_key A - cabin AVERAGE <--subsection 
+    co2eq myclimate 
+    co2eq goclimate
+    co2eq ukgov
+
+    ### cluster_key B - cabin ECONOMY <--subsection 
+    co2eq myclimate 
+    co2eq goclimate
+    co2eq ukgov
+
+    ## "CO2 Estimation in distance mode
+    
+    <same as peviously>
+
+    ## "CO2 Estimation in attendee mode
+
+    ### cluster_key A <--subsection 
+
+    ### cluster_key B <--subsection
+
+    The co2eq and cabin argument are ignored in the attendee mode.
+    This results flight and distance mode having twice more section 
+    that he attendee mode and each of these section have 3 figures as
+    opposed to a single figure in the attendee mode.
+
+    Files are names and contains all the necessary metadata. We use 
+    mode_list, co2eq_list, cabin_list to order the figure in a more 
+    or less uniform way, while not preventing the cluster_key to be 
+    expanded in the future.
+    ```
+    Args:
+      banner (str): the banner
+      toc (bool): indicates whether the TOC is generate dor not. set to True by default.
+
+    """
+
+    ## initial lists to order the figures according to the metadata
+    ## associated to each figure.
+    mode_list = [ 'flight', 'distance', 'attendee' ]
+    cluster_key_list = [ None, 'presence', 'organization', 'country',\
+                        'subregion', 'flight_segment_numb     er' ]
+    co2eq_list =  [ 'myclimate', 'goclimate', 'ukgov' ]
+    cabin_list = [ 'ECONOMY', 'AVERAGE' ] 
+    ## lists the figures metadata (arg_dict)
     fig_list = []
+    
+    ## for every svg file, extracts the arguments from the file name (arg_dict).
+    ##         { 'mode' : mode,
+    ##           'cluster_key' : cluster_key,
+    ##           'co2eq' : co2eq,
+    ##           'cabin' : cabin }
+    ## to collects the list of mode, cluster_key 
+    ## it also adds to the metadata the text associated to the svg.
+    ## 
     for f in listdir( self.output_dir ):
       if 'svg' not  in f:
         continue
       arg_dict = self.file_name_to_kwargs( f )
       if arg_dict[ 'mode' ] is None: ## only mandatory parameter
         continue
-      arg_dict[ 'md_text' ] =  f"![]({f})\n"
-      if arg_dict[ 'mode' ] not in mode_list:
-        mode_list.append( arg_dict[ 'mode' ] )
-      elif arg_dict[ 'cluster_key' ]  not in cluster_key_list:
-        cluster_key_list.append( arg_dict[ 'cluster_key' ] )
+      arg_dict[ 'file_name' ] = f
       fig_list.append( arg_dict )
-    if None in cluster_key_list:
-      cluster_key_list.remove( None )
-      cluster_key_list.insert( 0, None )
 
-    toc_md = "Table of Contents\n\n"
-    md = ""
-    for mode in [ 'flight', 'distance', 'attendee' ]: ## mode
-      if mode not in mode_list:
-        continue
+    ## ensuring lists contains all potential new arguments form 
+    ## fig metadata
+    for fig in fig_list: 
+      if fig[ 'mode' ] not in mode_list:
+        mode_list.append( fig[ 'mode' ] )
+      if fig[ 'cluster_key' ]  not in cluster_key_list:
+        cluster_key_list.append( fig[ 'cluster_key' ] )
+      if fig[ 'co2eq' ]  not in co2eq_list:
+        co2eq_list.append( fig[ 'co2eq' ] )
+      if fig[ 'cabin' ]  not in cabin_list:
+        cabin_list.append( fig[ 'cabin' ] )
+     
+    ## ensuring lists do not contains values not present in the metadata
+    for mode in mode_list[:] :
+      if mode not in [ fig[ 'mode' ] for fig in fig_list ]:
+        mode_list.remove( mode) 
+    for cluster_key in cluster_key_list[:]:
+      if cluster_key not in [ fig[ 'cluster_key' ] for fig in fig_list ] :
+        cluster_key_list.remove( cluster_key )
+    for co2eq in co2eq_list[:]:
+      if co2eq not in [ fig[ 'co2eq' ] for fig in fig_list ]:
+        co2eq_list.remove( co2eq )
+    for cabin in cabin_list[:]:
+      if cabin not in [ fig[ 'cabin' ] for fig in fig_list ]:
+        cabin_list.remove( cabin )
+   
+    if None in co2eq_list:
+      co2eq_list.remove( None )
+    if None in cabin_list:    
+      cabin_list.remove( None )
+
+    if toc is True:
+      toc_md = "\n\n* TOC\n{:toc}\n\n"
+    else: 
+      toc_md = ""
+
+    md =f"# {self.name} Data\n{banner}\n{toc_md}" 
+            
+    section_no = 1
+    subsection_no = 1
+
+    for mode in mode_list: #[ 'flight', 'distance', 'attendee' ]: ## mode
       if mode in [ 'flight', 'distance' ]:
-        title = f"CO2 Estimation in {mode} mode"
+        section_title = f"CO2 Estimation in {mode} mode"
       elif mode == 'attendee':
-        title = f"Number of Attendees"
-      toc_md += f"* [{title}](#{mode})\n"
-      md += f"<div id=\"{mode}\"></div>\n## {title}\n\n"
-      for cluster_key in cluster_key_list:
-        if cluster_key not in cluster_key_list :
-          continue
-        if cluster_key is None:
-          title = f"No Clustering"
+        section_title = f"Number of Attendees"
+      md += f"## { roman.toRoman( section_no ) }. {section_title}\n\n"
+      section_no += 1
+      ## selecting and ordering the figures
+      for cluster_key in cluster_key_list: #[ None, 'presence', 'organization',\
+                                      # 'country', 'subregion', 'flight_segment_number' ]:
+        if cluster_key is None :
+          subsection_title = "No Clustering"
+        else: 
+          subsection_title = f"Clustering by {cluster_key}"
+        ## only flight and distance mode have co2eq related parameters.  
+        if mode in [ 'flight', 'distance' ]:
+          for cabin in cabin_list: #[ 'ECONOMY', 'AVERAGE' ]:
+            ## selecting all figures that fall under that subsection
+            subsection_svg_list = []  
+            for co2eq in co2eq_list: #[ 'myclimate', 'goclimate', 'ukgov' ]:
+              for fig in fig_list:
+                if fig[ 'mode' ] == mode and fig[ 'cluster_key' ] == cluster_key and\
+                   fig[ 'cabin' ] == cabin and fig[ 'co2eq' ] == co2eq :
+                  subsection_svg_list.append( fig )
+            md += self.subsection_svg_list_to_md( section_no, subsection_no,\
+                                                  f"{subsection_title} for cabin {cabin}",\
+                                                  subsection_svg_list )
+            subsection_no += 1
+            ## removing the printed figure from the list of figures 
+            for fig in subsection_svg_list:
+              fig_list.remove( fig )
+
+        elif mode in [ 'attendee' ]:
+          ## with mode = attendee cabin is set to None
+          ## with mode = attendee co2eq takes None
+          subsection_svg_list = []  
+          for fig in fig_list:
+            if fig[ 'mode' ] == mode and fig[ 'cluster_key' ] == cluster_key:
+              subsection_svg_list.append( fig )
+          md += self.subsection_svg_list_to_md( section_no, subsection_no,\
+                                                f"{subsection_title}",\
+                                                subsection_svg_list )
+          subsection_no += 1
+          ## removing the printed figure from the list of figures 
+          for fig in subsection_svg_list:
+            fig_list.remove( fig )
         else:
-          title = f"Clustering by {cluster_key}"
-        toc_md += f"  * [{title}](#{mode}-{cluster_key})\n"
-        md += f"<div id=\"{mode}-{cluster_key}\"></div>\n### {title}\n\n"
-        for fig in fig_list:
-          if fig[ 'mode' ] == mode and fig[ 'cluster_key' ] == cluster_key:
-            md += fig[ 'md_text' ]
-        md += "\n"
+          raise ValueError( f"Unexpected mode: {mode}" )    
+
 
     with open( join( self.output_dir, "index.md"), 'wt', encoding='utf8' ) as f:
-      header = f"# {self.name} Data\n\n"
-      if toc is False:
-        f.write( f"{header}\n{banner}\n{md}" )
-      else: 
-        f.write( f"{header}\n{banner}\n{toc_md}\n{md}" )
+      f.write( md )
+
+    if len( fig_list ) != 0:
+      print( f"mode_list: {mode_list}" )
+      print( f"cluster_key_list: {cluster_key_list}" )
+      print( f"cabin_list: {cabin_list}" )
+      print( f"co2eq_list: {co2eq_list}" )
+      raise ValueError( f"The following figures have not been considered: {fig_list}" )
+
+  def subsection_svg_list_to_md( self, section_no, subsection_no,\
+          subsection_title, subsection_svg_list ):
+    """ builds the markdown subsection
+
+    Given the section informations and the list of svg files, this function
+    builds the page and outputs the page in a markdown format.
+    The page requires the list of svg files to be non empty.
+
+    Args:
+      section_no (int): the number of the section
+      subsection_no (int): the numbe rof the subsection
+      subsection_title (str): the title of the subsection
+      subsection_svg_list (lst): the list of figure metadata. 
+        The metadata are those extracted from the file name, to which the file path has been added.For example:  {'mode': 'flight', 'cluster_key': 'country', 'co2eq': 'myclimate', 'cabin': 'ECONOMY', 'file_name': 'co2eq-mode_flight_distance-cluster_key_country-cluster_nbr_15-co2eq_myclimate_goclimate_ukgov-cabin_ECONOMY_AVERAGE.svg'}
+
+    Returns:
+      the section in a markdown format (str)
+  """
+
+    if len( subsection_svg_list ) == 0:
+      return ""
+    md = f"### {roman.toRoman( section_no )}.{subsection_no} {subsection_title}\n\n"
+    for fig in subsection_svg_list :
+      cabin = fig[ 'cabin' ]
+      co2eq = fig[ 'co2eq' ]
+      if cabin is not None and  co2eq is not None: 
+        co2eq_ppkm = self.co2eq_per_passenger_per_km( cabin=cabin, co2eq=co2eq )    
+        md+= f"Resulting CO2eq per passenger per Km: {co2eq_ppkm} kg/passenger/Km\n"   
+      md += f"![]({fig[ 'file_name' ]})\n"
+    md += '\n'
+    return md        
 
   def get_flight_km( self):
     """ return the total flight distance in km """
@@ -939,7 +1119,7 @@ class MeetingList(Meeting):
     banner += end_table
     return banner
 
-  def www_md( self, meeting_list_url, col_nbr=10, toc=True, home_url=None):
+  def www_md( self, meeting_list_url, col_nbr=8, toc=True, home_url=None):
     """ generates all md pages for the IETF meetings """
     banner = self.banner_md( meeting_list_url, col_nbr=col_nbr, home_url=home_url )
     self.md( banner, toc=toc )
