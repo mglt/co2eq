@@ -20,13 +20,21 @@ class Conf:
     self.env.read_env( env_file )  # read .env file, if it exists
 #    self.env.read_env( os.path.join( os.getcwd(), '.env' ) )  # read .env file, if it exists
     
-    ISO3166_REPRESENTATIVE_CITY_file_path = self.env.path( 'ISO3166_REPRESENTATIVE_CITY', 
-             os.path.expanduser( '~/.config/co2eq/ISO3166_REPRESENTATIVE_CITY.json.gz' ) )
+    ISO3166_REP_CITY_file_path = os.path.expanduser( \
+            self.env.path( 'ISO3166_REPRESENTATIVE_CITY',\
+            '~/.config/co2eq/ISO3166_REPRESENTATIVE_CITY.json.gz' ) )
+
+#    print( f"ISO3166_R : { os.path.expanduser( ISO3166_REPRESENTATIVE_CITY_file_path )}")
+#    if os.path.isfile( ISO3166_REPRESENTATIVE_CITY_file_path ):
+#        print( f"detected as file: {type(ISO3166_REPRESENTATIVE_CITY_file_path)}" )   
+#    else: 
+#        print( f"NOT detected as file: {type(ISO3166_REP_CITY_file_path)}" )   
+
     self.CONF = {
       ## The directory where air flights, or CO2 emissions for a given air flight
       ## requested to GO Climate are stored after it has been requested.
       ## The main purpose if to prevent co2eq to resolve the same request multiple time
-      'CACHE_DIR' : self.env.path( 'CACHE_DIR', os.path.expanduser( '~/.cache/co2eq' ) ), 
+      'CACHE_DIR' : os.path.expanduser( self.env.path( 'CACHE_DIR', '~/.cache/co2eq' ) ), 
   
       ## co2eq retrieves flight offers to estimate a real flight and uses the AMADEUS API:
       ## https://developers.amadeus.com/get-started/get-started-with-amadeus-apis-334
@@ -46,10 +54,10 @@ class Conf:
 
       ## where logs are stored. We suggest you perform tail -f your_log_file
       ## to monitor what can possibly go wrong.
-      'log' : self.env.path( 'log', '/tmp/co2eq.log' ),
+      'log' : os.path.expanduser( self.env.path( 'log', '/tmp/co2eq.log' ) ),
  
       ## Directory where all outputs are stored
-      'OUTPUT_DIR' : self.env.path( 'OUTPUT_DIR', './output' ),
+      'OUTPUT_DIR' : os.path.expanduser(  self.env.path( 'OUTPUT_DIR', './output' ) ),
  
       ## CityDB specific parameters
       ## ISO3166_REPRESENTATIVE_CITY enable to indicate a specific
@@ -58,7 +66,7 @@ class Conf:
       ## representative city or when no flight can be retrieved from 
       ## that country
       ##'ISO3166_REPRESENTATIVE_CITY' : env.dict( 'ISO3166_REPRESENTATIVE_CITY',  parsed_key=str, parsed_value=dict)  
-      'ISO3166_REPRESENTATIVE_CITY' : self.json_file_content( ISO3166_REPRESENTATIVE_CITY_file_path )
+      'ISO3166_REPRESENTATIVE_CITY' : self.json_file_content( ISO3166_REP_CITY_file_path )
       }
 
   def show( self ): 

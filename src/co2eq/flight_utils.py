@@ -668,7 +668,7 @@ class MyClimate:
           city = self.cityDB.get_city_by_iata( iata )
           coordinates.append( ( city[ 'latitude' ], city[ 'longitude' ] ) )
         except:
-          raise ValueError(f"{city} cannot be retrieved from {iata}: "\
+          raise ValueError(f"city cannot be retrieved from {iata}: "\
                            f"Check {iata} is proper IATA airport or city code" )
     return great_circle( coordinates[0], coordinates[1] ).km
 
@@ -950,6 +950,7 @@ class FlightDB(JCacheDict):
     self.cache_dir = cache_dir( conf )
     self.cache_flight = join( self.cache_dir, 'flightDB', 'flightDB.json' )
     self.cache_amadeus_dir = join( self.cache_dir, 'flightDB', 'amadeus' )
+
     self.amadeus_id = conf[ 'AMADEUS_ID' ]
     self.amadeus_secret = conf[ 'AMADEUS_SECRET' ]
     self.output = conf['OUTPUT_DIR']
@@ -1191,17 +1192,20 @@ class FlightDB(JCacheDict):
     """
     key = self.kwarg_to_key( origin=origin, destination=destination )
     amadeus_file = join( self.cache_amadeus_dir, f"{key}.json.gz" )
-    amadeus_file = path.join(self.output,amadeus_file)
-    print(amadeus_file)
+#    amadeus_file = path.join(self.output,amadeus_file)
+#    print( "DEBUG" )
+#    print( f" amadeus_file: {amadeus_file}")
 
     ## look for amadeus files
     try:
+      print( f"1. Looking for file {amadeus_file}" ) 
       with gzip.open( amadeus_file, 'rt', encoding="utf8" ) as f:
         amadeus_offer_list = json.loads( f.read() )
     except FileNotFoundError :
       try:
         reverse_key = self.kwarg_to_key( origin=destination, destination=origin )
         reverse_amadeus_file = join( self.cache_amadeus_dir, f"{reverse_key}.json" )
+        print( f"2. Looking for file {reverse_amadeus_file}" ) 
         with gzip.open( reverse_amadeus_file, 'rt', encoding="utf8" ) as f:
           amadeus_offer_list = json.loads( f.read() )
       except FileNotFoundError :
@@ -1217,7 +1221,7 @@ class FlightDB(JCacheDict):
     if amadeus_offer_list != []:
       search_offer = amadeus_offer_list[ 0 ]
     else:
-      print( f"    - retrieve amadeus : {origin} - {destination} "\
+      print( f"    - No local result, retrieving from amadeus : {origin} - {destination} "\
             f"(departure_date, return_date) : {str((departure_date, return_date))}" )
       search_offer = self.retrieve_amadeus(origin, destination, \
                        departure_date=departure_date, return_date=return_date, \
@@ -1330,7 +1334,8 @@ class Flight:
   def __init__( self, origin=None, destination=None, departure_date=None,
                 return_date=None, adults=1, cabin='ECONOMY',
                 segment_list=None, co2eq=None, price=None, currency=None,
-                flight_duration=None, travel_duration=None,
+                flight_duration=None, travel_duration=None, flying_distance=None,
+                map_distance=None, 
                 airportDB = True, cityDB = True, goclimateDB=True, \
                 conf=co2eq.conf.Conf().CONF ):
     """ computes co2eq associated to the flight
@@ -1364,6 +1369,8 @@ class Flight:
     self.currency = currency
     self.travel_duration = travel_duration
     self.flight_duration = flight_duration
+    self.flying_distance = flying_distance
+    self.map_distance = map_distance
     self.co2eq = co2eq
     if airportDB is True:
       self.airportDB = AirportDB()
@@ -1381,6 +1388,12 @@ class Flight:
     self.ukgov = UKGov( model='2021',  cityDB=self.cityDB, airportDB=self.airportDB )
     if segment_list is not None and co2eq is None:
       self.co2eq = self.compute_co2eq( )
+    if segment_list is not None and flying_distance is None:
+      self.flying_distance = 0
+      for seg in self.segment_list :
+        self.flying_distance += self.myclimate.dist( seg[ 0 ], seg[ 1 ] )
+    if map_distance is None:
+      self.map_distance = self.myclimate.dist( self.origin, self.destination )
 
   def compute_co2eq( self ):
     ## for amadeus CO2 computation
@@ -1414,6 +1427,8 @@ class Flight:
       'currency' : self.currency,
       'travel_duration' : str( self.travel_duration ),
       'flight_duration' : str( self.flight_duration ),
+      'flying_distance' : self.flying_distance,
+      'map_distance' : self.map_distance,
       'co2eq' : self.co2eq }
 
 
