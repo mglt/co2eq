@@ -11,6 +11,7 @@ pd.options.plotting.backend = "plotly"
 #from random import random
 import matplotlib
 import plotly.express as px
+#import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import kaleido ## to be able to export
 
@@ -22,7 +23,7 @@ import time
 
 from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, CountryDB, Flight, logger, MyClimate
 import co2eq.conf
-
+import co2eq.fig
     
 class Meeting:
 
@@ -208,7 +209,7 @@ class Meeting:
   def get_attendee_flight_obj( self, country,  cabin, mode ):
     """ returns the flight object used to compute co2eq and distance 
 
-    This function primary set a speudoi flight in a distance mode 
+    This function primarily sets a speudo flight in a distance mode 
     which corresponds to a direct flight.
     """
 
@@ -240,6 +241,25 @@ class Meeting:
     requests to the larger FlightDB.
     Repeated request occurs when diferent co2eq methods are performed 
     as well as when multiple users are coming from the same country
+
+    The database self.db is as represented below:
+    { (mode, cabin) :
+      { country_code : 
+        { 'co2eq_method' : 
+          { 'goclimate' : gocliamte_value,
+            'myclimate' : myclimate_value,
+            'uk_gov' : uk_gov_value }  
+          'segment_list' : 3 },
+        country_code :     
+        { 'co2eq_method' : 
+          { 'goclimate' : gocliamte_value,
+            ... }
+      },
+      (mode, cabin) :
+      { country_code : 
+      ...
+      },
+    }  
     """
     if ( mode, cabin ) in self.flight_db.keys():
       return None
@@ -255,7 +275,8 @@ class Meeting:
     t_stop = time.time()
     print( f"Building flight_db in {t_stop - t_start}" )
     print( f"resolution time: {( t_stop - t_start ) / len( country_list ) }")
-      
+
+  ## the following functions are helpers to complete the dataframe
   def get_attendee_co2eq( self, mode, cabin, country, co2eq_method ):
     return self.flight_db[ ( mode, cabin ) ][ country ][ 'co2eq'][ co2eq_method ]
     
@@ -345,8 +366,10 @@ class Meeting:
     """
 
     ## read from json if already computed
+    ## commenting to force the generation of the pd
     data_file = self.json_file_name( mode, cluster_key, \
             co2eq_method=co2eq_method, cabin=cabin )   
+    
     if data_file is True: 
       return pd.read_json( data_file )
 
@@ -362,7 +385,7 @@ class Meeting:
     elif cluster_key == 'subregion' :
       self.df[ 'subregion' ] = self.df.apply( lambda x: self.get_attendee_subregion( x['country'] ), axis=1 )
     elif cluster_key == 'region' :
-      self.df[ 'region' ] = self.df.apply( lambda x: self.get_attendee_subregion( x['country'] ), axis=1 )
+      self.df[ 'region' ] = self.df.apply( lambda x: self.get_attendee_region( x['country'] ), axis=1 )
     
     ## 2.b computing co2eq / distance based on mode 
     if mode in [ 'flight', 'distance' ]:
@@ -371,7 +394,7 @@ class Meeting:
       k = ( mode, cabin, co2eq_method )
       if k not in self.total_co2eq.keys() :
         self.total_co2eq[ k ]  = self.df[ co2eq_method ].sum()
-      ## we ensure totalk_map_distance is computed.
+      ## we ensure total_map_distance is computed.
       if self.total_map_distance is None:
         self.df[ "map_distance" ] = self.df.apply( lambda x: self.get_attendee_map_distance( mode, cabin, x[ 'country' ] ) , axis=1)
         self.total_map_distance = self.df[ "map_distance" ].sum()
@@ -401,43 +424,111 @@ class Meeting:
 ### https://www.shanelynn.ie/bar-plots-in-python-using-pandas-dataframes/
 
 
-  def plot_co2eq( self, mode, cluster_key, cabin ):
-  ## https://plotly.com/python/wide-form/
+  def plot_co2eq_distribution( self, mode, cabin, debug=True ):
+    """ plots the distribution of the estimated CO2eq
 
-    col_cluster_key = []  ## legend
-    col_co2eq_method = [] ## column title
-    col_co2eq = []      ## y values
+    For each cluster_key (country, subregion, region) the 
+    CO2eq is plot for each CO2eq estimation method.  
+
     
-    for co2eq_method in self.co2eq_method_list :
-      d = self.build_data( mode=mode, cluster_key=cluster_key,\
-              co2eq_method=co2eq_method, cabin=cabin )
-      col_cluster_key.extend( d.index.values )
-      col_co2eq_method.extend(  [ d.name for i in d.index.values ] )
-      col_co2eq.extend( d.to_list() )
-    df = pd.DataFrame( { d.index.name : col_cluster_key, 
-                            'co2eq_method' : col_co2eq_method, 
-                            'co2eq' : col_co2eq } )
+    """
+    ## https://plotly.com/python/wide-form/
+    subfig_list = []
+    for cluster_key in self.cluster_key_list :
+      col_cluster_key = []  ## legend
+      col_co2eq_method = [] ## column title
+      col_co2eq = []      ## y values
+      
+      for co2eq_method in self.co2eq_method_list :
+        d = self.build_data( mode=mode, cluster_key=cluster_key,\
+                co2eq_method=co2eq_method, cabin=cabin )
+        ## --- d: 
+        ## segment_nbr
+        ## 6    5640.573951
+        ## 5    5092.001108
+        ## 0       0.000000
+        ## Name: ukgov, dtype: float64
+        ## d.name: ukgov
+        ## d.index: Index([6, 5, 0], dtype='int64', name='segment_nbr')
+        ## d.index.name: segment_nbr
+        ## d.index.values: [6 5 0]
+        print( f"--- d: " )
+        print( d )
+        print( f"d.name: {d.name}" )
+        print( f"d.index: {d.index}" )
+        print( f"d.index.name: {d.index.name}" )
+        print( f"d.index.values: {d.index.values}" )
+
+        ## convertion to string is done to ensure legend 
+        ## is considered the same way in all subplots.
+        if d.index.dtype == 'int64':
+          cluster_key_values = [ str(i) for i in d.index.values ]
+        else: 
+          cluster_key_values = d.index.values
+        col_cluster_key.extend( cluster_key_values )
+        col_co2eq_method.extend(  [ d.name for i in d.index.values ] )
+        col_co2eq.extend( d.to_list() )
+      df = pd.DataFrame( { d.index.name : col_cluster_key, 
+                              'co2eq_method' : col_co2eq_method, 
+                              'co2eq' : col_co2eq } )
+      ##    segment_nbr co2eq_method        co2eq
+      ## 0            6    myclimate  6639.928899
+      ## 1            5    myclimate  5538.633329
+      ## 2            0    myclimate     0.000000
+      ## 3            6    goclimate  8600.000000
+      ## 4            5    goclimate  7100.000000
+      ## 5            0    goclimate     0.000000
+      ## 6            6        ukgov  5640.573951
+      ## 7            5        ukgov  5092.001108
+      ## 8            0        ukgov     0.000000
+      ## 
+      ## df.head: <bound method NDFrame.head of    segment_nbr co2eq_method        co2eq
+      ## df.columns: Index(['segment_nbr', 'co2eq_method', 'co2eq'], dtype='object')
+      ## df.columns.name: None
+      ## df.columns.values: ['segment_nbr' 'co2eq_method' 'co2eq']
+      ## df.index: RangeIndex(start=0, stop=9, step=1)
+      if debug is True:
+        print( f"--- df: " )
+        print( df )
+        print( f"\ndf.head: {df.head}" )
+        print( f"df.columns: {df.columns}" )
+        print( f"df.columns.name: {df.columns.name}" )
+        print( f"df.columns.values: {df.columns.values}" )
+        print( f"df.index: {df.index}" )
+      subfig = px.bar(df, x=col_co2eq_method, y="co2eq", color=d.index.name,\
+              # text=d.index.name, 
+              title=cluster_key,  
+              labels={"co2eq": "CO2eq (Kg)", "co2eq": "CO2eq Estimation Method" } )
+      subfig_list.append( subfig )
+
     ## title
-    print( f"self.total_co2eq: {self.total_co2eq}" )
-    co2eq_list = [ self.total_co2eq[ ( mode, cabin, m ) ]  for m in self.co2eq_method_list ]
+    co2eq_list = []
+    for m in self.co2eq_method_list:
+      co2eq_list.append( self.total_co2eq[ ( mode, cabin, m ) ] )
     av = statistics.mean( co2eq_list )
+    stdev = statistics.stdev( co2eq_list ) 
     m = min ( co2eq_list)
     M = max( co2eq_list )
-    d_co2eq = ( M - m ) / av * 100.0
     epppkm = av / self.total_map_distance / self.total_attendee_nbr 
-    title = f"{self.name} CO2eq emissions per {cluster_key} in  mode {mode}, cabin {cabin}<br>"\
-            f"   - Co2eq:  ~ {self.kg( av )},  min: {self.kg( m )}, max: {self.kg( M )}, D: {d_co2eq:.2f}%<br>"\
+    title = f"{self.name} Distribution of CO2eq emissions for {mode} mode, cabin {cabin} - {self.total_attendee_nbr} attendees<br>"\
+            f"   - Co2eq -- mean: {self.kg( av )},  min: {self.kg( m )}, max: {self.kg( M )}, std: {self.kg( stdev )}<br>"\
             f"   - Co2eq per passenger Km: {self.kg( epppkm )}/p/km <br>"\
-            f"   - Attendees: {self.total_attendee_nbr}"
 
-    fig = px.bar(df, x=col_co2eq_method, y="co2eq", color=d.index.name,\
-            text=d.index.name, 
-            title=title,  
-            labels={"co2eq": "CO2eq (Kg)", "x": "CO2eq Estimation Method" } )
-    fig.update_layout(font_family="Rockwell", showlegend=True)
-    fig.write_html( self.image_file_name( 'html', mode, cabin, cluster_key=cluster_key ) )
-    fig.write_image( self.image_file_name( 'svg', mode, cabin, cluster_key=cluster_key ) )    
-    fig.show()
+    fig = co2eq.fig.OneRowSubfig( \
+      subfig_list, 
+      offset=1.32, 
+      subfig_title_list=self.cluster_key_list,
+      fig_title=title,
+      html_file_name=self.image_file_name( 'html', mode, cabin ), 
+      svg_file_name=self.image_file_name( 'svg', mode, cabin ) )
+#    fig = px.bar(df, x=col_co2eq_method, y="co2eq", color=d.index.name,\
+#            text=d.index.name, 
+#            title=title,  
+#            labels={"co2eq": "CO2eq (Kg)", "x": "CO2eq Estimation Method" } )
+#    fig.update_layout(font_family="Rockwell", showlegend=True)
+#    fig.write_html( self.image_file_name( 'html', mode, cabin, cluster_key=cluster_key ) )
+#    fig.write_image( self.image_file_name( 'svg', mode, cabin, cluster_key=cluster_key ) )    
+    fig.fig.show()
 
   def kg( self, number) :
     """ returns the string associated to number in Kg
@@ -448,37 +539,165 @@ class Meeting:
     engFormat = matplotlib.ticker.EngFormatter(unit='g',places=2,sep='')
     return engFormat( 1000 * number )
 
-  def plot_attendees( self, cabin='AVERAGE' ):      
-    data = []
-    for cluster_key in self.cluster_key_list :
-      data.append( self.build_data( mode='attendee', cluster_key=cluster_key, cabin=cabin ) )
-    df = pd.DataFrame( data, index=self.cluster_key_list )   
-    print( df )  
-##    fig = df.plot( kind='bar', subplots=True, ylabel=ylabel, title=title )
-##    fig = df.plot( kind='bar', ylabel=ylabel, title=title )
-    title = f"Attendees distribution for {self.name} {self.total_attendee_nbr} attendees"
-    ylabel =  "Number of attendees" 
-#    
-    fig = df.plot.bar( title=title )
-#    fig.title( title )
-#    plt.ylabel( ylabel )
+  def plot_attendees_distribution( self, cabin='AVERAGE', debug=False ): 
+    """plots the distribution of the attendees 
 
-#   
-    fig.write_html( self.image_file_name( 'html', 'attendee', cabin ) )
-    fig.write_image( self.image_file_name( 'svg', 'attendee', cabin ) )    
-    fig.show()
+    We use the stacked histogram to represent the distribution 
+    according to the various cluster_key values. For example if 
+    cluster_key is 'country', the stacked histogram will 
+    represent the number of attendees per country. 
+
+    The total number of attendees will remain the same. We use 
+    the SVG / HTML representation in order to be able to point 
+    each stack and determine the exact number associated when
+    the mouse points to the stack.  
+    The total number of attendees is the same, so the dimension 
+    of the histogram are the same, and only the way these 
+    histograms (bars) are slacked is changing.
+
+    """
+
+    print( "--- plot_attendees_distribution" )
+#    from plotly.subplots import make_subplots
+    subfig_list = []
+    for cluster_key in self.cluster_key_list :
+      ## d is expected to have the following format  
+      ##  --- : d: <class 'pandas.core.series.Series'>
+      ## country
+      ## KG    1
+      ## IN    1
+      ## MX    1
+      ## CZ    1
+      ## MO    1
+      ## DZ    1
+      ## Name: country, dtype: int64
+      ## d.name: country
+      ## d.index: Index(['KG', 'IN', 'MX', 'CZ', 'MO', 'DZ'], dtype='object', name='country')
+      ## d.index.name: country
+      ## d.index.values: ['KG' 'IN' 'MX' 'CZ' 'MO' 'DZ']
+      d = self.build_data( mode='attendee', cluster_key=cluster_key, cabin=cabin )
+      if debug is True:
+        print( f"--- : d: {type(d)}" )
+        print( d )
+        print( f"d.name: {d.name}" )
+        print( f"d.index: {d.index}" )
+        print( f"d.index.name: {d.index.name}" )
+        print( f"d.index.values: {d.index.values}" )
+
+      ## df is expected to have the following format:
+      ## --- : df: 
+      ## country  KG  IN  MX  CZ  MO  DZ
+      ## country   1   1   1   1   1   1
+      ## 
+      ## df.head: <bound method NDFrame.head of country  KG  IN  MX  CZ  MO  DZ
+      ## country   1   1   1   1   1   1>
+      ## df.columns: Index(['KG', 'IN', 'MX', 'CZ', 'MO', 'DZ'], dtype='object', name='country')
+      ## df.columns.name: country
+      ## df.columns.values: ['KG' 'IN' 'MX' 'CZ' 'MO' 'DZ']
+      ## df.index: Index(['country'], dtype='object')
+
+      df = pd.DataFrame( [ d ] )
+      df.columns.name = cluster_key
+      if debug is True:
+        print( f"--- : df: " )
+        print( df )
+        print( f"\ndf.head: {df.head}" )
+        print( f"df.columns: {df.columns}" )
+        print( f"df.columns.name: {df.columns.name}" )
+        print( f"df.columns.values: {df.columns.values}" )
+        print( f"df.index: {df.index}" )
+      subfig_list.append( px.bar(df, x=df.index, y=df.columns ) ) #, \
+                              # color=df.index,\
+    fig = co2eq.fig.OneRowSubfig( \
+      subfig_list, 
+      offset=1.32, 
+      subfig_title_list=self.cluster_key_list,
+      fig_title=f"{self.name} Distributions of {self.total_attendee_nbr} Attendees",
+      html_file_name=self.image_file_name( 'html', 'attendee', cabin ), 
+      svg_file_name=self.image_file_name( 'svg', 'attendee', cabin ) )
+    fig.fig.show( )
+    return None
+
+##    cols = len( subfig_list )
+##    n = 9
+##    barwidth = 1 / ( n * cols ) 
+##    hspace = (n - 1) / ( n * cols )
+##    ## the offset is used to position the legend. =
+##    ## offset + batwidth is the described column
+##    offset = 1.32 * barwidth 
+##    column_widths = [ barwidth for i in range( cols ) ] 
+##
+##    fig = plotly.subplots.make_subplots( rows=1, cols=cols, \
+##            subplot_titles= self.cluster_key_list, 
+##            horizontal_spacing = hspace, 
+##            column_widths=column_widths
+##            )
+##    legend_layout = {}
+##    for i, subfig in enumerate(subfig_list):
+##      print( f"subfig : {subfig}" )
+##      print( f"i : {i}" )
+##      if i + 1 >= 2:  
+##        legend_name = f"legend{i+1}" 
+##      else:
+##        legend_name = "legend"
+##      legend_layout[ legend_name ] = {
+###        'title' : "",
+###        'xref' : "container",
+###        'yref' : "container", 
+##        'y' : 1,
+##        'x' :  offset + barwidth +  i * ( hspace + offset + barwidth ),
+###        'bgcolor' : "orange" # usefull to determine the offset
+##        }       
+##      for trace in range(len(subfig["data"])):
+##        print( f"trace: {trace}" )
+##        subfig["data"][trace][ 'legend' ] = legend_name
+##        fig.add_trace( subfig["data"][trace], row=1, col=i+1 )
+##    ## barmode applies to all subplots
+##    fig.update_layout(
+##      height=600, 
+##      width=1500, 
+##      barmode='relative',
+##      title_text= f"Attendees Distributions for {self.name}",
+##      margin={ 'l':0, 'r':0 }
+##            )
+##    for k in legend_layout.keys():
+##      fig[ 'layout' ][ k ] = legend_layout[ k ]  
+##    print( f"--- fig: {fig}" )  
+##    ## provides an overview for all cluster keys - We need to remove the variable legende. 
+##    print( "--- plot_attendees_distribution\n" )
+###    data = []
+###    for cluster_key in self.cluster_key_list :
+###      data.append( self.build_data( mode='attendee', cluster_key=cluster_key, cabin=cabin ) )
+###    df = pd.DataFrame( data, index=self.cluster_key_list )  
+###    print( "--- data frame: " )
+###    print( df ) 
+##
+####    fig = df.plot( kind='bar', subplots=True, ylabel=ylabel, title=title )
+####    fig = df.plot( kind='bar', ylabel=ylabel, title=title )
+###    title = f"Attendees distribution for {self.name} {self.total_attendee_nbr} attendees"
+###    ylabel =  "Number of attendees" 
+###    
+###    fig = df.plot.bar( title=title )
+###    fig.title( title )
+###    plt.ylabel( ylabel )
+##  # from https://stackoverflow.com/questions/51903232/adding-a-slider-to-figure-with-subplots-in-plotly
+###   
+##    fig.write_html( self.image_file_name( 'html', 'attendee', cabin ) )
+##    fig.write_image( self.image_file_name( 'svg', 'attendee', cabin ) )    
+##    fig.show()
     
  
-  def plot( self, mode_list=[ 'attendee', 'flight'], cabine_list=[ 'AVERAGE' ] ):
+  def plot_distribution( self, mode_list=[ 'attendee', 'flight'], cabine_list=[ 'AVERAGE' ] ):
 
-    ## does not really makes sense 
-    self.plot_attendees( 'AVERAGE' ) 
+    if 'attendee' in mode_list:   
+      self.plot_attendees_distribution( 'AVERAGE' ) 
 
-    for mode in mode_list: 
-       for cluster_key in self.cluster_key_list :
-         for cabin in cabine_list :  
-           self.plot_co2eq( mode, cluster_key, cabin )
-     
+    mode_list.remove( 'attendee' )
+    for mode in mode_list:
+   #    for cluster_key in self.cluster_key_list :
+       for cabin in cabine_list :  
+         self.plot_co2eq_distribution( mode, cabin )
+    
 #        index.append( co2eq_method )         
 #    plot_data = pd.DataFrame( [ df_pres1, df_pres2], index=[ "df_pres1", "df_pres2" ] ) 
 #    plot = pd.DataFrame( [ df_pres1, df_pres2] )
