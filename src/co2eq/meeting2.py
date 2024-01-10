@@ -1,24 +1,19 @@
 import os
 from os import listdir
 from os.path import join, isfile, isdir
-#from html.parser import HTMLParser
 import json
 import gzip 
 import statistics
 from datetime import datetime, timedelta
 import pandas as pd
 pd.options.plotting.backend = "plotly"
-#from random import random
 import matplotlib
 import plotly.express as px
-#import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import kaleido ## to be able to export
 
-#import numpy as np
 import requests
 from math import ceil
-#import roman
 import time 
 
 from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, CountryDB, Flight, logger, MyClimate
@@ -273,8 +268,10 @@ class Meeting:
                 f"{( country,  cabin, mode )}: {flight}" )
       self.flight_db[ ( mode, cabin ) ] [ country ] = flight
     t_stop = time.time()
-    print( f"Building flight_db in {t_stop - t_start}" )
-    print( f"resolution time: {( t_stop - t_start ) / len( country_list ) }")
+    print( f"Building flight_db in {t_stop - t_start} sec" )
+    print( f"resolution time: {( t_stop - t_start ) / len( country_list ) } sec")
+
+
 
   ## the following functions are helpers to complete the dataframe
   def get_attendee_co2eq( self, mode, cabin, country, co2eq_method ):
@@ -307,7 +304,7 @@ class Meeting:
     file_name = ""
     for key, value in kwargs.items():
       file_name += f"{key}-{value}--"
-    return file_name[ :-1 ] 
+    return file_name[ :-2 ] 
 
   def str_to_kwargs( self, file_name ): 
     """ retrieves kwargs from a file name 
@@ -333,25 +330,40 @@ class Meeting:
       kw[ split_seg[ 0 ] ] = split_seg[ 1 ]
     return kw
 
-  def json_file_name( self, mode, cluster_key, co2eq_method=None, cabin=None ):
-    if mode == 'attendee' and co2eq_method is None and cabin is None :
-      data_file = self.kwargs_to_str( mode=mode, cluster_key=cluster_key )
+  def json_file_name( self, name, mode, cluster_key, co2eq_method=None, cabin=None ):
+    if mode == 'attendee' : 
+      if co2eq_method is not None and cabin is not None :
+        raise ValueError( f"with mode 'attendee', co2eq_method"\
+                f" and cabin MUST be None. Got {locals()}" ) 
+      data_file = self.kwargs_to_str( name=name, mode=mode, cluster_key=cluster_key )
     else: 
-      data_file = self.kwargs_to_str( mode=mode, cluster_key=cluster_key,\
+      data_file = self.kwargs_to_str( name=name, mode=mode, cluster_key=cluster_key,\
         co2eq_method=co2eq_method, cabin=cabin)
     return os.path.join( self.output_dir, data_file + ".json")
 
-  def image_file_name( self, ext, mode, cabin, cluster_key=None ):
-    if mode == 'attendee' and cluster_key is None :
-      data_file = self.kwargs_to_str( mode=mode, cabin=cabin )
-    elif mode in [ 'flight', 'distance' ]: 
-      data_file = self.kwargs_to_str( mode=mode, cluster_key=cluster_key,\
-              cabin=cabin )
+  def image_file_name( self, name, ext, mode, cabin=None, cluster_key=None, co2eq_method=None ):
+    """ return an image file name
+   
+    The intent is to ensure a certain format in the file names, as
+    well as to perform some minor checks and avoid duplictaed files
+    with different names. 
+    """
+    if mode == 'attendee' and ( cabin is not None or co2eq_method is not None ):
+      raise ValueError( f"with mode 'attendee'  cabin and co2eq_method"\
+              "are expected to be set to None. Got {locals()}." )
+    f_kwargs = { } 
+##    print( locals() )
+    for k in list( locals().keys() ):
+      if k in [ 'self', 'ext', 'f_kwargs' ]:
+        continue
+      if locals()[ k ] is not None:
+        f_kwargs[ k] = locals()[ k ]
+    data_file = self.kwargs_to_str( **f_kwargs )
     return os.path.join( self.output_dir, data_file + "." + ext )
 
 
 
-  def build_data( self, mode='flight', cluster_key='country', co2eq_method='myclimate', cabin='AVERAGE' ) -> dict :
+  def build_data( self, mode='flight', cluster_key='country', co2eq_method=None, cabin=None ) -> dict :
     """ co2 equivalent based on real flights including multiple segments)
 
     The possible modes are 'attendee', 'flight', 'distance'. 
@@ -367,9 +379,18 @@ class Meeting:
 
     ## read from json if already computed
     ## commenting to force the generation of the pd
-    data_file = self.json_file_name( mode, cluster_key, \
-            co2eq_method=co2eq_method, cabin=cabin )   
-    
+    if mode == 'attendee':
+      data_file = self.json_file_name( 'data', mode, cluster_key )
+      co2eq_method = None
+      cabin = None 
+    else: 
+      if co2eq_method is None: 
+        co2eq_method = 'myclimate'
+      if co2eq_method is None: 
+        cabin = 'AVERAGE'
+      data_file = self.json_file_name( 'data', mode, cluster_key, \
+            co2eq_method=co2eq_method, cabin=cabin )  
+      
     if data_file is True: 
       return pd.read_json( data_file )
 
@@ -377,11 +398,16 @@ class Meeting:
     if mode in [ 'flight', 'distance' ] :
       self.build_flight_db( mode, cabin )
     elif mode == 'attendee' and cluster_key == 'segment_nbr':
-      self.build_flight_db( 'flight', cabin )
+      self.build_flight_db( 'flight', 'AVERAGE' )
     
     ## 2.a. preparing attende based values based on cluster values cluster_key and mode
     if cluster_key == 'segment_nbr' :
-      self.df[ 'segment_nbr' ] = self.df.apply( lambda x: self.get_attendee_seg_nbr( mode, cabin, x['country'] ), axis=1)
+      if mode == 'attendee' :
+        ## to compute segment numbers, we use the cabin set to AVERAGE   
+        self.df[ 'segment_nbr' ] = self.df.apply( lambda x: self.get_attendee_seg_nbr( mode, 'AVERAGE', x['country'] ), axis=1)
+      else: 
+        self.df[ 'segment_nbr' ] = self.df.apply( lambda x: self.get_attendee_seg_nbr( mode, cabin, x['country'] ), axis=1)
+
     elif cluster_key == 'subregion' :
       self.df[ 'subregion' ] = self.df.apply( lambda x: self.get_attendee_subregion( x['country'] ), axis=1 )
     elif cluster_key == 'region' :
@@ -399,6 +425,8 @@ class Meeting:
         self.df[ "map_distance" ] = self.df.apply( lambda x: self.get_attendee_map_distance( mode, cabin, x[ 'country' ] ) , axis=1)
         self.total_map_distance = self.df[ "map_distance" ].sum()
 
+
+    ## Extraction of the data should be performed in each function.  
     ## 3. extracting the data to be plot        
     if mode == 'attendee':
       ## group by country, take the 'country' colum  and count elements
@@ -440,6 +468,9 @@ class Meeting:
       col_co2eq = []      ## y values
       
       for co2eq_method in self.co2eq_method_list :
+        ## we need here to take (on-site, cluster_key ) to only plot the 
+        ## EfFFECTIVE CO2 that is only considering the on-site participants.
+        ## when 'presence' is selected it is unchanged.
         d = self.build_data( mode=mode, cluster_key=cluster_key,\
                 co2eq_method=co2eq_method, cabin=cabin )
         ## --- d: 
@@ -519,15 +550,8 @@ class Meeting:
       offset=1.32, 
       subfig_title_list=self.cluster_key_list,
       fig_title=title,
-      html_file_name=self.image_file_name( 'html', mode, cabin ), 
-      svg_file_name=self.image_file_name( 'svg', mode, cabin ) )
-#    fig = px.bar(df, x=col_co2eq_method, y="co2eq", color=d.index.name,\
-#            text=d.index.name, 
-#            title=title,  
-#            labels={"co2eq": "CO2eq (Kg)", "x": "CO2eq Estimation Method" } )
-#    fig.update_layout(font_family="Rockwell", showlegend=True)
-#    fig.write_html( self.image_file_name( 'html', mode, cabin, cluster_key=cluster_key ) )
-#    fig.write_image( self.image_file_name( 'svg', mode, cabin, cluster_key=cluster_key ) )    
+      html_file_name=self.image_file_name( 'distribution', 'html', mode, cabin ), 
+      svg_file_name=self.image_file_name( 'distribution', 'svg', mode, cabin ) )
     fig.fig.show()
 
   def kg( self, number) :
@@ -535,11 +559,10 @@ class Meeting:
 
     Because Kg is the unit but we want Mg instead of kKg we convert in g 
     """
-    #from matplotlib.ticker import EngFormatter
     engFormat = matplotlib.ticker.EngFormatter(unit='g',places=2,sep='')
     return engFormat( 1000 * number )
 
-  def plot_attendees_distribution( self, cabin='AVERAGE', debug=False ): 
+  def plot_attendees_distribution( self, debug=False ): 
     """plots the distribution of the attendees 
 
     We use the stacked histogram to represent the distribution 
@@ -557,8 +580,6 @@ class Meeting:
 
     """
 
-    print( "--- plot_attendees_distribution" )
-#    from plotly.subplots import make_subplots
     subfig_list = []
     for cluster_key in self.cluster_key_list :
       ## d is expected to have the following format  
@@ -575,7 +596,7 @@ class Meeting:
       ## d.index: Index(['KG', 'IN', 'MX', 'CZ', 'MO', 'DZ'], dtype='object', name='country')
       ## d.index.name: country
       ## d.index.values: ['KG' 'IN' 'MX' 'CZ' 'MO' 'DZ']
-      d = self.build_data( mode='attendee', cluster_key=cluster_key, cabin=cabin )
+      d = self.build_data( mode='attendee', cluster_key=cluster_key )
       if debug is True:
         print( f"--- : d: {type(d)}" )
         print( d )
@@ -613,93 +634,24 @@ class Meeting:
       offset=1.32, 
       subfig_title_list=self.cluster_key_list,
       fig_title=f"{self.name} Distributions of {self.total_attendee_nbr} Attendees",
-      html_file_name=self.image_file_name( 'html', 'attendee', cabin ), 
-      svg_file_name=self.image_file_name( 'svg', 'attendee', cabin ) )
+      html_file_name=self.image_file_name( 'distribution', 'html', 'attendee' ), 
+      svg_file_name=self.image_file_name( 'distribution', 'svg', 'attendee' ) )
     fig.fig.show( )
     return None
 
-##    cols = len( subfig_list )
-##    n = 9
-##    barwidth = 1 / ( n * cols ) 
-##    hspace = (n - 1) / ( n * cols )
-##    ## the offset is used to position the legend. =
-##    ## offset + batwidth is the described column
-##    offset = 1.32 * barwidth 
-##    column_widths = [ barwidth for i in range( cols ) ] 
-##
-##    fig = plotly.subplots.make_subplots( rows=1, cols=cols, \
-##            subplot_titles= self.cluster_key_list, 
-##            horizontal_spacing = hspace, 
-##            column_widths=column_widths
-##            )
-##    legend_layout = {}
-##    for i, subfig in enumerate(subfig_list):
-##      print( f"subfig : {subfig}" )
-##      print( f"i : {i}" )
-##      if i + 1 >= 2:  
-##        legend_name = f"legend{i+1}" 
-##      else:
-##        legend_name = "legend"
-##      legend_layout[ legend_name ] = {
-###        'title' : "",
-###        'xref' : "container",
-###        'yref' : "container", 
-##        'y' : 1,
-##        'x' :  offset + barwidth +  i * ( hspace + offset + barwidth ),
-###        'bgcolor' : "orange" # usefull to determine the offset
-##        }       
-##      for trace in range(len(subfig["data"])):
-##        print( f"trace: {trace}" )
-##        subfig["data"][trace][ 'legend' ] = legend_name
-##        fig.add_trace( subfig["data"][trace], row=1, col=i+1 )
-##    ## barmode applies to all subplots
-##    fig.update_layout(
-##      height=600, 
-##      width=1500, 
-##      barmode='relative',
-##      title_text= f"Attendees Distributions for {self.name}",
-##      margin={ 'l':0, 'r':0 }
-##            )
-##    for k in legend_layout.keys():
-##      fig[ 'layout' ][ k ] = legend_layout[ k ]  
-##    print( f"--- fig: {fig}" )  
-##    ## provides an overview for all cluster keys - We need to remove the variable legende. 
-##    print( "--- plot_attendees_distribution\n" )
-###    data = []
-###    for cluster_key in self.cluster_key_list :
-###      data.append( self.build_data( mode='attendee', cluster_key=cluster_key, cabin=cabin ) )
-###    df = pd.DataFrame( data, index=self.cluster_key_list )  
-###    print( "--- data frame: " )
-###    print( df ) 
-##
-####    fig = df.plot( kind='bar', subplots=True, ylabel=ylabel, title=title )
-####    fig = df.plot( kind='bar', ylabel=ylabel, title=title )
-###    title = f"Attendees distribution for {self.name} {self.total_attendee_nbr} attendees"
-###    ylabel =  "Number of attendees" 
-###    
-###    fig = df.plot.bar( title=title )
-###    fig.title( title )
-###    plt.ylabel( ylabel )
-##  # from https://stackoverflow.com/questions/51903232/adding-a-slider-to-figure-with-subplots-in-plotly
-###   
-##    fig.write_html( self.image_file_name( 'html', 'attendee', cabin ) )
-##    fig.write_image( self.image_file_name( 'svg', 'attendee', cabin ) )    
-##    fig.show()
-    
  
   def plot_distribution( self, mode_list=[ 'attendee', 'flight'], cabine_list=[ 'AVERAGE' ] ):
 
     if 'attendee' in mode_list:   
-      self.plot_attendees_distribution( 'AVERAGE' ) 
+      self.plot_attendees_distribution( ) 
 
     mode_list.remove( 'attendee' )
     for mode in mode_list:
-   #    for cluster_key in self.cluster_key_list :
        for cabin in cabine_list :  
          self.plot_co2eq_distribution( mode, cabin )
-    
-#        index.append( co2eq_method )         
-#    plot_data = pd.DataFrame( [ df_pres1, df_pres2], index=[ "df_pres1", "df_pres2" ] ) 
-#    plot = pd.DataFrame( [ df_pres1, df_pres2] )
-#    f = plot_data.plot.bar()    
-#    f.show()
+   
+
+## x= companies, y=CO2eq [methods], 
+## x= companies, y=CO2eq [methods] / remote[Co2], 
+
+
