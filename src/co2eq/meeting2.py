@@ -106,20 +106,28 @@ class Meeting:
       os.makedirs( self.output_dir )
     self.logger = logger( conf, __name__ )
 
-    ## DataFrame
-    self.df = pd.read_json( attendee_list )
+    self.attendee_list = attendee_list
+    df = pd.read_json( attendee_list )
+    ## to build flightDB
+    self.country_list = df[ 'country' ].unique().tolist()
+    self.total_attendee_nbr = len( df )
+    self.cluster_key_list = list( df )
+    self.cluster_key_list.extend( ['segment_nbr', 'subregion', 'region', 'co2eq' ] )
+    self.co2eq_method_list = [ 'myclimate', 'goclimate', 'ukgov' ]
 
+    ## DataFrame
+    self.df_data = {} 
     ### built variables
-    self.total_attendee_nbr = len( self.df )
+    ##    self.total_attendee_nbr = None
     ## total_map distance to represent the effectice 
     ## traveled distance between the two end points.
     ## this is different from the flying distance.
     self.total_map_distance = None
     ## self.total_co2eq = { ( mode, cabin, co2eq_method ) : co2eq_value }
     self.total_co2eq = {}
-    self.cluster_key_list = list( self.df )
-    self.cluster_key_list.extend( ['segment_nbr', 'subregion', 'region' ] )
-    self.co2eq_method_list = [ 'myclimate', 'goclimate', 'ukgov' ]
+#    self.cluster_key_list = [] # list( self.df_attendee_list )
+    # self.cluster_key_list.extend( ['segment_nbr', 'subregion', 'region', 'co2eq' ] )
+#    self.co2eq_method_list = [] #[ 'myclimate', 'goclimate', 'ukgov' ]
 
     ## data base of all flight information associated to the 
     ## meeting self.flight_db[ ( mode, cabin ) ] [ country ] = flight
@@ -259,9 +267,9 @@ class Meeting:
     if ( mode, cabin ) in self.flight_db.keys():
       return None
     self.flight_db[ ( mode, cabin ) ] = {}    
-    country_list = self.df[ 'country' ].unique().tolist()
+#    country_list = self.df_attendee_list[ 'country' ].unique().tolist()
     t_start = time.time()
-    for country in country_list :
+    for country in self.country_list :
       flight = self.get_attendee_flight_obj( country,  cabin, mode ) 
       if not isinstance( flight, dict ): 
         raise ValueError( f"unexpected flight object for "\
@@ -269,7 +277,7 @@ class Meeting:
       self.flight_db[ ( mode, cabin ) ] [ country ] = flight
     t_stop = time.time()
     print( f"Building flight_db in {t_stop - t_start} sec" )
-    print( f"resolution time: {( t_stop - t_start ) / len( country_list ) } sec")
+    print( f"resolution time: {( t_stop - t_start ) / len( self.country_list ) } sec")
 
 
 
@@ -330,16 +338,26 @@ class Meeting:
       kw[ split_seg[ 0 ] ] = split_seg[ 1 ]
     return kw
 
-  def json_file_name( self, name, mode, cluster_key, co2eq_method=None, cabin=None ):
+  def json_file_name( self, name, mode, cluster_key=None, co2eq_method=None, cabin=None ):
     if mode == 'attendee' : 
       if co2eq_method is not None and cabin is not None :
         raise ValueError( f"with mode 'attendee', co2eq_method"\
                 f" and cabin MUST be None. Got {locals()}" ) 
-      data_file = self.kwargs_to_str( name=name, mode=mode, cluster_key=cluster_key )
-    else: 
-      data_file = self.kwargs_to_str( name=name, mode=mode, cluster_key=cluster_key,\
-        co2eq_method=co2eq_method, cabin=cabin)
+    f_kwargs = { } 
+##    print( locals() )
+    for k in list( locals().keys() ):
+      if k in [ 'self', 'ext', 'f_kwargs' ]:
+        continue
+      if locals()[ k ] is not None:
+        f_kwargs[ k] = locals()[ k ]
+    data_file = self.kwargs_to_str( **f_kwargs )
     return os.path.join( self.output_dir, data_file + ".json")
+
+# data_file = self.kwargs_to_str( name=name, mode=mode, cluster_key=cluster_key )
+#    else: 
+#      data_file = self.kwargs_to_str( name=name, mode=mode, cluster_key=cluster_key,\
+#        co2eq_method=co2eq_method, cabin=cabin)
+#    return os.path.join( self.output_dir, data_file + ".json")
 
   def image_file_name( self, name, ext, mode, cabin=None, cluster_key=None, co2eq_method=None ):
     """ return an image file name
@@ -363,7 +381,7 @@ class Meeting:
 
 
 
-  def build_data( self, mode='flight', cluster_key='country', co2eq_method=None, cabin=None ) -> dict :
+  def build_data( self, mode='flight', cabin=None ) -> dict :
     """ co2 equivalent based on real flights including multiple segments)
 
     The possible modes are 'attendee', 'flight', 'distance'. 
@@ -376,64 +394,78 @@ class Meeting:
       * we are doing now a lot of measurements and each time we retrieves
         the flights. We need to be able to comput ea attendee_flight_list once. 
     """
+    ## return the df in cache is present
+    if ( mode, cabin )  in self.df_data.keys():
+      return self.df_data[ ( mode, cabin ) ]
 
     ## read from json if already computed
     ## commenting to force the generation of the pd
     if mode == 'attendee':
-      data_file = self.json_file_name( 'data', mode, cluster_key )
-      co2eq_method = None
+      data_file = self.json_file_name( 'data', mode )
+      cluster_key_list = self.cluster_key_list[:]
+      cluster_key_list.remove( 'co2eq' )
       cabin = None 
     else: 
-      if co2eq_method is None: 
-        co2eq_method = 'myclimate'
-      if co2eq_method is None: 
+      if cabin is None: 
         cabin = 'AVERAGE'
-      data_file = self.json_file_name( 'data', mode, cluster_key, \
-            co2eq_method=co2eq_method, cabin=cabin )  
-      
+      data_file = self.json_file_name( 'data', mode, cabin=cabin ) 
+
     if data_file is True: 
-      return pd.read_json( data_file )
+      self.df_data[ ( mode, cabin ) ] =  pd.read_json( data_file )
+      return self.df_data[ ( mode, cabin ) ]
+
+    ## building the data 
+    df = pd.read_json( self.attendee_list )
 
     ## 1. preparing flights information
     if mode in [ 'flight', 'distance' ] :
       self.build_flight_db( mode, cabin )
-    elif mode == 'attendee' and cluster_key == 'segment_nbr':
+    elif mode == 'attendee' : # needed for 'segment_nbr'
       self.build_flight_db( 'flight', 'AVERAGE' )
     
-    ## 2.a. preparing attende based values based on cluster values cluster_key and mode
-    if cluster_key == 'segment_nbr' :
-      if mode == 'attendee' :
-        ## to compute segment numbers, we use the cabin set to AVERAGE   
-        self.df[ 'segment_nbr' ] = self.df.apply( lambda x: self.get_attendee_seg_nbr( mode, 'AVERAGE', x['country'] ), axis=1)
-      else: 
-        self.df[ 'segment_nbr' ] = self.df.apply( lambda x: self.get_attendee_seg_nbr( mode, cabin, x['country'] ), axis=1)
+    ## 2.a. Filling all values associated to cluster_key 
+    for cluster_key in self.cluster_key_list :
+      if cluster_key == 'segment_nbr' :
+        if mode == 'attendee' :
+          ## to compute segment numbers, we use the cabin set to AVERAGE   
+          df[ 'segment_nbr' ] = df.apply( lambda x: self.get_attendee_seg_nbr( mode, 'AVERAGE', x['country'] ), axis=1)
+        else: 
+          df[ 'segment_nbr' ] = df.apply( lambda x: self.get_attendee_seg_nbr( mode, cabin, x['country'] ), axis=1)
 
-    elif cluster_key == 'subregion' :
-      self.df[ 'subregion' ] = self.df.apply( lambda x: self.get_attendee_subregion( x['country'] ), axis=1 )
-    elif cluster_key == 'region' :
-      self.df[ 'region' ] = self.df.apply( lambda x: self.get_attendee_region( x['country'] ), axis=1 )
-    
-    ## 2.b computing co2eq / distance based on mode 
-    if mode in [ 'flight', 'distance' ]:
-      self.df[ co2eq_method ] = self.df.apply( lambda x: self.get_attendee_co2eq( mode, cabin, x['country'], co2eq_method) , axis=1)
-      ## computing total_co2eq
-      k = ( mode, cabin, co2eq_method )
-      if k not in self.total_co2eq.keys() :
-        self.total_co2eq[ k ]  = self.df[ co2eq_method ].sum()
-      ## we ensure total_map_distance is computed.
-      if self.total_map_distance is None:
-        self.df[ "map_distance" ] = self.df.apply( lambda x: self.get_attendee_map_distance( mode, cabin, x[ 'country' ] ) , axis=1)
-        self.total_map_distance = self.df[ "map_distance" ].sum()
+      elif cluster_key == 'subregion' :
+        df[ 'subregion' ] = df.apply( lambda x: self.get_attendee_subregion( x['country'] ), axis=1 )
+      elif cluster_key == 'region' :
+        df[ 'region' ] = df.apply( lambda x: self.get_attendee_region( x['country'] ), axis=1 )
+      elif cluster_key == 'co2eq' : 
+        if mode not in [ 'flight', 'distance' ] or self.co2eq_method_list == []:
+          continue
+        for co2eq_method in self.co2eq_method_list: 
+          df[ co2eq_method ] = df.apply( lambda x: self.get_attendee_co2eq( mode, cabin, x['country'], co2eq_method) , axis=1)
+          ## computing total_co2eq
+          k = ( mode, cabin, co2eq_method )
+          if k not in self.total_co2eq.keys() :
+            self.total_co2eq[ k ]  = df[ co2eq_method ].sum()
+        ## we ensure total_map_distance is computed.
+        if self.total_map_distance is None:
+          df[ "map_distance" ] = df.apply( lambda x: self.get_attendee_map_distance( mode, cabin, x[ 'country' ] ) , axis=1)
+          self.total_map_distance = df[ "map_distance" ].sum()
+
+    df.to_json( data_file )
+    self.df_data[ ( mode, cabin ) ] =  df
+    return df
+
+
+
 
 
     ## Extraction of the data should be performed in each function.  
     ## 3. extracting the data to be plot        
     if mode == 'attendee':
       ## group by country, take the 'country' colum  and count elements
-      df = self.df.groupby( by=[ cluster_key ], sort=False )[ cluster_key ].count()
+      df = self.df_attendee_list.groupby( by=[ cluster_key ], sort=False )[ cluster_key ].count()
     elif mode in [ 'flight', 'distance' ]:
-      df = self.df.groupby( by=[ cluster_key ], sort=False )[ co2eq_method ].sum()
-#      df = self.df.groupby( by=[ f"co2eq-{co2eq_method}", cluster_key ], sort=False ).sum().unstack()
+      df = self.df_attendee_list.groupby( by=[ cluster_key ], sort=False )[ co2eq_method ].sum()
+#      df = self.df_attendee_list.groupby( by=[ f"co2eq-{co2eq_method}", cluster_key ], sort=False ).sum().unstack()
 
     df.to_json( data_file )
     return df
@@ -463,6 +495,8 @@ class Meeting:
     ## https://plotly.com/python/wide-form/
     subfig_list = []
     for cluster_key in self.cluster_key_list :
+      if cluster_key == 'co2eq' :
+        continue
       col_cluster_key = []  ## legend
       col_co2eq_method = [] ## column title
       col_co2eq = []      ## y values
@@ -471,8 +505,10 @@ class Meeting:
         ## we need here to take (on-site, cluster_key ) to only plot the 
         ## EfFFECTIVE CO2 that is only considering the on-site participants.
         ## when 'presence' is selected it is unchanged.
-        d = self.build_data( mode=mode, cluster_key=cluster_key,\
-                co2eq_method=co2eq_method, cabin=cabin )
+        #d = self.build_data( mode=mode, cluster_key=cluster_key,\
+        ##        co2eq_method=co2eq_method, cabin=cabin )
+        d = self.build_data( mode=mode, cabin=cabin )
+        d = d.groupby( by=[ cluster_key ], sort=False )[ co2eq_method ].sum()
         ## --- d: 
         ## segment_nbr
         ## 6    5640.573951
@@ -540,6 +576,8 @@ class Meeting:
     stdev = statistics.stdev( co2eq_list ) 
     m = min ( co2eq_list)
     M = max( co2eq_list )
+    print( f"total_map_distance : {self.total_map_distance}" )
+    print( f"total_attendee_nbr: {self.total_attendee_nbr}" )
     epppkm = av / self.total_map_distance / self.total_attendee_nbr 
     title = f"{self.name} Distribution of CO2eq emissions for {mode} mode, cabin {cabin} - {self.total_attendee_nbr} attendees<br>"\
             f"   - Co2eq -- mean: {self.kg( av )},  min: {self.kg( m )}, max: {self.kg( M )}, std: {self.kg( stdev )}<br>"\
@@ -562,7 +600,7 @@ class Meeting:
     engFormat = matplotlib.ticker.EngFormatter(unit='g',places=2,sep='')
     return engFormat( 1000 * number )
 
-  def plot_attendees_distribution( self, debug=False ): 
+  def plot_attendees_distribution( self, debug=True ): 
     """plots the distribution of the attendees 
 
     We use the stacked histogram to represent the distribution 
@@ -582,6 +620,9 @@ class Meeting:
 
     subfig_list = []
     for cluster_key in self.cluster_key_list :
+      print( f" --- plot_attendees_distribution -- {cluster_key}" )
+      if cluster_key == 'co2eq' :
+        continue
       ## d is expected to have the following format  
       ##  --- : d: <class 'pandas.core.series.Series'>
       ## country
@@ -596,7 +637,10 @@ class Meeting:
       ## d.index: Index(['KG', 'IN', 'MX', 'CZ', 'MO', 'DZ'], dtype='object', name='country')
       ## d.index.name: country
       ## d.index.values: ['KG' 'IN' 'MX' 'CZ' 'MO' 'DZ']
-      d = self.build_data( mode='attendee', cluster_key=cluster_key )
+#      d = self.build_data( mode='attendee', cluster_key=cluster_key )
+      d = self.build_data( mode='attendee' )
+      d = d.groupby( by=[ cluster_key ], sort=False )[ cluster_key ].count()
+
       if debug is True:
         print( f"--- : d: {type(d)}" )
         print( d )
