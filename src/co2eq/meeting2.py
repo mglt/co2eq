@@ -458,17 +458,17 @@ class Meeting:
 
 
 
-    ## Extraction of the data should be performed in each function.  
-    ## 3. extracting the data to be plot        
-    if mode == 'attendee':
-      ## group by country, take the 'country' colum  and count elements
-      df = self.df_attendee_list.groupby( by=[ cluster_key ], sort=False )[ cluster_key ].count()
-    elif mode in [ 'flight', 'distance' ]:
-      df = self.df_attendee_list.groupby( by=[ cluster_key ], sort=False )[ co2eq_method ].sum()
-#      df = self.df_attendee_list.groupby( by=[ f"co2eq-{co2eq_method}", cluster_key ], sort=False ).sum().unstack()
-
-    df.to_json( data_file )
-    return df
+##    ## Extraction of the data should be performed in each function.  
+##    ## 3. extracting the data to be plot        
+##    if mode == 'attendee':
+##      ## group by country, take the 'country' colum  and count elements
+##      df = self.df_attendee_list.groupby( by=[ cluster_key ], sort=False )[ cluster_key ].count()
+##    elif mode in [ 'flight', 'distance' ]:
+##      df = self.df_attendee_list.groupby( by=[ cluster_key ], sort=False )[ co2eq_method ].sum()
+###      df = self.df_attendee_list.groupby( by=[ f"co2eq-{co2eq_method}", cluster_key ], sort=False ).sum().unstack()
+##
+##    df.to_json( data_file )
+##    return df
     
 ###plot:
 ###    basic stacked histogram:
@@ -494,21 +494,71 @@ class Meeting:
     """
     ## https://plotly.com/python/wide-form/
     subfig_list = []
+
     for cluster_key in self.cluster_key_list :
-      if cluster_key == 'co2eq' :
+      if cluster_key in [ 'co2eq', 'presence' ] :
         continue
       col_cluster_key = []  ## legend
       col_co2eq_method = [] ## column title
       col_co2eq = []      ## y values
-      
+ 
+##      https://keytodatascience.com/groupby-pandas-python
+      agg_dict = {}
+      for co2eq_method in self.co2eq_method_list :
+        agg_dict[ co2eq_method ] = 'sum' 
+      ddd = self.build_data( mode=mode, cabin=cabin )
+      ddd = ddd[ ddd.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
+##       -------- ddddd reduced :
+##    region   myclimate  goclimate       ukgov
+## 0  Europe     0.00000        0.0    0.000000
+## 1  Africa  1074.50987     1600.0  762.125942
+      # we want to pivot.
+      print( ddd )
+      print( f"index: {ddd.index}" )
+      print( f"head: {ddd.info}" )
+      print( f"columns: {ddd.columns}")
+      print( f"--------update index : " )
+      ddd = ddd.set_index( cluster_key )
+      print( ddd )
+      print( f"index: {ddd.index}" )
+      print( f"head: {ddd.info}" )
+      print( f"columns: {ddd.columns}")
+      print( f"--------After transpose : " )
+      ddd = ddd.transpose()
+      print( ddd )
+      print( f"index: {ddd.index}" )
+      print( f"head: {ddd.info}" )
+      print( f"columns: {ddd.columns}")
+      print( "--------adjustment" )
+#      ddd.columns.values[ 0 ] = 'co2eq_m'
+#      ddd = ddd.set_index( cluster_key )
+#      ddd.columns = [ cluster_key ].extend( ddd.columns[ 1 : ] )
+#      print( ddd )
+      ## this the wide format
+#      print( f"d.name: {d.name}" )
+      print( f"ddd.index: {ddd.index}" )
+      print( f"head: {ddd.info}" )
+      print( f"columns: {ddd.columns}")
+      ## the resulting transpose ends up in the index columns being named
+      ## cluster_key and the column with the co2eq_method being named index. 
+      subfig = px.bar(ddd, x=ddd.index,  y=ddd.columns, 
+              ##color=d.index.name,\
+              # text=d.index.name, 
+              title=cluster_key,  
+              labels={"co2eq": "CO2eq (Kg)", "co2eq": "CO2eq Estimation Method" } )
+      subfig_list.append( subfig )
+      ## the result corresponds to the wide format
+      ## https://plotly.com/python/wide-form/
+      ## 
+      ## plotting distribution of the effective CO2eq
       for co2eq_method in self.co2eq_method_list :
         ## we need here to take (on-site, cluster_key ) to only plot the 
-        ## EfFFECTIVE CO2 that is only considering the on-site participants.
+        ## EFFECTIVE CO2 that is only considering the on-site participants.
         ## when 'presence' is selected it is unchanged.
         #d = self.build_data( mode=mode, cluster_key=cluster_key,\
         ##        co2eq_method=co2eq_method, cabin=cabin )
         d = self.build_data( mode=mode, cabin=cabin )
-        d = d.groupby( by=[ cluster_key ], sort=False )[ co2eq_method ].sum()
+        ## d = d[ d.presence == 'on-site' ].groupby( by=[ cluster_key ], sort=False )[ co2eq_method ].sum()
         ## --- d: 
         ## segment_nbr
         ## 6    5640.573951
@@ -519,12 +569,21 @@ class Meeting:
         ## d.index: Index([6, 5, 0], dtype='int64', name='segment_nbr')
         ## d.index.name: segment_nbr
         ## d.index.values: [6 5 0]
-        print( f"--- d: " )
+        print( f"--- d {co2eq_method}: " )
         print( d )
-        print( f"d.name: {d.name}" )
+#        print( f"d.name: {d.name}" )
         print( f"d.index: {d.index}" )
         print( f"d.index.name: {d.index.name}" )
         print( f"d.index.values: {d.index.values}" )
+## WORKING VERSION
+#        d_test = d.copy( )
+        d = d[ d.presence == 'on-site' ].groupby( by=[ cluster_key ], sort=False )[ co2eq_method ].sum()
+        print( f"--- d {co2eq_method}: " )
+        print( d )
+#        print( f"d.name: {d.name}" )
+        print( f"d.index: {d.index}" )
+        print( f"d.index.name: {d.index.name}" )
+
 
         ## convertion to string is done to ensure legend 
         ## is considered the same way in all subplots.
@@ -562,11 +621,17 @@ class Meeting:
         print( f"df.columns.name: {df.columns.name}" )
         print( f"df.columns.values: {df.columns.values}" )
         print( f"df.index: {df.index}" )
+      print( f"-------- ddddd reduced : " )
+      print( ddd )
+#      print( f"d.name: {d.name}" )
+      print( f"ddd.index: {ddd.index}" )
+      print( f"ddd.index.name: {ddd.index.name}" )
+      print( f"ddd.index.values: {ddd.index.values}" )
       subfig = px.bar(df, x=col_co2eq_method, y="co2eq", color=d.index.name,\
               # text=d.index.name, 
               title=cluster_key,  
               labels={"co2eq": "CO2eq (Kg)", "co2eq": "CO2eq Estimation Method" } )
-      subfig_list.append( subfig )
+#      subfig_list.append( subfig )
 
     ## title
     co2eq_list = []
@@ -686,8 +751,8 @@ class Meeting:
  
   def plot_distribution( self, mode_list=[ 'attendee', 'flight'], cabine_list=[ 'AVERAGE' ] ):
 
-    if 'attendee' in mode_list:   
-      self.plot_attendees_distribution( ) 
+#    if 'attendee' in mode_list:   
+#      self.plot_attendees_distribution( ) 
 
     mode_list.remove( 'attendee' )
     for mode in mode_list:
