@@ -110,21 +110,26 @@ class Meeting:
     df = pd.read_json( attendee_list )
     ## to build flightDB
     self.country_list = df[ 'country' ].unique().tolist()
-    self.total_attendee_nbr = len( df )
+ #   self.total_attendee_nbr = len( df )
     self.cluster_key_list = list( df )
     self.cluster_key_list.extend( ['segment_nbr', 'subregion', 'region', 'co2eq' ] )
+    ## ensure 'presence' is in the first position 
+    if 'presence' in self.cluster_key_list:
+      self.cluster_key_list.remove( 'presence' )
+      self.cluster_key_list.insert( 0, 'presence' )
     self.co2eq_method_list = [ 'myclimate', 'goclimate', 'ukgov' ]
 
     ## DataFrame
-    self.df_data = {} 
+    self.df_data = {}
+    self.info = {}
     ### built variables
     ##    self.total_attendee_nbr = None
     ## total_map distance to represent the effectice 
     ## traveled distance between the two end points.
     ## this is different from the flying distance.
-    self.total_map_distance = None
+#    self.total_map_distance = None
     ## self.total_co2eq = { ( mode, cabin, co2eq_method ) : co2eq_value }
-    self.total_co2eq = {}
+#    self.total_co2eq = {}
 #    self.cluster_key_list = [] # list( self.df_attendee_list )
     # self.cluster_key_list.extend( ['segment_nbr', 'subregion', 'region', 'co2eq' ] )
 #    self.co2eq_method_list = [] #[ 'myclimate', 'goclimate', 'ukgov' ]
@@ -381,6 +386,35 @@ class Meeting:
 
 
 
+  def df_to_co2eq_info( self, df ):
+    print( "--- df" )
+    print( df.info )
+    map_distance = df[ "map_distance" ].sum() 
+    attendee_nbr  = len( df )
+    co2eq = {}
+    for co2eq_method in self.co2eq_method_list :
+      co2eq[ co2eq_method ] = df[ co2eq_method ].sum()    
+    co2eq_list = co2eq.values()
+#    for m in self.co2eq_method_list:
+#      co2eq_list.append( self.co2eq[ ( mode, cabin, m ) ] )
+    co2eq[ 'average' ] = statistics.mean( co2eq_list )
+    co2eq[ 'stdev' ] = statistics.stdev( co2eq_list ) 
+    co2eq[ 'min' ]  = min ( co2eq_list)
+    co2eq[ 'max' ]  = max( co2eq_list )
+#    print( f"total_map_distance : {self.total_map_distance}" )
+#    print( f"total_attendee_nbr: {self.total_attendee_nbr}" )
+    co2eq[ 'epppkm' ] = co2eq[ 'average' ] / map_distance / attendee_nbr
+#    title = f"{self.name} Distribution of CO2eq emissions for {mode} mode, cabin {cabin} "\
+#            f"- {self.info[ 'total_attendee_nbr' ]} attendees<br>"\
+#            f"   - Co2eq -- mean: {self.kg( self.info[ 'total_co2eq' ][ 'average' ] )}, "\
+#            f"min: {self.kg( self.info[ 'totalm )}, max: {self.kg( M )}, std: {self.kg( stdev )}<br>"\
+#            f"   - Co2eq per passenger Km: {self.kg( epppkm )}/p/km <br>"\
+    return { 'map_distance' : map_distance, 
+             'attendee_nbr' : attendee_nbr,
+             'co2eq' : co2eq }
+
+
+
   def build_data( self, mode='flight', cabin=None ) -> dict :
     """ co2 equivalent based on real flights including multiple segments)
 
@@ -441,21 +475,49 @@ class Meeting:
           continue
         for co2eq_method in self.co2eq_method_list: 
           df[ co2eq_method ] = df.apply( lambda x: self.get_attendee_co2eq( mode, cabin, x['country'], co2eq_method) , axis=1)
-          ## computing total_co2eq
-          k = ( mode, cabin, co2eq_method )
-          if k not in self.total_co2eq.keys() :
-            self.total_co2eq[ k ]  = df[ co2eq_method ].sum()
+#          ## computing total_co2eq
+#          k = ( mode, cabin, co2eq_method )
+#          if k not in self.total_co2eq.keys() :
+#            self.total_co2eq[ k ]  = df[ co2eq_method ].sum()
         ## we ensure total_map_distance is computed.
-        if self.total_map_distance is None:
+        if 'total_map_distance' not in self.info.keys() :
           df[ "map_distance" ] = df.apply( lambda x: self.get_attendee_map_distance( mode, cabin, x[ 'country' ] ) , axis=1)
-          self.total_map_distance = df[ "map_distance" ].sum()
+#          self.total_map_distance = df[ "map_distance" ].sum()
 
     df.to_json( data_file )
     self.df_data[ ( mode, cabin ) ] =  df
+    
+    ## building information
+##    map_distance = df[ "map_distance" ].sum() 
+##    attendee_nbr  = len( df )
+##    total_co2eq = {}
+##    for m in self.co2eq_method_list :
+##      total_co2eq[ co2eq_method ] = df[ co2eq_method ].sum()    
+##    total_co2eq_list = total_co2eq.values()
+###    for m in self.co2eq_method_list:
+###      co2eq_list.append( self.total_co2eq[ ( mode, cabin, m ) ] )
+##    total_co2eq[ 'average' ] = statistics.mean( total_co2eq_list )
+##    total_co2eq[ 'stdev' ] = statistics.stdev( total_co2eq_list ) 
+##    total_co2eq[ 'min' ]  = min ( total_co2eq_list)
+##    total_co2eq[ 'max' ]  = max( total_co2eq_list )
+###    print( f"total_map_distance : {self.total_map_distance}" )
+###    print( f"total_attendee_nbr: {self.total_attendee_nbr}" )
+##    total_co2eq[ 'epppkm' ] = total_co2eq[ 'average' ] / self.info[ 'total_map_distance' ] / self.info[ 'total_attendee_nbr' ] 
+###    title = f"{self.name} Distribution of CO2eq emissions for {mode} mode, cabin {cabin} "\
+###            f"- {self.info[ 'total_attendee_nbr' ]} attendees<br>"\
+###            f"   - Co2eq -- mean: {self.kg( self.info[ 'total_co2eq' ][ 'average' ] )}, "\
+###            f"min: {self.kg( self.info[ 'totalm )}, max: {self.kg( M )}, std: {self.kg( stdev )}<br>"\
+###            f"   - Co2eq per passenger Km: {self.kg( epppkm )}/p/km <br>"\
+##    self.info[ ( mode, cabin ) ] = { 'total' : { 'map_distance' : map_distance, 
+##                                                 'attendee_nbr' : attendee_nbr,
+##                                                 'co2eq' : total_co2eq }
+    if mode in [ 'flight', 'distance' ]:
+      self.info[ ( mode, cabin ) ] = { 'total' : self.df_to_co2eq_info( df ) } 
+      if 'presence' in self.cluster_key_list :
+        self.info[ ( mode, cabin ) ][ 'on_site' ] = self.df_to_co2eq_info( df[ df.presence == 'on-site' ] )
+        self.info[ ( mode, cabin ) ][ 'non_on_site' ] = self.df_to_co2eq_info( df[ df.presence != 'on-site' ] )
+
     return df
-
-
-
 
 
 ##    ## Extraction of the data should be performed in each function.  
@@ -483,178 +545,90 @@ class Meeting:
 ### https://plotly.com/python/pandas-backend/
 ### https://www.shanelynn.ie/bar-plots-in-python-using-pandas-dataframes/
 
+  
 
-  def plot_co2eq_distribution( self, mode, cabin, debug=True ):
-    """ plots the distribution of the estimated CO2eq
+  def plot_co2eq_distribution( self, mode, cabin, on_site=True):
+    """ plots the distribution of CO2eq according to cluster_key
 
-    For each cluster_key (country, subregion, region) the 
-    CO2eq is plot for each CO2eq estimation method.  
-
+    CO2eq distribution is plot against each cluster_key (presence,
+    country, subregion, region, ...).  
     
+    When 'presence' is provided as a cluster_key two kinds of
+    graphs are generated:
+      - 1. a CO2eq distribution for EFFECTIVE CO2 emissions that
+        is associated to participants that are 'on-ste'
+      - 2. a CO2eq distribution for participants that are not 
+        'on-site'. This represents a sort of OFFSET.
+    
+    Note that for both 1. and 2. the CO2eq distribution between 
+    'on-site' and non 'on-site' participant is provided.
+
     """
+    df = self.build_data( mode=mode, cabin=cabin )
+
+    ## check 'co2eq is a cluster_key and if so handle it properly, 
+    ## that is considering all other cluster_keys.
+    cluster_key_list = self.cluster_key_list[ : ]
+    cluster_key_list.remove( 'co2eq' )
+    
     ## https://plotly.com/python/wide-form/
+    ## https://keytodatascience.com/groupby-pandas-python
     subfig_list = []
 
-    for cluster_key in self.cluster_key_list :
-      if cluster_key in [ 'co2eq', 'presence' ] :
-        continue
-      col_cluster_key = []  ## legend
-      col_co2eq_method = [] ## column title
-      col_co2eq = []      ## y values
- 
-##      https://keytodatascience.com/groupby-pandas-python
-      agg_dict = {}
-      for co2eq_method in self.co2eq_method_list :
-        agg_dict[ co2eq_method ] = 'sum' 
-      ddd = self.build_data( mode=mode, cabin=cabin )
-      ddd = ddd[ ddd.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
-##       -------- ddddd reduced :
-##    region   myclimate  goclimate       ukgov
-## 0  Europe     0.00000        0.0    0.000000
-## 1  Africa  1074.50987     1600.0  762.125942
-      # we want to pivot.
-      print( ddd )
-      print( f"index: {ddd.index}" )
-      print( f"head: {ddd.info}" )
-      print( f"columns: {ddd.columns}")
-      print( f"--------update index : " )
-      ddd = ddd.set_index( cluster_key )
-      print( ddd )
-      print( f"index: {ddd.index}" )
-      print( f"head: {ddd.info}" )
-      print( f"columns: {ddd.columns}")
-      print( f"--------After transpose : " )
-      ddd = ddd.transpose()
-      print( ddd )
-      print( f"index: {ddd.index}" )
-      print( f"head: {ddd.info}" )
-      print( f"columns: {ddd.columns}")
-      print( "--------adjustment" )
-#      ddd.columns.values[ 0 ] = 'co2eq_m'
-#      ddd = ddd.set_index( cluster_key )
-#      ddd.columns = [ cluster_key ].extend( ddd.columns[ 1 : ] )
-#      print( ddd )
-      ## this the wide format
-#      print( f"d.name: {d.name}" )
-      print( f"ddd.index: {ddd.index}" )
-      print( f"head: {ddd.info}" )
-      print( f"columns: {ddd.columns}")
-      ## the resulting transpose ends up in the index columns being named
-      ## cluster_key and the column with the co2eq_method being named index. 
-      subfig = px.bar(ddd, x=ddd.index,  y=ddd.columns, 
+    ## defining how aggregation is performed. In our case
+    ## aggregation is performed simultaneously for every 
+    ## co2eq_methods
+    agg_dict = {}
+    for co2eq_method in self.co2eq_method_list :
+      agg_dict[ co2eq_method ] = 'sum'
+
+    for cluster_key in cluster_key_list :
+      ## with cluster_key set to presence, we plot the CO2eq 
+      ## associated to the presence, which includes remote,
+      ## not arrived and on-site
+      if cluster_key in [ 'presence' ] :
+        sub_df = df.groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
+      ## for other cluster_key we only focus on the CO2 associated to 
+      ## on-site participants'
+      else:
+        if 'presence' in df.columns :
+          if on_site is True:   
+            sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
+          else:
+            sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
+        else:
+          sub_df = df.groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
+
+      sub_df = sub_df.set_index( cluster_key ).transpose()
+
+      subfig = px.bar(sub_df, x=sub_df.index,  y=sub_df.columns, 
               ##color=d.index.name,\
               # text=d.index.name, 
               title=cluster_key,  
               labels={"co2eq": "CO2eq (Kg)", "co2eq": "CO2eq Estimation Method" } )
       subfig_list.append( subfig )
-      ## the result corresponds to the wide format
-      ## https://plotly.com/python/wide-form/
-      ## 
-      ## plotting distribution of the effective CO2eq
-      for co2eq_method in self.co2eq_method_list :
-        ## we need here to take (on-site, cluster_key ) to only plot the 
-        ## EFFECTIVE CO2 that is only considering the on-site participants.
-        ## when 'presence' is selected it is unchanged.
-        #d = self.build_data( mode=mode, cluster_key=cluster_key,\
-        ##        co2eq_method=co2eq_method, cabin=cabin )
-        d = self.build_data( mode=mode, cabin=cabin )
-        ## d = d[ d.presence == 'on-site' ].groupby( by=[ cluster_key ], sort=False )[ co2eq_method ].sum()
-        ## --- d: 
-        ## segment_nbr
-        ## 6    5640.573951
-        ## 5    5092.001108
-        ## 0       0.000000
-        ## Name: ukgov, dtype: float64
-        ## d.name: ukgov
-        ## d.index: Index([6, 5, 0], dtype='int64', name='segment_nbr')
-        ## d.index.name: segment_nbr
-        ## d.index.values: [6 5 0]
-        print( f"--- d {co2eq_method}: " )
-        print( d )
-#        print( f"d.name: {d.name}" )
-        print( f"d.index: {d.index}" )
-        print( f"d.index.name: {d.index.name}" )
-        print( f"d.index.values: {d.index.values}" )
-## WORKING VERSION
-#        d_test = d.copy( )
-        d = d[ d.presence == 'on-site' ].groupby( by=[ cluster_key ], sort=False )[ co2eq_method ].sum()
-        print( f"--- d {co2eq_method}: " )
-        print( d )
-#        print( f"d.name: {d.name}" )
-        print( f"d.index: {d.index}" )
-        print( f"d.index.name: {d.index.name}" )
 
 
-        ## convertion to string is done to ensure legend 
-        ## is considered the same way in all subplots.
-        if d.index.dtype == 'int64':
-          cluster_key_values = [ str(i) for i in d.index.values ]
-        else: 
-          cluster_key_values = d.index.values
-        col_cluster_key.extend( cluster_key_values )
-        col_co2eq_method.extend(  [ d.name for i in d.index.values ] )
-        col_co2eq.extend( d.to_list() )
-      df = pd.DataFrame( { d.index.name : col_cluster_key, 
-                              'co2eq_method' : col_co2eq_method, 
-                              'co2eq' : col_co2eq } )
-      ##    segment_nbr co2eq_method        co2eq
-      ## 0            6    myclimate  6639.928899
-      ## 1            5    myclimate  5538.633329
-      ## 2            0    myclimate     0.000000
-      ## 3            6    goclimate  8600.000000
-      ## 4            5    goclimate  7100.000000
-      ## 5            0    goclimate     0.000000
-      ## 6            6        ukgov  5640.573951
-      ## 7            5        ukgov  5092.001108
-      ## 8            0        ukgov     0.000000
-      ## 
-      ## df.head: <bound method NDFrame.head of    segment_nbr co2eq_method        co2eq
-      ## df.columns: Index(['segment_nbr', 'co2eq_method', 'co2eq'], dtype='object')
-      ## df.columns.name: None
-      ## df.columns.values: ['segment_nbr' 'co2eq_method' 'co2eq']
-      ## df.index: RangeIndex(start=0, stop=9, step=1)
-      if debug is True:
-        print( f"--- df: " )
-        print( df )
-        print( f"\ndf.head: {df.head}" )
-        print( f"df.columns: {df.columns}" )
-        print( f"df.columns.name: {df.columns.name}" )
-        print( f"df.columns.values: {df.columns.values}" )
-        print( f"df.index: {df.index}" )
-      print( f"-------- ddddd reduced : " )
-      print( ddd )
-#      print( f"d.name: {d.name}" )
-      print( f"ddd.index: {ddd.index}" )
-      print( f"ddd.index.name: {ddd.index.name}" )
-      print( f"ddd.index.values: {ddd.index.values}" )
-      subfig = px.bar(df, x=col_co2eq_method, y="co2eq", color=d.index.name,\
-              # text=d.index.name, 
-              title=cluster_key,  
-              labels={"co2eq": "CO2eq (Kg)", "co2eq": "CO2eq Estimation Method" } )
-#      subfig_list.append( subfig )
-
-    ## title
-    co2eq_list = []
-    for m in self.co2eq_method_list:
-      co2eq_list.append( self.total_co2eq[ ( mode, cabin, m ) ] )
-    av = statistics.mean( co2eq_list )
-    stdev = statistics.stdev( co2eq_list ) 
-    m = min ( co2eq_list)
-    M = max( co2eq_list )
-    print( f"total_map_distance : {self.total_map_distance}" )
-    print( f"total_attendee_nbr: {self.total_attendee_nbr}" )
-    epppkm = av / self.total_map_distance / self.total_attendee_nbr 
-    title = f"{self.name} Distribution of CO2eq emissions for {mode} mode, cabin {cabin} - {self.total_attendee_nbr} attendees<br>"\
-            f"   - Co2eq -- mean: {self.kg( av )},  min: {self.kg( m )}, max: {self.kg( M )}, std: {self.kg( stdev )}<br>"\
-            f"   - Co2eq per passenger Km: {self.kg( epppkm )}/p/km <br>"\
+    if 'presence' in df.columns :
+      if on_site is True:
+        suffix = 'distribution-onsite'
+        title = f"{self.name} CO2eq Distribution of 'on-site' participants (Effective CO2eq)"
+      else:
+        suffix = 'distribution-not-onsite'
+        title = f"{self.name} CO2eq Distribution of non 'on-site' participants (~Offset CO2eq)"
+    else:
+        suffix = 'distribution'
+        title = "{self.name} CO2eq Distribution" 
+    html_file_name = self.image_file_name( suffix, 'html', mode, cabin )
+    svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin )
 
     fig = co2eq.fig.OneRowSubfig( \
       subfig_list, 
       offset=1.32, 
-      subfig_title_list=self.cluster_key_list,
+      subfig_title_list=cluster_key_list,
       fig_title=title,
-      html_file_name=self.image_file_name( 'distribution', 'html', mode, cabin ), 
-      svg_file_name=self.image_file_name( 'distribution', 'svg', mode, cabin ) )
+      html_file_name=html_file_name, 
+      svg_file_name=svg_file_name )
     fig.fig.show()
 
   def kg( self, number) :
@@ -742,7 +716,7 @@ class Meeting:
       subfig_list, 
       offset=1.32, 
       subfig_title_list=self.cluster_key_list,
-      fig_title=f"{self.name} Distributions of {self.total_attendee_nbr} Attendees",
+      fig_title=f"{self.name} Distributions of Attendees",
       html_file_name=self.image_file_name( 'distribution', 'html', 'attendee' ), 
       svg_file_name=self.image_file_name( 'distribution', 'svg', 'attendee' ) )
     fig.fig.show( )
@@ -751,13 +725,17 @@ class Meeting:
  
   def plot_distribution( self, mode_list=[ 'attendee', 'flight'], cabine_list=[ 'AVERAGE' ] ):
 
-#    if 'attendee' in mode_list:   
-#      self.plot_attendees_distribution( ) 
+    if 'attendee' in mode_list:   
+      self.plot_attendees_distribution( ) 
+      mode_list.remove( 'attendee' )
 
-    mode_list.remove( 'attendee' )
     for mode in mode_list:
        for cabin in cabine_list :  
-         self.plot_co2eq_distribution( mode, cabin )
+         if 'co2eq' not in self.cluster_key_list :
+           continue
+         self.plot_co2eq_distribution( mode, cabin, on_site=True )
+         if 'presence' in self.cluster_key_list:  
+           self.plot_co2eq_distribution( mode, cabin, on_site=False )
    
 
 ## x= companies, y=CO2eq [methods], 
