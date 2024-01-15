@@ -639,7 +639,89 @@ class Meeting:
     engFormat = matplotlib.ticker.EngFormatter(unit='g',places=2,sep='')
     return engFormat( 1000 * number )
 
-  def plot_attendees_distribution( self, debug=True ): 
+  def plot_attendees_distribution( self, on_site=None ): 
+    """ 
+    args:
+      on_site: defines the subset of the attendees. None True False
+    """
+
+    ## on_site is only considered when 'presence' is indicated. 
+    ## we coudl have set on_site to None, but this might result
+    ## in the same graph being re-computed 3 times
+    ## (on_site = True/False, None). So we prefer not computing 
+    ## the graph when incoherent parameters are provided. 
+    if 'presence' not in df.columns and on_site is not None:
+      return None
+
+    df = self.build_data( mode=attendee )
+
+    ## check 'co2eq is a cluster_key and if so handle it properly, 
+    ## that is considering all other cluster_keys.
+    cluster_key_list = self.cluster_key_list[ : ]
+    cluster_key_list.remove( 'co2eq' )
+    
+    ## https://plotly.com/python/wide-form/
+    ## https://keytodatascience.com/groupby-pandas-python
+    subfig_list = []
+
+#    ## defining how aggregation is performed. In our case
+#    ## aggregation is performed simultaneously for every 
+#    ## co2eq_methods
+#    agg_dict = {}
+#    for co2eq_method in self.co2eq_method_list :
+#      agg_dict[ co2eq_method ] = 'sum'
+
+    for cluster_key in cluster_key_list :
+      ## with cluster_key set to presence, we plot the number
+      ## of attendees. 
+      ## associated to the presence, which includes remote,
+      ## not arrived and on-site
+      if cluster_key in [ 'presence' ] :
+        sub_df = df.groupby( by=[ cluster_key, ], sort=False ).count().reset_index()
+      ## for other cluster_key we only focus on the CO2 associated to 
+      ## on-site participants'
+      else:
+        if on_site is True:   
+          sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).count().reset_index()
+        elif on_site is False:
+          sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).count().reset_index()
+        elif on_site is None:
+          sub_df = df.groupby( by=[ cluster_key, ], sort=False ).count().reset_index()
+        else:
+          raise ValueError( f"unexpected value for on_site: {on_site}"\
+                  f" on_site MUST be in True, False or None." )
+      sub_df = sub_df.set_index( cluster_key ).transpose()
+      subfig = px.bar(sub_df, x=sub_df.index,  y=sub_df.columns, 
+              ##color=d.index.name,\
+              # text=d.index.name, 
+              title=cluster_key,  
+              labels={"co2eq": "CO2eq (Kg)", "co2eq": "CO2eq Estimation Method" } )
+      subfig_list.append( subfig )
+
+
+    if on_site is True:
+      suffix = 'distribution-attendees-onsite'
+      title = f"{self.name} 'on-site' Attendee Distribution"
+    elif on_site is False:
+      suffix = 'distribution-attendees-not-onsite'
+      title = f"{self.name} non 'on-site' Attendees Distribution"
+    else:
+      suffix = 'distribution-attendee-all'
+      title = "{self.name} Attendee Distribution" 
+    html_file_name = self.image_file_name( suffix, 'html', mode, cabin )
+    svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin )
+
+    fig = co2eq.fig.OneRowSubfig( \
+      subfig_list, 
+      offset=1.32, 
+      subfig_title_list=cluster_key_list,
+      fig_title=title,
+      html_file_name=html_file_name, 
+      svg_file_name=svg_file_name )
+    fig.fig.show()
+
+
+  def plot_attendees_distribution_old( self, debug=True ): 
     """plots the distribution of the attendees 
 
     We use the stacked histogram to represent the distribution 
@@ -725,8 +807,12 @@ class Meeting:
  
   def plot_distribution( self, mode_list=[ 'attendee', 'flight'], cabine_list=[ 'AVERAGE' ] ):
 
-    if 'attendee' in mode_list:   
-      self.plot_attendees_distribution( ) 
+    if 'attendee' in mode_list: 
+      if 'presence' in self.cluster_key_list :  
+        for on_site in [ True, False ]:
+          self.plot_attendees_distribution( on_site=on_site) 
+      self.plot_attendees_distribution( on_site=None) 
+
       mode_list.remove( 'attendee' )
 
     for mode in mode_list:
