@@ -35,18 +35,31 @@ class OneRowSubfig:
   """
   def __init__( self, \
     subfig_list, \
-    offset=1.32, \
+    offset=None, \
     subfig_title_list=None, \
     fig_title="",\
     html_file_name=None, 
     svg_file_name=None, 
-    fig_height=600, fig_width=1500):
-    ## organization of the dimensions  
+    fig_height=600,
+    fig_width=None):
+    ## organization of the dimensions 
+    ## fig_width set to 1500 seems fine for 6 histograms with legends
+    ## 
     cols = len( subfig_list )
+    if fig_width is None:
+      fig_width = 1500 / 6 * cols
+    ## each columns is divided:
+    ## - 1/9 for the bar
+    ## - 8/9 for the legend
     n = 9 
     barwidth = 1 / ( n * cols ) 
     hspace = (n - 1) / ( n * cols )
-    offset = 1.32 * barwidth
+    ## offset is how much the legend is offsets to 
+    ## be alonside the bar. 
+    if offset is None:
+      offset = 1.32 * barwidth
+    else:
+      offset = offset * barwidth
 
     ## building legends
     legend_layout = {}
@@ -63,7 +76,6 @@ class OneRowSubfig:
         'x' :  offset + barwidth +  i * ( hspace + offset + barwidth ),
 #        'bgcolor' : "orange" # usefull to determine the offset
         }    
-
     ## building subfigure
     self.fig = plotly.subplots.make_subplots( rows=1, cols=cols, \
             subplot_titles= subfig_title_list,

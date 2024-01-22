@@ -11,6 +11,7 @@ import matplotlib
 import plotly.express as px
 import matplotlib.pyplot as plt
 import kaleido ## to be able to export
+import roman 
 
 import requests
 from math import ceil
@@ -364,7 +365,7 @@ class Meeting:
 #        co2eq_method=co2eq_method, cabin=cabin)
 #    return os.path.join( self.output_dir, data_file + ".json")
 
-  def image_file_name( self, name, ext, mode, cabin=None, cluster_key=None, co2eq_method=None ):
+  def image_file_name( self, name, ext, mode, cabin=None, cluster_key=None, co2eq_method=None, on_site=None ):
     """ return an image file name
    
     The intent is to ensure a certain format in the file names, as
@@ -515,7 +516,8 @@ class Meeting:
       self.info[ ( mode, cabin ) ] = { 'total' : self.df_to_co2eq_info( df ) } 
       if 'presence' in self.cluster_key_list :
         self.info[ ( mode, cabin ) ][ 'on_site' ] = self.df_to_co2eq_info( df[ df.presence == 'on-site' ] )
-        self.info[ ( mode, cabin ) ][ 'non_on_site' ] = self.df_to_co2eq_info( df[ df.presence != 'on-site' ] )
+##        self.info[ ( mode, cabin ) ][ 'non_on_site' ] = self.df_to_co2eq_info( df[ df.presence != 'on-site' ] )
+        self.info[ ( mode, cabin ) ][ 'remote' ] = self.df_to_co2eq_info( df[ df.presence == 'remote' ] )
 
     return df
 
@@ -547,11 +549,24 @@ class Meeting:
 
   
 
-  def plot_co2eq_distribution( self, mode, cabin, on_site=True):
+  def plot_co2eq_distribution( self, mode, cabin, on_site=None):
     """ plots the distribution of CO2eq according to cluster_key
 
     CO2eq distribution is plot against each cluster_key (presence,
-    country, subregion, region, ...).  
+    country, subregion, region, ...). 
+
+    Args:
+      - on_site: defines whether the distribution concerns 
+        attenedess that are 'on-site' (on_site set to True) 
+        or ('remote' and 'not-arrived') (on_site set to False) or
+        all attendees without any distinctions (on_site set to 
+        None). By default, on_site is set to None. Its value 
+        only makes sense when 'presence' is specified in df. 
+        When on_site is not set to None and 'presence' does 
+        not appear as a criteria, the function raises an error.
+        and does not generates any graph. We coudl have ignored
+        on_site and set it to None, but we want to avoid that a 
+        given draft is generated multiple times.  
     
     When 'presence' is provided as a cluster_key two kinds of
     graphs are generated:
@@ -561,10 +576,27 @@ class Meeting:
         'on-site'. This represents a sort of OFFSET.
     
     Note that for both 1. and 2. the CO2eq distribution between 
-    'on-site' and non 'on-site' participant is provided.
+    'on-site' and 'remote' participant is provided.
 
     """
+
     df = self.build_data( mode=mode, cabin=cabin )
+
+    
+    ## on_site is only considered when 'presence' is indicated. 
+    ## we coudl have set on_site to None, but this might result
+    ## in the same graph being re-computed 3 times
+    ## (on_site = True/False, None). So we prefer not computing 
+    ## the graph when incoherent parameters are provided. 
+    if on_site not in [ True, False, None ]:
+      raise ValueError( f"Unknown value {on_site} for on_site.\
+        Expecting True, False or None" ) 
+
+
+    if 'presence' not in df.columns and on_site is not None:
+      raise ValueError( f"on_site is specified to {on_site} but "\
+        f"'presence' is not specified in the data frame.\n"\
+        f"{df.info}\ndf.columns: {df.columns}" )
 
     ## check 'co2eq is a cluster_key and if so handle it properly, 
     ## that is considering all other cluster_keys.
@@ -585,46 +617,47 @@ class Meeting:
     for cluster_key in cluster_key_list :
       ## with cluster_key set to presence, we plot the CO2eq 
       ## associated to the presence, which includes remote,
-      ## not arrived and on-site
+      ## not arrived and on-site. 
+      ## This is a special case, so we can position each sub
+      ## distribution to the more global picture.  
       if cluster_key in [ 'presence' ] :
         sub_df = df.groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
       ## for other cluster_key we only focus on the CO2 associated to 
       ## on-site participants'
       else:
-        if 'presence' in df.columns :
-          if on_site is True:   
-            sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
-          else:
-            sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
-        else:
+        if on_site is True:   
+          sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
+        elif on_site is False:
+          sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
+        elif on_site is None:
           sub_df = df.groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
-
       sub_df = sub_df.set_index( cluster_key ).transpose()
-
+     
       subfig = px.bar(sub_df, x=sub_df.index,  y=sub_df.columns, 
               ##color=d.index.name,\
               # text=d.index.name, 
-              title=cluster_key,  
-              labels={"co2eq": "CO2eq (Kg)", "co2eq": "CO2eq Estimation Method" } )
+              title=cluster_key, 
+              ## labels are displayed when mouse is hand over the value.
+              labels={ 'value': "CO2eq (Kg)", 'index': "CO2eq Estimation Method" },
+            )
+      print( f"subfig: {subfig}" )
+##      raise ValueError
       subfig_list.append( subfig )
 
 
-    if 'presence' in df.columns :
-      if on_site is True:
-        suffix = 'distribution-onsite'
-        title = f"{self.name} CO2eq Distribution of 'on-site' participants (Effective CO2eq)"
-      else:
-        suffix = 'distribution-not-onsite'
-        title = f"{self.name} CO2eq Distribution of non 'on-site' participants (~Offset CO2eq)"
-    else:
-        suffix = 'distribution'
-        title = "{self.name} CO2eq Distribution" 
-    html_file_name = self.image_file_name( suffix, 'html', mode, cabin )
-    svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin )
+    suffix = 'distribution'
+    if on_site is True:
+      title = f"{self.name} CO2eq Distribution of 'on-site' participants (Effective CO2eq)"
+    elif on_site is False:
+      title = f"{self.name} CO2eq Distribution of 'remote' participants (~Offset CO2eq)"
+    elif on_site is None:
+      title = "{self.name} CO2eq Distribution" 
+    html_file_name = self.image_file_name( suffix, 'html', mode, cabin=cabin, on_site=on_site )
+    svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin=cabin, on_site=on_site )
 
     fig = co2eq.fig.OneRowSubfig( \
       subfig_list, 
-      offset=1.32, 
+#      offset=1.32, 
       subfig_title_list=cluster_key_list,
       fig_title=title,
       html_file_name=html_file_name, 
@@ -636,7 +669,7 @@ class Meeting:
 
     Because Kg is the unit but we want Mg instead of kKg we convert in g 
     """
-    engFormat = matplotlib.ticker.EngFormatter(unit='g',places=2,sep='')
+    engFormat = matplotlib.ticker.EngFormatter(unit='g',places=2,sep=' ')
     return engFormat( 1000 * number )
 
   def plot_attendees_distribution( self, on_site=None ): 
@@ -645,15 +678,22 @@ class Meeting:
       on_site: defines the subset of the attendees. None True False
     """
 
+    df = self.build_data( mode='attendee' )
+
     ## on_site is only considered when 'presence' is indicated. 
     ## we coudl have set on_site to None, but this might result
     ## in the same graph being re-computed 3 times
     ## (on_site = True/False, None). So we prefer not computing 
     ## the graph when incoherent parameters are provided. 
-    if 'presence' not in df.columns and on_site is not None:
-      return None
+    if on_site not in [ True, False, None ]:
+      raise ValueError( f"Unknown value {on_site} for on_site.\
+        Expecting True, False or None" ) 
 
-    df = self.build_data( mode=attendee )
+
+    if 'presence' not in df.columns and on_site is not None:
+      raise ValueError( f"on_site is specified to {on_site} but "\
+        f"'presence' is not specified in the data frame.\n"\
+        f"{df.info}\ndf.columns: {df.columns}" )
 
     ## check 'co2eq is a cluster_key and if so handle it properly, 
     ## that is considering all other cluster_keys.
@@ -677,43 +717,65 @@ class Meeting:
       ## associated to the presence, which includes remote,
       ## not arrived and on-site
       if cluster_key in [ 'presence' ] :
-        sub_df = df.groupby( by=[ cluster_key, ], sort=False ).count().reset_index()
+#        print( f"------------------------- initial state {cluster_key} / {on_site}" )
+#        print( f"--- df: {df.info()}" )
+#        print( f"--- df: {df.head()}" )
+#        print( f"--- df: {df[[ cluster_key ]].info()}" )
+#        print( f"--- df: {df[[ cluster_key ]].head()}" )
+        ##sub_df = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
+        sub_serie = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
       ## for other cluster_key we only focus on the CO2 associated to 
       ## on-site participants'
       else:
+#        print( f"------------------------- initial state {cluster_key} / {on_site}" )
+#        print( f"--- sub_df: {sub_df.info()}" )
+#        print( f"--- sub_df: {sub_df.head()}" )
         if on_site is True:   
-          sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).count().reset_index()
+          ##sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
+          sub_serie = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
         elif on_site is False:
-          sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).count().reset_index()
+          ##sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
+##          sub_serie = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+          sub_serie = df[ df.presence == 'remote' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
         elif on_site is None:
-          sub_df = df.groupby( by=[ cluster_key, ], sort=False ).count().reset_index()
+          ##sub_df = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
+          sub_serie = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
         else:
           raise ValueError( f"unexpected value for on_site: {on_site}"\
                   f" on_site MUST be in True, False or None." )
-      sub_df = sub_df.set_index( cluster_key ).transpose()
+      sub_df = pd.DataFrame( [ sub_serie ] )
+      sub_df.columns.name = cluster_key
+##      sub_df = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index(
+#      print( f"------------------------- grouping {cluster_key} / {on_site} " )
+#      print( f"--- sub_df: {sub_df.info()}" )
+#      print( f"--- sub_df: {sub_df.head()}" )
+#      print( f"------------------------- translate {cluster_key} / {on_site}" )
+#      sub_df = sub_df[ cluster_key].transpose().reset_index()
+#      print( f"--- sub_df: {sub_df.info()}" )
+#      print( f"--- sub_df: {sub_df.head()}" )
+#      raise ValueError
+#      sub_df = sub_df.set_index( cluster_key ).transpose()
       subfig = px.bar(sub_df, x=sub_df.index,  y=sub_df.columns, 
               ##color=d.index.name,\
               # text=d.index.name, 
               title=cluster_key,  
-              labels={"co2eq": "CO2eq (Kg)", "co2eq": "CO2eq Estimation Method" } )
+##              labels={"co2eq": "CO2eq (Kg)", "co2eq": "CO2eq Estimation Method" } 
+      )
       subfig_list.append( subfig )
 
 
+    suffix = 'distribution'
     if on_site is True:
-      suffix = 'distribution-attendees-onsite'
       title = f"{self.name} 'on-site' Attendee Distribution"
     elif on_site is False:
-      suffix = 'distribution-attendees-not-onsite'
-      title = f"{self.name} non 'on-site' Attendees Distribution"
+      title = f"{self.name} non 'remote' Attendees Distribution"
     else:
-      suffix = 'distribution-attendee-all'
-      title = "{self.name} Attendee Distribution" 
-    html_file_name = self.image_file_name( suffix, 'html', mode, cabin )
-    svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin )
+      title = f"{self.name} Attendee Distribution" 
+    html_file_name = self.image_file_name( suffix, 'html', 'attendee', on_site=on_site,  )
+    svg_file_name=self.image_file_name( suffix, 'svg', 'attendee', on_site=on_site )
 
     fig = co2eq.fig.OneRowSubfig( \
       subfig_list, 
-      offset=1.32, 
       subfig_title_list=cluster_key_list,
       fig_title=title,
       html_file_name=html_file_name, 
@@ -807,23 +869,127 @@ class Meeting:
  
   def plot_distribution( self, mode_list=[ 'attendee', 'flight'], cabine_list=[ 'AVERAGE' ] ):
 
-    if 'attendee' in mode_list: 
-      if 'presence' in self.cluster_key_list :  
-        for on_site in [ True, False ]:
-          self.plot_attendees_distribution( on_site=on_site) 
-      self.plot_attendees_distribution( on_site=None) 
-
-      mode_list.remove( 'attendee' )
-
     for mode in mode_list:
-       for cabin in cabine_list :  
-         if 'co2eq' not in self.cluster_key_list :
-           continue
-         self.plot_co2eq_distribution( mode, cabin, on_site=True )
-         if 'presence' in self.cluster_key_list:  
-           self.plot_co2eq_distribution( mode, cabin, on_site=False )
+      if mode == 'attendee': 
+        self.plot_attendees_distribution( on_site=None) 
+        if 'presence' in self.cluster_key_list :  
+          for on_site in [ True, False ]:
+            self.plot_attendees_distribution( on_site=on_site) 
+      elif mode in [ 'flight', 'distance' ]:
+        for cabin in cabine_list :  
+          self.plot_co2eq_distribution( mode, cabin, on_site=on_site )
+          if 'presence' in self.cluster_key_list:  
+            for on_site in [ True, False ]:
+              self.plot_co2eq_distribution( mode, cabin, on_site=on_site )
    
 
+  def co2_info_txt( self ):
+
+      
+    md = f"""The estimation of the CO2eq emitted by {self.name} is estimated according to a 'mode' and a 'cabin' class. 
+
+    The 'mode' can be set to 'flight' or 'distance'. The 'flight' mode uses real flights segments to estimate the CO2eq emitted. The 'flight' mode is always prefered as it takes into consideration multiple takes off and landings as well as flying distance that is non optimal compared to a direct flight. The 'distance' mode on the other end considers only a direct flight. 
+
+ The 'cabin' can be set to 'ECONOMY' for economy class, 'BUSINESS' for business class as well as 'AVERAGE' that considers a mixed of 20% of travelers in business and the remaining in economy.
+
+The CO2eq is estimated using various methodology. I this report the following methodologies are used:\n"""
+    for co2eq in self.co2eq_method_list:
+      if co2eq == 'myclimate':
+        txt = ""
+      elif co2eq == 'goclimate':
+        txt = ""
+      elif co2eq == 'ukgov':
+        txt = ""
+      md+= f"  * {co2eq}: {txt}\n"   
+      
+    md += "\n\n"
+
+    for mode_cabin in self.info.keys():
+      md += f"For the mode '{mode_cabin[0]}' and cabin '{mode_cabin[1]}' the estimations are as follows:\n\n"
+      for part in self.info[ mode_cabin ].keys(): #['total', 'on_site', 'remote' ]
+        if part == 'total':
+          md += f"  1. Total Attendees: This means that ALL attendees are considered as attending the Meeting On Site.\n" 
+        elif part == 'on_site':
+          md += f"  2. On Site Attendees: This means only the attendees that are effectively marked as attending the meeting On Site.\n"
+        elif part == 'remote':
+          md += f"  3. Remote Attendees: This means only the attendees that are attending remotely. This can be interpreted as an kind of Offset. However such interpretation needs to be cautiously considered as it is only valid if emissions associated to a remote participation remains negligible. In general this needs further studies. We also do not consider the attendees that are 'not_arrived' - these are ignored as we expect them to be negligible and neither 'remote' nor 'on-site'.\n" 
+        else:
+          raise ValueError( f"Unknown part {part}. Expecting ['total', 'on_site', 'remote' ]" )
+        print( f"info: {self.info}" )
+        v = self.info[ mode_cabin ][ part ]    
+        md += f"    * Map Distance: {v[ 'map_distance' ]} Km. This represents the total distance between the origin and the destination. The destination is the meeting's destination and the origin destination corresponds to the capital (or most important city in the country) of the country of origin\n"
+        md += f"    * Number of Attendees: {v[ 'attendee_nbr' ]}\n"
+
+        md += f"    * Estimation CO2eq :\n"
+        for co2eq in self.co2eq_method_list:
+          md += f"       * {co2eq} CO2eq: {self.kg( v[ 'co2eq' ][ co2eq ])}\n"
+        md += f"       * Average CO2eq: {self.kg( v[ 'co2eq' ][ 'average' ])}. The average CO2eq among {self.co2eq_method_list}.\n"
+        md += "       * Standard Deviation of CO2eq v[ 'total' ][ 'co2eq' ][ 'stdev' ])}.\n"
+        md += f"       * Minimum CO2eq: {self.kg( v[ 'co2eq' ][ 'min' ])}.\n"
+        md += f"       * Maximum CO2eq: {self.kg( v[ 'co2eq' ][ 'max' ])}.\n"
+        md += f"       * Average CO2eq per Passenger per Km: {self.kg( v[ 'co2eq' ][ 'epppkm' ])}. This considers the Map Distance and the Average CO2eq.\n"
+
+
+    return md 
+
+  def md( self, mode_list=[ 'flight' , 'attendee' ], 
+          cabine_list=[ 'AVERAGE' ], 
+          on_site_list=[ None, True, False], 
+          banner="",
+          toc=True ):
+ 
+    if toc is True:
+      toc_md = "\n\n* TOC\n{:toc}\n\n"
+    else:
+      toc_md = ""
+
+    md =f"# {self.name} Data\n{banner}\n{toc_md}"
+
+    if 'attendee' in mode_list and 'flight' in mode_list :
+      md += f"This page estimates the CO2 emitted for {self.name} as well as the distribution of the attendees of {self.name}."
+    elif 'attendee' in mode_list and 'flight' not in mode_list :
+      txt += f"This page displays the distribution of the attendees of {self.name}."
+    elif 'attendee' not in mode_list and 'flight' in mode_list :
+      txt += f"This page estimates the CO2 emitted according for {self.name}."
+
+    md += "\n\n"
+    md += self.co2_info_txt( ) 
+    md += "\n\n"
+
+    section_no = 1
+    subsection_no = 1
+
+    for mode in mode_list:
+      if mode in [ 'flight', 'distance' ]:
+        for cabin in cabine_list :
+          section_title = f"CO2 Estimation for '{mode}' mode in cabin {cabin}"
+          md += f"## { roman.toRoman( section_no ) }. {section_title}\n\n"
+          section_no += 1
+          for on_site in on_site_list:
+#            if on_site is None:
+#              sub_section_title = "CO2eq Distribution for All Participants"
+#            elif on_site is True: 
+#              sub_section_title = "CO2eq Distribution for On-site Participants"
+#            elif on_site is False:
+#              sub_section_title = "CO2eq Distribution for Remote Participants"
+#          md += f"### { roman.toRoman( section_no ) }.{subsection_no} {sub_section_title}\n\n"
+#          subsection_no += 1
+            html_file_name = self.image_file_name( 'distribution', 'html', mode, 
+                  cabin=cabin, on_site=on_site )
+          md += f"<iframe src='{html_file_name}'></iframe>\n\n"
+      elif mode == 'attendee':
+        section_title = f"Attendees Distribution"
+      md += f"## { roman.toRoman( section_no ) }. {section_title}\n\n"
+      section_no += 1
+      for on_site in on_site_list:
+        html_file_name = self.image_file_name( 'distribution', 'html', mode, 
+                on_site=on_site )
+        md += f"<iframe src='{html_file_name}'></iframe>\n\n"
+
+    with open( join( self.output_dir, "index.md"), 'wt', encoding='utf8' ) as f:
+      f.write( md )
+
+ 
 ## x= companies, y=CO2eq [methods], 
 ## x= companies, y=CO2eq [methods] / remote[Co2], 
 
