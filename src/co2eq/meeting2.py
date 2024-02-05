@@ -25,9 +25,9 @@ class Meeting:
 
   def __init__( self, name:str, 
                 location:dict, 
+                conf=co2eq.conf.Conf().CONF,  \
                 attendee_list:str = None, \
                 base_output_dir=None, 
-                conf=co2eq.conf.Conf().CONF,  \
                 airportDB=True, 
                 cityDB=True, 
                 flightDB=True, 
@@ -75,49 +75,21 @@ class Meeting:
     self.conf = conf
     print( f"Computing CO2eq for {self.name}\n" )
     print( f"Configuration:\n {self.conf}" )
-    if airportDB is True:
-      self.airportDB = AirportDB()
-    else:
-      self.airportDB = airportDB
-    if  cityDB is True:
-      self.cityDB = CityDB( conf, airportDB=self.airportDB )
-    else:
-      self.cityDB = cityDB
-    if goclimateDB is True:
-      self.goclimateDB=GoClimateDB( conf )
-    else:
-      self.goclimateDB = goclimateDB
-    ## flightDB and designate it by the destination airport
-    if flightDB is True:
-      flightDB = FlightDB( conf, cityDB=self.cityDB, airportDB=self.airportDB, \
-                           goclimateDB=self.goclimateDB)
-    self.flightDB = flightDB
-
-    self.countryDB = CountryDB()
+    self.init_DB( airportDB, cityDB, flightDB, goclimateDB )
+    self.init_output_dir( base_output_dir )
     # print( f"meeting iata location: {self.iata_location}" )
-    if base_output_dir is None:
-      base_output_dir = './output'
-    self.output_dir = join( base_output_dir, self.name )
+    self.logger = logger( conf, __name__ )
 
     ## location is a dictionary with keys iata, city, state, country)
     self.location = location
     self.meeting_iata_city = self.cityDB.representative_city( self.location )[ 'iata' ]
-
-    if isdir( self.output_dir ) is False:
-      os.makedirs( self.output_dir )
-    self.logger = logger( conf, __name__ )
 
     self.attendee_list = attendee_list
     df = pd.read_json( attendee_list )
     ## to build flightDB
     self.country_list = df[ 'country' ].unique().tolist()
  #   self.total_attendee_nbr = len( df )
-    self.cluster_key_list = list( df )
-    self.cluster_key_list.extend( ['segment_nbr', 'subregion', 'region', 'co2eq' ] )
-    ## ensure 'presence' is in the first position 
-    if 'presence' in self.cluster_key_list:
-      self.cluster_key_list.remove( 'presence' )
-      self.cluster_key_list.insert( 0, 'presence' )
+    self.init_cluster_key_list( df )
     self.co2eq_method_list = [ 'myclimate', 'goclimate', 'ukgov' ]
 
     ## DataFrame
@@ -140,7 +112,47 @@ class Meeting:
     self.flight_db = {}
 ##   self.km = None
 
-  
+  def init_DB( self, airportDB, cityDB, flightDB, goclimateDB ):
+    """ initializes airportDB, cityDB, flightDB, goclimateDB and CountryDB """
+
+    if airportDB is True:
+      self.airportDB = AirportDB()
+    else:
+      self.airportDB = airportDB
+    if  cityDB is True:
+      self.cityDB = CityDB( self.conf, airportDB=self.airportDB )
+    else:
+      self.cityDB = cityDB
+    if goclimateDB is True:
+      self.goclimateDB=GoClimateDB( self.conf )
+    else:
+      self.goclimateDB = goclimateDB
+    ## flightDB and designate it by the destination airport
+    if flightDB is True:
+      flightDB = FlightDB( self.conf, cityDB=self.cityDB, airportDB=self.airportDB, \
+                           goclimateDB=self.goclimateDB)
+    self.flightDB = flightDB
+
+    self.countryDB = CountryDB()
+ 
+  def init_output_dir( self, base_output_dir ):
+    """initializes teh output directory """
+    if base_output_dir is None:
+      base_output_dir = './output'
+    self.output_dir = join( base_output_dir, self.name )
+    if isdir( self.output_dir ) is False:
+      os.makedirs( self.output_dir )
+
+  def init_cluster_key_list( self, df ): 
+    self.cluster_key_list = list( df )
+    if 'country' in self.cluster_key_list:
+      self.cluster_key_list.extend( ['segment_nbr', 'subregion', 'region', 'co2eq' ] )
+    ## ensure 'presence' is in the first position 
+    if 'presence' in self.cluster_key_list:
+      self.cluster_key_list.remove( 'presence' )
+      self.cluster_key_list.insert( 0, 'presence' )
+
+
   def get_attendee_flight( self, country, cabin ):
     """ returns the flight associated to the attendee for a specific cabin 
 
@@ -214,7 +226,81 @@ class Meeting:
       self.debug_country_info( attendee[ 'country' ] )
       raise ValueError( "unable top retrieve flight")
 
+
+  def debug_country_info( self, country ):
+    """ provides information to understand why a flight cannot be retrived 
+
+    The ability to retrieve a flight depends on:
+      1) the correctness and coherence of the iata_city_codes-2015.json, iata_city_airport_map.json and countryinfo
+      2) the ability of Amadeus to retrieve an itinerary
+      3) Many other reasons...
+    This function helps to find why a flight cannot be retrieved. 
+    It is limited to the case where only the country has been provided.
+    """
+    ## Step 1: checking the capital returned by country info
+    country_info = self.cityDB.countryDB.get_country_info( country )
+    print( f"-- step 1: Capital of {country_info.name()} ({country}) is "\
+           f"{country_info.capital()}\n"\
+           f"           coordinates of the capital are {country_info.capital_latlng()}\n"\
+           f"           Please check capital and coordinates are correct.\n"\
+           f"           If these information are not correct update the\n"\
+           f"           countryinfo data.")
  
+    ## Step 2: checking the the matching cities from the IATA city code DB
+    iata_capital_list = self.cityDB.get_city( country=country, name=country_info.capital() )
+    if len( iata_capital_list ) > 0:
+      iata_capital = iata_capital_list[ 0 ]
+    else:
+      iata_capital = None
+    print( f"-- step 2: Searching IATA city by matching the capital\n"\
+           f"           name returns: the following city {iata_capital}.\n"\
+           f"           A response is only expected when there is a match\n"\
+           f"           Between names. It may not happen. In case a match is\n"\
+           f"           expected, please consider carefully changing the\n"\
+           f"           'capital' in the countryinfo data or the 'name'\n"\
+           f"           in the iata_city_codes-2015.json file." )
+    ## Step 3: checking the city returned by evaluating the distances
+    iata_rep_city = self.cityDB.country_representative_city( country )
+    print( f"-- step 3: Searching capital via distance returns {iata_rep_city}\n"\
+           f"           There cases where the capital has been overwritten \n"\
+           f"           by a larger city (see ISO3166_REPRESENTATIVE_CITY).\n"\
+           f"           If the result is surprising  here are possible\n"\
+           f"           reasons:\n"\
+           f"             a) Coordinate of the expected city in the file\n"\
+           f"                iata_city_codes-2015.json are not correct.\n"\
+           f"                In this case, upadte the coordinates in \n"\
+           f"                iata_city_codes-2015.json\n"\
+           f"             b) The distance method only considers cities with airports\n"\
+           f"                The city in question is not associated to sufficiently\n"\
+           f"                large airports. This could be that the IATA city airport\n"\
+           f"                In iata_city_codes-2015.json does not corresponds to the\n"\
+           f"                IATA city airport of iata_city_airport_map.\n"\
+           f"             c) Amadeux is unable to retrieve flights itinerary from that airport" )
+ 
+    coordinates = country_info.capital_latlng()
+    capital = { 'latitude' : coordinates[ 0 ], 'longitude' : coordinates[ 1 ] }
+    if iata_capital is not None:
+      print( f"Distance from {country_info.capital()} of IATA city found by name matching\n"\
+             f"(step 2 ) : {self.cityDB.dist( capital, iata_capital )}\n" )
+    print( f"Distance from {country_info.capital()} of IATA city found by shortest distance\n"\
+           f"(step 3) : {self.cityDB.dist( capital, iata_rep_city )}\n" )
+    ## Step3.5 checking airports associated to the IATA 
+    if iata_capital is not None:
+      print( f"-- step 4: Does the IATA city (matching capital name) has airports ?\n"\
+             f"           {self.cityDB.has_airports( iata_capital ) }\n"\
+             f"           False may indicate the IATA code of the city is not\n"\
+             f"           recognized by the iata_city_airport_map.\n"\
+             f"           True may indicate everything is correct but Amadeux is unable\n"\
+             f"           to retrieve an itinerary. If that is the case, this may be adjusted\n"\
+             f"           by updating ISO3166_REPRESENTATIVE_CITY.\n")
+
+    print( f"Please check the log in {self.conf[ 'log' ]} "\
+           f"for further details. You can do tail -f {self.conf[ 'log' ]}.\n\n"\
+           f"If you have not detected something abnormal, it may be that AMADEUS "\
+           f"was not able to retrieve the flight at this time and that the next "\
+           f" attempt will work. Keep finger crossed and retry." )
+
+
   def get_attendee_flight_obj( self, country,  cabin, mode ):
     """ returns the flight object used to compute co2eq and distance 
 
@@ -626,21 +712,21 @@ class Meeting:
       ## on-site participants'
       else:
         if on_site is True:   
-          sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
+          sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=True ).agg( agg_dict ).reset_index()
         elif on_site is False:
-          sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
+          sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=True ).agg( agg_dict ).reset_index()
         elif on_site is None:
-          sub_df = df.groupby( by=[ cluster_key, ], sort=False ).agg( agg_dict ).reset_index()
+          sub_df = df.groupby( by=[ cluster_key, ], sort=True ).agg( agg_dict ).reset_index()
       sub_df = sub_df.set_index( cluster_key ).transpose()
-     
+      print( f"sub_df :{sub_df}" )  
       subfig = px.bar(sub_df, x=sub_df.index,  y=sub_df.columns, 
               ##color=d.index.name,\
               # text=d.index.name, 
-              title=cluster_key, 
+              title=f"CO2eq Distribution according to {cluster_key}", 
               ## labels are displayed when mouse is hand over the value.
               labels={ 'value': "CO2eq (Kg)", 'index': "CO2eq Estimation Method" },
             )
-      print( f"subfig: {subfig}" )
+##      print( f"subfig: {subfig}" )
 ##      raise ValueError
       subfig_list.append( subfig )
 
@@ -658,11 +744,17 @@ class Meeting:
     fig = co2eq.fig.OneRowSubfig( \
       subfig_list, 
 #      offset=1.32, 
-      subfig_title_list=cluster_key_list,
+#      subfig_title_list=cluster_key_list,
       fig_title=title,
+      print_grid=True,
+      show=True,
+      shared_xaxes=False,
+      shared_yaxes=False,
+      legend_offset=0,
+      horizontal_spacing=0.15,
       html_file_name=html_file_name, 
       svg_file_name=svg_file_name )
-    fig.fig.show()
+#    fig.fig.show()
 
   def kg( self, number) :
     """ returns the string associated to number in Kg
@@ -723,7 +815,7 @@ class Meeting:
 #        print( f"--- df: {df[[ cluster_key ]].info()}" )
 #        print( f"--- df: {df[[ cluster_key ]].head()}" )
         ##sub_df = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
-        sub_serie = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+        sub_serie = df.groupby( by=[ cluster_key, ], sort=True )[ cluster_key ].count()
       ## for other cluster_key we only focus on the CO2 associated to 
       ## on-site participants'
       else:
@@ -732,14 +824,14 @@ class Meeting:
 #        print( f"--- sub_df: {sub_df.head()}" )
         if on_site is True:   
           ##sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
-          sub_serie = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+          sub_serie = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=True )[ cluster_key ].count()
         elif on_site is False:
           ##sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
 ##          sub_serie = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
-          sub_serie = df[ df.presence == 'remote' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+          sub_serie = df[ df.presence == 'remote' ].groupby( by=[ cluster_key, ], sort=True )[ cluster_key ].count()
         elif on_site is None:
           ##sub_df = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
-          sub_serie = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+          sub_serie = df.groupby( by=[ cluster_key, ], sort=True )[ cluster_key ].count()
         else:
           raise ValueError( f"unexpected value for on_site: {on_site}"\
                   f" on_site MUST be in True, False or None." )
@@ -776,95 +868,101 @@ class Meeting:
 
     fig = co2eq.fig.OneRowSubfig( \
       subfig_list, 
-      subfig_title_list=cluster_key_list,
+#      subfig_title_list=cluster_key_list,
       fig_title=title,
+      print_grid=True,
+      show=True,
+      shared_xaxes=False,
+      shared_yaxes=False,
+      legend_offset=0,
+      horizontal_spacing=0.15,
       html_file_name=html_file_name, 
       svg_file_name=svg_file_name )
-    fig.fig.show()
+#    fig.fig.show()
 
 
-  def plot_attendees_distribution_old( self, debug=True ): 
-    """plots the distribution of the attendees 
-
-    We use the stacked histogram to represent the distribution 
-    according to the various cluster_key values. For example if 
-    cluster_key is 'country', the stacked histogram will 
-    represent the number of attendees per country. 
-
-    The total number of attendees will remain the same. We use 
-    the SVG / HTML representation in order to be able to point 
-    each stack and determine the exact number associated when
-    the mouse points to the stack.  
-    The total number of attendees is the same, so the dimension 
-    of the histogram are the same, and only the way these 
-    histograms (bars) are slacked is changing.
-
-    """
-
-    subfig_list = []
-    for cluster_key in self.cluster_key_list :
-      print( f" --- plot_attendees_distribution -- {cluster_key}" )
-      if cluster_key == 'co2eq' :
-        continue
-      ## d is expected to have the following format  
-      ##  --- : d: <class 'pandas.core.series.Series'>
-      ## country
-      ## KG    1
-      ## IN    1
-      ## MX    1
-      ## CZ    1
-      ## MO    1
-      ## DZ    1
-      ## Name: country, dtype: int64
-      ## d.name: country
-      ## d.index: Index(['KG', 'IN', 'MX', 'CZ', 'MO', 'DZ'], dtype='object', name='country')
-      ## d.index.name: country
-      ## d.index.values: ['KG' 'IN' 'MX' 'CZ' 'MO' 'DZ']
-#      d = self.build_data( mode='attendee', cluster_key=cluster_key )
-      d = self.build_data( mode='attendee' )
-      d = d.groupby( by=[ cluster_key ], sort=False )[ cluster_key ].count()
-
-      if debug is True:
-        print( f"--- : d: {type(d)}" )
-        print( d )
-        print( f"d.name: {d.name}" )
-        print( f"d.index: {d.index}" )
-        print( f"d.index.name: {d.index.name}" )
-        print( f"d.index.values: {d.index.values}" )
-
-      ## df is expected to have the following format:
-      ## --- : df: 
-      ## country  KG  IN  MX  CZ  MO  DZ
-      ## country   1   1   1   1   1   1
-      ## 
-      ## df.head: <bound method NDFrame.head of country  KG  IN  MX  CZ  MO  DZ
-      ## country   1   1   1   1   1   1>
-      ## df.columns: Index(['KG', 'IN', 'MX', 'CZ', 'MO', 'DZ'], dtype='object', name='country')
-      ## df.columns.name: country
-      ## df.columns.values: ['KG' 'IN' 'MX' 'CZ' 'MO' 'DZ']
-      ## df.index: Index(['country'], dtype='object')
-
-      df = pd.DataFrame( [ d ] )
-      df.columns.name = cluster_key
-      if debug is True:
-        print( f"--- : df: " )
-        print( df )
-        print( f"\ndf.head: {df.head}" )
-        print( f"df.columns: {df.columns}" )
-        print( f"df.columns.name: {df.columns.name}" )
-        print( f"df.columns.values: {df.columns.values}" )
-        print( f"df.index: {df.index}" )
-      subfig_list.append( px.bar(df, x=df.index, y=df.columns ) ) #, \
-                              # color=df.index,\
-    fig = co2eq.fig.OneRowSubfig( \
-      subfig_list, 
-      offset=1.32, 
-      subfig_title_list=self.cluster_key_list,
-      fig_title=f"{self.name} Distributions of Attendees",
-      html_file_name=self.image_file_name( 'distribution', 'html', 'attendee' ), 
-      svg_file_name=self.image_file_name( 'distribution', 'svg', 'attendee' ) )
-    fig.fig.show( )
-    return None
+##  def plot_attendees_distribution_old( self, debug=True ): 
+##    """plots the distribution of the attendees 
+##
+##    We use the stacked histogram to represent the distribution 
+##    according to the various cluster_key values. For example if 
+##    cluster_key is 'country', the stacked histogram will 
+##    represent the number of attendees per country. 
+##
+##    The total number of attendees will remain the same. We use 
+##    the SVG / HTML representation in order to be able to point 
+##    each stack and determine the exact number associated when
+##    the mouse points to the stack.  
+##    The total number of attendees is the same, so the dimension 
+##    of the histogram are the same, and only the way these 
+##    histograms (bars) are slacked is changing.
+##
+##    """
+##
+##    subfig_list = []
+##    for cluster_key in self.cluster_key_list :
+##      print( f" --- plot_attendees_distribution -- {cluster_key}" )
+##      if cluster_key == 'co2eq' :
+##        continue
+##      ## d is expected to have the following format  
+##      ##  --- : d: <class 'pandas.core.series.Series'>
+##      ## country
+##      ## KG    1
+##      ## IN    1
+##      ## MX    1
+##      ## CZ    1
+##      ## MO    1
+##      ## DZ    1
+##      ## Name: country, dtype: int64
+##      ## d.name: country
+##      ## d.index: Index(['KG', 'IN', 'MX', 'CZ', 'MO', 'DZ'], dtype='object', name='country')
+##      ## d.index.name: country
+##      ## d.index.values: ['KG' 'IN' 'MX' 'CZ' 'MO' 'DZ']
+###      d = self.build_data( mode='attendee', cluster_key=cluster_key )
+##      d = self.build_data( mode='attendee' )
+##      d = d.groupby( by=[ cluster_key ], sort=False )[ cluster_key ].count()
+##
+##      if debug is True:
+##        print( f"--- : d: {type(d)}" )
+##        print( d )
+##        print( f"d.name: {d.name}" )
+##        print( f"d.index: {d.index}" )
+##        print( f"d.index.name: {d.index.name}" )
+##        print( f"d.index.values: {d.index.values}" )
+##
+##      ## df is expected to have the following format:
+##      ## --- : df: 
+##      ## country  KG  IN  MX  CZ  MO  DZ
+##      ## country   1   1   1   1   1   1
+##      ## 
+##      ## df.head: <bound method NDFrame.head of country  KG  IN  MX  CZ  MO  DZ
+##      ## country   1   1   1   1   1   1>
+##      ## df.columns: Index(['KG', 'IN', 'MX', 'CZ', 'MO', 'DZ'], dtype='object', name='country')
+##      ## df.columns.name: country
+##      ## df.columns.values: ['KG' 'IN' 'MX' 'CZ' 'MO' 'DZ']
+##      ## df.index: Index(['country'], dtype='object')
+##
+##      df = pd.DataFrame( [ d ] )
+##      df.columns.name = cluster_key
+##      if debug is True:
+##        print( f"--- : df: " )
+##        print( df )
+##        print( f"\ndf.head: {df.head}" )
+##        print( f"df.columns: {df.columns}" )
+##        print( f"df.columns.name: {df.columns.name}" )
+##        print( f"df.columns.values: {df.columns.values}" )
+##        print( f"df.index: {df.index}" )
+##      subfig_list.append( px.bar(df, x=df.index, y=df.columns ) ) #, \
+##                              # color=df.index,\
+##    fig = co2eq.fig.OneRowSubfig( \
+##      subfig_list, 
+##      offset=1.32, 
+##      subfig_title_list=self.cluster_key_list,
+##      fig_title=f"{self.name} Distributions of Attendees",
+##      html_file_name=self.image_file_name( 'distribution', 'html', 'attendee' ), 
+##      svg_file_name=self.image_file_name( 'distribution', 'svg', 'attendee' ) )
+##    fig.fig.show( )
+##    return None
 
  
   def plot_distribution( self, mode_list=[ 'attendee', 'flight'], cabine_list=[ 'AVERAGE' ] ):
@@ -945,12 +1043,16 @@ The CO2eq is estimated using various methodology. I this report the following me
 
     md =f"# {self.name} Data\n{banner}\n{toc_md}"
 
-    if 'attendee' in mode_list and 'flight' in mode_list :
+    co2eq_dist = 'flight' in mode_list or 'distance' in mode_list
+    atten_dist = 'attendee' in mode_list
+    if atten_dist and co2eq_dist :
       md += f"This page estimates the CO2 emitted for {self.name} as well as the distribution of the attendees of {self.name}."
-    elif 'attendee' in mode_list and 'flight' not in mode_list :
+    elif atten_dist and not co2eq_dist: 
       txt += f"This page displays the distribution of the attendees of {self.name}."
-    elif 'attendee' not in mode_list and 'flight' in mode_list :
+    elif not atten_dist and co2eq_dist :
       txt += f"This page estimates the CO2 emitted according for {self.name}."
+    else: 
+      raise ValueError( f"only ")
 
     md += "\n\n"
     md += self.co2_info_txt( ) 
@@ -958,14 +1060,19 @@ The CO2eq is estimated using various methodology. I this report the following me
 
     section_no = 1
     subsection_no = 1
-
+    print( f"mode_list: {mode_list}" )
     for mode in mode_list:
       if mode in [ 'flight', 'distance' ]:
         for cabin in cabine_list :
           section_title = f"CO2 Estimation for '{mode}' mode in cabin {cabin}"
           md += f"## { roman.toRoman( section_no ) }. {section_title}\n\n"
           section_no += 1
-          for on_site in on_site_list:
+          md += self.md_subsection_txt( mode, on_site_list )
+          #for on_site in on_site_list:
+          #  html_file_name = self.image_file_name( 'distribution', 'html', mode, 
+          #          on_site=on_site )
+          #  md += f"<iframe src='{html_file_name}'></iframe>\n\n"
+##          for on_site in on_site_list:
 #            if on_site is None:
 #              sub_section_title = "CO2eq Distribution for All Participants"
 #            elif on_site is True: 
@@ -974,22 +1081,29 @@ The CO2eq is estimated using various methodology. I this report the following me
 #              sub_section_title = "CO2eq Distribution for Remote Participants"
 #          md += f"### { roman.toRoman( section_no ) }.{subsection_no} {sub_section_title}\n\n"
 #          subsection_no += 1
-            html_file_name = self.image_file_name( 'distribution', 'html', mode, 
-                  cabin=cabin, on_site=on_site )
-          md += f"<iframe src='{html_file_name}'></iframe>\n\n"
+##            html_file_name = self.image_file_name( 'distribution', 'html', mode, 
+##                  cabin=cabin, on_site=on_site )
+##          md += f"<iframe src='{html_file_name}'></iframe>\n\n"
       elif mode == 'attendee':
         section_title = f"Attendees Distribution"
-      md += f"## { roman.toRoman( section_no ) }. {section_title}\n\n"
-      section_no += 1
-      for on_site in on_site_list:
-        html_file_name = self.image_file_name( 'distribution', 'html', mode, 
-                on_site=on_site )
-        md += f"<iframe src='{html_file_name}'></iframe>\n\n"
+        md += f"## { roman.toRoman( section_no ) }. {section_title}\n\n"
+        section_no += 1
+        md += self.md_subsection_txt( mode, on_site_list )
+#        for on_site in on_site_list:
+#          html_file_name = self.image_file_name( 'distribution', 'html', mode, 
+#                  on_site=on_site )
+#          md += f"<iframe src='{html_file_name}'></iframe>\n\n"
 
     with open( join( self.output_dir, "index.md"), 'wt', encoding='utf8' ) as f:
       f.write( md )
 
- 
+  def md_subsection_txt( self, mode, on_site_list ):
+    for on_site in on_site_list:
+      html_file_name = self.image_file_name( 'distribution', 'html', mode, 
+              on_site=on_site )
+      return f"<iframe src='{html_file_name}'></iframe>\n\n"
+
+
 ## x= companies, y=CO2eq [methods], 
 ## x= companies, y=CO2eq [methods] / remote[Co2], 
 
