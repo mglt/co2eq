@@ -92,6 +92,7 @@ class OneRowSubfig:
 #        'x' :  legend_offset + barwidth +  i * ( hspace + legend_offset + barwidth ),
         'x' :  total_legend_offset,
 #        'bgcolor' : "orange" # usefull to determine the legend_offset
+        'traceorder' : 'grouped' 
         }  
       if print_grid is True:
         legend_layout[ legend_name ][ 'bgcolor' ] = "orange" 
