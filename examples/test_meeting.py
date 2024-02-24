@@ -14,7 +14,7 @@ if False:
                  "country": "CZ",
                  "city": "Prague"
                },
-               attendee_list="./ietf99.json.gz",
+               attendee_list="/home/mglt/.local/lib/python3.10/site-packages/co2eq/data/ietf/meeting_attendee_list/json/ietf72.json.gz",
   #             base_output_dir=None,
   #             conf=co2eq.conf.Conf().CONF,  \
                airportDB=True,
@@ -83,6 +83,7 @@ if True:
                                         airportDB=True,
                                         cityDB=True,
                                         flightDB=True )
+  ml.plot_attendee_remote_switch( show=True, print_grid=False  )
   ml.www( mode_list=[ 'flight', 'attendee' ], cabin_list=[ 'AVERAGE' ] )
 ##  ml.plot_co2eq_distribution( mode='flight', cabin='AVERAGE', on_site=None )
 

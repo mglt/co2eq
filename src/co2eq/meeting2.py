@@ -490,8 +490,8 @@ class Meeting:
   def df_to_co2eq_info( self, df ):
     print( "--- df" )
     print( df.info )
-    map_distance = df[ "map_distance" ].sum() 
     attendee_nbr  = len( df )
+    map_distance = df[ "map_distance" ].sum() 
     co2eq = {}
     for co2eq_method in self.co2eq_method_list :
       co2eq[ co2eq_method ] = df[ co2eq_method ].sum()    
@@ -504,7 +504,13 @@ class Meeting:
     co2eq[ 'max' ]  = max( co2eq_list )
 #    print( f"total_map_distance : {self.total_map_distance}" )
 #    print( f"total_attendee_nbr: {self.total_attendee_nbr}" )
-    co2eq[ 'epppkm' ] = co2eq[ 'average' ] / map_distance / attendee_nbr
+    print( f"co2eq[ 'average' ]: {co2eq[ 'average' ]} [{type(co2eq[ 'average' ])}]" ) 
+    print( f"map_distance: {map_distance} [{type(map_distance)}]" ) 
+    print( f"attendee_nbr: {attendee_nbr} [{type(attendee_nbr)}]" ) 
+    if attendee_nbr == 0:
+      co2eq[ 'epppkm' ] = None
+    else: 
+      co2eq[ 'epppkm' ] = co2eq[ 'average' ] / map_distance / attendee_nbr
 #    title = f"{self.name} Distribution of CO2eq emissions for {mode} mode, cabin {cabin} "\
 #            f"- {self.info[ 'total_attendee_nbr' ]} attendees<br>"\
 #            f"   - Co2eq -- mean: {self.kg( self.info[ 'total_co2eq' ][ 'average' ] )}, "\
@@ -835,7 +841,8 @@ class Meeting:
 #        print( f"--- df: {df[[ cluster_key ]].info()}" )
 #        print( f"--- df: {df[[ cluster_key ]].head()}" )
         ##sub_df = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
-        sub_serie = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+        ##sub_serie = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index( name='count' ).sort_values(by='count', ascending=False )
+        sub_df = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index( name='count' ).sort_values(by='count', ascending=False )
       ## for other cluster_key we only focus on the CO2 associated to 
       ## on-site participants'
       else:
@@ -844,39 +851,50 @@ class Meeting:
 #        print( f"--- sub_df: {sub_df.head()}" )
         if on_site is True:   
           ##sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
-          sub_serie = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+## REDO          sub_serie = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+          sub_df = df[ df.presence == 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index( name='count' ).sort_values(by='count', ascending=False )
         elif on_site is False:
           ##sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
 ##          sub_serie = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
-          sub_serie = df[ df.presence == 'remote' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+##          sub_serie = df[ df.presence == 'remote' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+          sub_df = df[ df.presence != 'on-site' ].groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index( name='count' ).sort_values(by='count', ascending=False )
         elif on_site is None:
           ##sub_df = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index()
-          sub_serie = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+##REDO          sub_serie = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count()
+          sub_df = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index( name='count' ).sort_values(by='count', ascending=False )
         else:
           raise ValueError( f"unexpected value for on_site: {on_site}"\
                   f" on_site MUST be in True, False or None." )
-      sub_df = pd.DataFrame( [ sub_serie ] )
-      sub_df.columns.name = cluster_key  
+######### REDO
+##      sub_df = pd.DataFrame( [ sub_serie ] )
+##      sub_df.columns.name = cluster_key  
+
+
+## END REDO
       ##.sort_values(by=, ascending=False )
 ##      sub_df = df.groupby( by=[ cluster_key, ], sort=False )[ cluster_key ].count().reset_index(
 #      print( f"------------------------- grouping {cluster_key} / {on_site} " )
 #      print( f"--- sub_df: {sub_df.info()}" )
-      print( f"--- sub_df: {sub_df.head()}" )
+      sub_df.insert( 0, 'meeting', f"{self.name} - {self.meeting_iata_city}"  )
+
+      print( f"--- sub_df: {sub_df}" )
 ##      raise ValueError
 #      print( f"------------------------- translate {cluster_key} / {on_site}" )
 #      sub_df = sub_df[ cluster_key].transpose().reset_index()
-#      print( f"--- sub_df: {sub_df.info()}" )
-#      print( f"--- sub_df: {sub_df.head()}" )
-#      raise ValueError
+      print( f"--- sub_df info: {sub_df.info()}" )
+      print( f"--- sub_df head: {sub_df.head()}" )
+      print( f"--- cluster_key: {cluster_key}" )
+##      raise ValueError
 #      sub_df = sub_df.set_index( cluster_key ).transpose()
-      subfig = px.bar(sub_df, x=sub_df.index,  y=sub_df.columns, 
+##REDO      subfig = px.bar(sub_df, x=sub_df.index,  y=sub_df.columns,
+      subfig = px.bar(sub_df, x='meeting',  y='count', 
+              color=cluster_key,\
               ##color=d.index.name,\
               # text=d.index.name, 
               title=cluster_key,  
-##              labels={"co2eq": "CO2eq (Kg)", "co2eq": "CO2eq Estimation Method" } 
+              labels={"count": "Number of Attendees", "meeting": "" } 
       )
       subfig_list.append( subfig )
-
 
     suffix = 'distribution'
     if on_site is True:

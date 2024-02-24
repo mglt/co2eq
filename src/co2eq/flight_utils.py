@@ -948,7 +948,7 @@ class FlightDB(JCacheDict):
     """
 
     self.cache_dir = cache_dir( conf )
-    self.cache_flight = join( self.cache_dir, 'flightDB', 'flightDB.json' )
+    self.cache_flight = join( self.cache_dir, 'flightDB', 'flightDB.json.gz' )
     self.cache_amadeus_dir = join( self.cache_dir, 'flightDB', 'amadeus' )
 
     self.amadeus_id = conf[ 'AMADEUS_ID' ]
