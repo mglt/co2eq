@@ -150,18 +150,9 @@ class MeetingList( co2eq.meeting2.Meeting ):
       print( f"sub_df.columns: {sub_df.columns}" )
       print( f"sub_df.head: {sub_df.head}" )
       subfig_list = []
-      subfig_title_list = []
-      ## sort
+#      subfig_title_list = []
       for co2eq_method in self.co2eq_method_list:
-######        method_df = sub_df.pivot( index='meeting', columns=cluster_key, values=co2eq_method )
-##        print( f"method_df: {method_df}" )
-##        print( f"method_df.columns: {method_df.columns}" )
-##        print( f"method_df.head: {method_df.head}" )
-       
-#        subfig = px.bar(sub_df, x=sub_df.index,  y=sub_df.columns,
-#        subfig = px.bar(sub_df, x=sub_df.index,  y=sub_df.columns,
         subfig_title = f"Estimated with {co2eq_method}"
-######        subfig = px.bar( method_df, x=method_df.index,  y=method_df.columns,
         subfig = px.bar( sub_df, x='meeting',  y=co2eq_method,
                   color=cluster_key,\
                   ##color=d.index.name,\
@@ -170,11 +161,9 @@ class MeetingList( co2eq.meeting2.Meeting ):
                   ## labels are displayed when mouse is hand over the value.
                   labels={ 'value': "CO2eq (Kg)", 'index': "Meetings" },
                 )
-#        subfig.update_xaxes(tickangle=90)
-##        print( f"subfig: {subfig}" )
-##        raise ValueError
+        subfig.update_xaxes(tickangle=90)
         subfig_list.append( subfig )
-        subfig_title_list.append( subfig_title )
+#        subfig_title_list.append( subfig_title )
       
       suffix = 'distribution'
       if on_site is True:
@@ -294,6 +283,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
         font_family="Rockwell",
         showlegend=True
             )
+      fig.update_xaxes(tickangle=90)
 #    for legend_name in legend_name_list:
 #      self.fig[ 'layout' ][ legend_name ] = legend_layout[ legend_name ]
       if html_file_name is not None:
@@ -319,11 +309,166 @@ class MeetingList( co2eq.meeting2.Meeting ):
 #        svg_file_name=svg_file_name )
 #      fig.fig.show()
 
-  def plot_attendee_remote_switch( self ):
+  def plot_co2eq_remote_ratio( self, mode='flight', cabin='AVERAGE', show=False, print_grid=False ):
     """ plots the ratio of remote/on-site """
-    pass
 
-  def plot_attendee_remote_switch( self, show=False, print_grid=False  ):
+    df = self.build_data( mode=mode, cabin=cabin )
+    if 'presence' not in df.columns :
+      raise ValueError( f"on_site is specified to {on_site} but "\
+        f"'presence' is not specified in the data frame.\n"\
+        f"{df.info}\ndf.columns: {df.columns}" )
+    cluster_key_list = self.cluster_key_list[ : ]
+    cluster_key_list.remove( 'co2eq' )
+    subfig_list = []
+
+    agg_dict = {}
+    for co2eq_method in self.co2eq_method_list :
+      agg_dict[ co2eq_method ] = 'sum'
+
+    title = f"Remote Ratio of CO2eq Distribution"
+    for cluster_key in cluster_key_list :
+      if cluster_key in [ 'presence' ] :
+        print( f"--> 1. df.head: {df.head}" )
+        ## summinf emissions by presence type
+        fig_df = df.groupby( by=[ 'meeting', 'presence' ], sort=False ).agg( agg_dict ).reset_index()
+        print( f"--> 2. fig_df.head: {fig_df.head}" )
+        print( f"--> 2. fig_df.info: {fig_df.info()}" )
+        fig_remote = fig_df[ fig_df.presence != 'on-site' ].agg( agg_dict )
+       # .groupby( by=[ 'meeting', 'presence', ], sort=True )[ cluster_key ]
+        print( f"--> 3. fig_remote.head: {fig_remote}" )
+        print( f"--> 3. fig_remote.info: {fig_remote.info()}" )
+        fig_df = fig_df.groupby( by=[ 'meeting'], sort=False ).agg( agg_dict )
+        print( f"--> 4. fig_df.head: {fig_df.head}" )
+        print( f"--> 4. fig_df.info: {fig_df.info()}" )
+
+##          subfig = px.bar( sub_df, x='meeting',  y=co2eq_method,
+##                    color=cluster_key,\
+##                    ##color=d.index.name,\
+##                    # text=d.index.name, 
+##                    title=subfig_title, 
+##                    ## labels are displayed when mouse is hand over the value.
+##                    labels={ 'value': "CO2eq (Kg)", 'index': "Meetings" },
+##                  )
+##          subfig.update_xaxes(tickangle=90)
+##          subfig_list.append( subfig )
+      else:
+        pd.set_option("display.max_rows", None, "display.max_columns", None)
+        print( f"--> 1. df.head: {df.head(60)}" )
+        ## counting the number of participants for each typ eof presence
+        fig_df = df.groupby( by=[ 'meeting', cluster_key, 'presence' ], sort=False ).agg( agg_dict ).reset_index()
+        print( f"--> 2. fig_df.head: {fig_df}" )
+        ## summing all possible values that are not on-site (in our case,
+        ## it could be not-arrived, remote) per cluster_key
+        fig_remote = fig_df[ fig_df.presence != 'on-site' ].groupby( by=[ 'meeting', cluster_key], sort=False ).agg( agg_dict )
+#[ [ 'meeting', cluster_key, 'presence','count' ] ].reset_index()
+       # .groupby( by=[ 'meeting', 'presence', ], sort=True )[ cluster_key ]
+        print( f"--> 3. fig_remote.head: {fig_remote}" )
+        ## counting the total number of participants per cluster_key
+        fig_df = fig_df.groupby( by=[ 'meeting', cluster_key, ], sort=False ).agg( agg_dict )
+        print( f"--> 4. fig_df.head: {fig_df}" )
+        ## index is ( meeting, cluster_key )
+
+
+##        fig_df[ 'ratio' ] = fig_remote[ 'sum' ] / fig_df[ 'sum' ] * 100 
+##        ## flatering the index
+##        print( f"--> 5. fig_df.head: {fig_df}" )
+##        ## when remote is not defined a value set to nan is provided.
+##        ## we replace it by 0
+##        fig_df[ 'ratio' ] = fig_df[ 'ratio' ].fillna( 0 )
+##        ## cluster_key is the union of all values. (not needed)
+##        ## cluster_key_list = fig_df[ cluster_key ].unique().tolist()
+#      fig_title = f"Attende Distribution per {cluster_key}"
+#      subfig = px.bar( method_df, x=method_df.index,  y=method_df.columns,
+#        meeting_list = [ f"{m.name} - {m.meeting_iata_city}"  for m in self.meeting_list ]
+#        fig_df = fig_df[ fig_df.sum >= 5 ]
+##        fig_df = fig_df.reset_index()
+
+##        fig = px.line( fig_df, x='meeting',  y='ratio',
+##                color=cluster_key,\
+##                # text=d.index.name, 
+##                title=title,
+##                ## labels are displayed when mouse is hand over the value.
+##                labels={ 'ratio': "Ratio Remote / On Site (%)", 'meeting': "Meetings" },
+##              )
+##        fig.update_xaxes(tickangle=90)
+##        fig.show( )
+##      print( f"subfig: {subfig}" )
+##      raise ValueError
+##      subfig_list.append( subfig )
+##      subfig_title_list.append( subfig_title )
+
+      ## computing ration for all co2eq_methods
+      for co2eq_method in self.co2eq_method_list:
+        ratio = f"ratio_{co2eq_method}"
+        print( f" ----- fig_remote: {fig_remote}" )
+        print( f" ----- fig_df: {fig_df}" )
+        fig_df[ ratio ] = fig_remote[ co2eq_method ] / fig_df[ co2eq_method ] * 100 
+        fig_df[ ratio ] = fig_df[ ratio ].fillna( 0 )
+      fig_df = fig_df.reset_index()
+
+
+      suffix = 'remote_ratio'
+      html_file_name = self.image_file_name( suffix, 'html', mode,\
+              cluster_key=cluster_key )
+      svg_file_name=self.image_file_name( suffix, 'svg', mode,\
+              cluster_key=cluster_key)
+      ## scaling figure to the distribution mode.
+      if len( self.co2eq_method_list ) != 0:
+        fig_width = self.fig_width / len( self.co2eq_method_list )
+      if cluster_key == "presence":
+        color = None
+      else: 
+        color = cluster_key
+      subfig_list = []
+      for co2eq_method in self.co2eq_method_list:
+        ratio = f"ratio_{co2eq_method}"
+        subfig_title = f"Estimated with {co2eq_method}"
+        subfig = px.line( fig_df, x='meeting',  y=ratio,
+                color = color,
+                # text=d.index.name, 
+                title=subfig_title,
+                ## labels are displayed when mouse is hand over the value.
+                labels={ 'ratio': "CO2 Ratio Remote / (Remote  + On Site ) (%)", 'meeting': "Meetings" },
+              )
+        subfig.update_xaxes( tickangle=90 )
+        subfig.update_layout(
+          height=self.fig_height,
+          width=fig_width,
+          barmode='relative',
+          title= { 'text': title, 'automargin': True, 'xref': 'container', 'y':0.95 },
+          margin={ 'l':0, 'r':0 },
+          font_family="Rockwell",
+          showlegend=True
+              )
+        subfig_list.append( subfig )
+
+      fig = co2eq.fig.OneRowSubfig( \
+        subfig_list,
+#        subfig_title_list=subfig_title_list, ## we shoudl be able to read the title from the figure.
+        fig_title=title,
+        fig_width=self.fig_width,
+        fig_height=self.fig_height,
+        print_grid=print_grid,
+        show=show,
+        shared_xaxes=False,
+        shared_yaxes=False,
+        legend_offset=0,
+        horizontal_spacing=0.3,
+        html_file_name=html_file_name,
+        svg_file_name=svg_file_name )
+
+#    for legend_name in legend_name_list:
+#      self.fig[ 'layout' ][ legend_name ] = legend_layout[ legend_name ]
+#      if html_file_name is not None:
+#        fig.write_html( html_file_name )
+#      if svg_file_name is not None:
+#        fig.write_image( svg_file_name )
+#      if show is True:
+#        fig.show()
+
+#      fig = co2eq.fig.OneRowSubfig( \
+
+  def plot_attendee_remote_ratio( self, show=False, print_grid=False  ):
     """ plots the ratio of remote/on-site """
 
     df = self.build_data( mode='attendee' )
@@ -338,52 +483,68 @@ class MeetingList( co2eq.meeting2.Meeting ):
     title = f"Remote Attendee Ratio Distribution"
     for cluster_key in cluster_key_list :
       if cluster_key in [ 'presence' ] :
-        print( f"1. df.head: {df.head}" )
-        fig_df = df.groupby( by=[ 'meeting', 'presence' ], sort=True )[ cluster_key ].agg( [ 'count' ] ).reset_index()
-        print( f"2. fig_df.head: {fig_df.head}" )
-        print( f"2. fig_df.info: {fig_df.info()}" )
-        fig_remote = fig_df[ fig_df.presence != 'on-site' ][ 'count' ].reset_index()
+        print( f"--> 1. df.head: {df.head}" )
+        fig_df = df.groupby( by=[ 'meeting', 'presence' ], sort=False )[ cluster_key ].agg( [ 'count' ] ).reset_index()
+        print( f"--> 2. fig_df.head: {fig_df.head}" )
+        print( f"--> 2. fig_df.info: {fig_df.info()}" )
+        fig_remote = fig_df[ fig_df.presence != 'on-site' ][ 'count' ].agg( [ 'sum' ] )
        # .groupby( by=[ 'meeting', 'presence', ], sort=True )[ cluster_key ]
-        print( f"3. fig_remote.head: {fig_remote}" )
-        print( f"3. fig_remote.head: {fig_remote.info()}" )
-        fig_df = fig_df.groupby( by=[ 'meeting'], sort=True )[ 'count' ].agg( [ 'sum' ] ).reset_index()
-        print( f"4. fig_df.head: {fig_df.head}" )
-        print( f"4. fig_df.head: {fig_df.info()}" )
-        fig_df[ 'ratio' ] = fig_remote[ 'count' ] / fig_df[ 'sum' ] * 100 
-        print( f"5. fig_df.head: {fig_df.head}" )
-        print( f"5. fig_df.head: {fig_df.info()}" )
-        fig = px.line( fig_df, x='meeting',  y='ratio',
-                # text=d.index.name, 
-                title=title,
-                ## labels are displayed when mouse is hand over the value.
-                labels={ 'ratio': "Ratio Remote / On Site", 'meeting': "Meetings" },
-              )
+        print( f"--> 3. fig_remote.head: {fig_remote}" )
+        print( f"--> 3. fig_remote.info: {fig_remote.info()}" )
+        fig_df = fig_df.groupby( by=[ 'meeting'], sort=False )[ 'count' ].agg( [ 'sum' ] )
+        print( f"--> 4. fig_df.head: {fig_df.head}" )
+        print( f"--> 4. fig_df.info: {fig_df.info()}" )
+####        fig_df[ 'ratio' ] = fig_remote[ 'sum' ] / fig_df[ 'sum' ] * 100 
+####        print( f"--> 5. fig_df.head: {fig_df.head}" )
+####        print( f"--> 5. fig_df.info: {fig_df.info()}" )
+####        fig_df[ 'ratio' ] = fig_df[ 'ratio' ].fillna( 0 )
+####        fig_df = fig_df.reset_index()
+####        fig = px.line( fig_df, x='meeting',  y='ratio',
+####                # text=d.index.name, 
+####                title=title,
+####                ## labels are displayed when mouse is hand over the value.
+####                labels={ 'ratio': "Ratio Remote / On Site (%)", 'meeting': "Meetings" },
+####              )
+####        fig.update_xaxes(tickangle=90)
       else:
-        print( f"1. df.head: {df.head}" )
-        fig_df = df.groupby( by=[ 'meeting', cluster_key, 'presence' ], sort=True )[ cluster_key ].agg( [ 'count' ] ).reset_index()
-        print( f"2. fig_df.head: {fig_df.head}" )
-        print( f"2. fig_df.info: {fig_df.info()}" )
-        fig_remote = fig_df[ fig_df.presence != 'on-site' ][ 'count' ].reset_index()
+        pd.set_option("display.max_rows", None, "display.max_columns", None)
+        print( f"--> 1. df.head: {df.head(60)}" )
+        ## counting the number of participants for each typ eof presence
+        fig_df = df.groupby( by=[ 'meeting', cluster_key, 'presence' ], sort=False )[ cluster_key ].agg( [ 'count' ] ).reset_index()
+        print( f"--> 2. fig_df.head: {fig_df}" )
+        ## summing all possible values that are not on-site (in our case,
+        ## it could be not-arrived, remote) per cluster_key
+        fig_remote = fig_df[ fig_df.presence != 'on-site' ].groupby( by=[ 'meeting', cluster_key], sort=False )[ 'count' ].agg( [ 'sum' ] )
+#[ [ 'meeting', cluster_key, 'presence','count' ] ].reset_index()
        # .groupby( by=[ 'meeting', 'presence', ], sort=True )[ cluster_key ]
-        print( f"3. fig_remote.head: {fig_remote}" )
-        print( f"3. fig_remote.head: {fig_remote.info()}" )
-        fig_df = fig_df.groupby( by=[ 'meeting', cluster_key, ], sort=True )[ 'count' ].agg( [ 'sum' ] ).reset_index()
-        print( f"4. fig_df.head: {fig_df.head}" )
-        print( f"4. fig_df.head: {fig_df.info()}" )
-        fig_df[ 'ratio' ] = fig_remote[ 'count' ] / fig_df[ 'sum' ] * 100 
-        print( f"5. fig_df.head: {fig_df.head}" )
-        print( f"5. fig_df.head: {fig_df.info()}" )
-
+        print( f"--> 3. fig_remote.head: {fig_remote}" )
+        ## counting the total number of participants per cluster_key
+        fig_df = fig_df.groupby( by=[ 'meeting', cluster_key, ], sort=True )[ 'count' ].agg( [ 'sum' ] )
+        print( f"--> 4. fig_df.head: {fig_df}" )
+        ## index is ( meeting, cluster_key )
+      fig_df[ 'ratio' ] = fig_remote[ 'sum' ] / fig_df[ 'sum' ] * 100 
+      ## flatering the index
+      print( f"--> 5. fig_df.head: {fig_df}" )
+      ## when remote is not defined a value set to nan is provided.
+      ## we replace it by 0
+      fig_df[ 'ratio' ] = fig_df[ 'ratio' ].fillna( 0 )
+      ## cluster_key is the union of all values. (not needed)
+      ## cluster_key_list = fig_df[ cluster_key ].unique().tolist()
 #      fig_title = f"Attende Distribution per {cluster_key}"
 #      subfig = px.bar( method_df, x=method_df.index,  y=method_df.columns,
-        fig = px.line( fig_df, x='meeting',  y='ratio',
-                color=cluster_key,\
-                # text=d.index.name, 
-                title=title,
-                ## labels are displayed when mouse is hand over the value.
-                labels={ 'ratio': "Ratio Remote / On Site", 'meeting': "Meetings" },
-              )
-##      fig.update_xaxes(tickangle=90)
+#        meeting_list = [ f"{m.name} - {m.meeting_iata_city}"  for m in self.meeting_list ]
+#        fig_df = fig_df[ fig_df.sum >= 5 ]
+      fig_df = fig_df.reset_index()
+
+####        fig = px.line( fig_df, x='meeting',  y='ratio',
+####                color=cluster_key,\
+####                # text=d.index.name, 
+####                title=title,
+####                ## labels are displayed when mouse is hand over the value.
+####                labels={ 'ratio': "Ratio Remote / On Site (%)", 'meeting': "Meetings" },
+####              )
+####        fig.update_xaxes(tickangle=90)
+##        fig.show( )
 ##      print( f"subfig: {subfig}" )
 ##      raise ValueError
 ##      subfig_list.append( subfig )
@@ -397,6 +558,19 @@ class MeetingList( co2eq.meeting2.Meeting ):
       ## scaling figure to the distribution mode.
       if len( self.co2eq_method_list ) != 0:
         fig_width = self.fig_width / len( self.co2eq_method_list )
+      if cluster_key == "presence":
+        color = None # no legend
+      else:
+        color = cluster_key # cluster_key is displayed in the legend
+
+      fig = px.line( fig_df, x='meeting',  y='ratio',
+              color=color,\
+              # text=d.index.name, 
+              title=title,
+              ## labels are displayed when mouse is hand over the value.
+              labels={ 'ratio': "Ratio Remote / ( Remote + On Site ) (%)", 'meeting': "Meetings" },
+            )
+      fig.update_xaxes(tickangle=90)
 
       fig.update_layout(
         height=self.fig_height,

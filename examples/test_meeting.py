@@ -83,7 +83,8 @@ if True:
                                         airportDB=True,
                                         cityDB=True,
                                         flightDB=True )
-  ml.plot_attendee_remote_switch( show=True, print_grid=False  )
+  ml.plot_attendee_remote_ratio( show=True, print_grid=True  )
+  ml.plot_co2eq_remote_ratio( show=True, print_grid=True  )
   ml.www( mode_list=[ 'flight', 'attendee' ], cabin_list=[ 'AVERAGE' ] )
 ##  ml.plot_co2eq_distribution( mode='flight', cabin='AVERAGE', on_site=None )
 
