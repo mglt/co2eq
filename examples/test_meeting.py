@@ -57,34 +57,54 @@ if False:
 
   ml.www( mode_list=[ 'flight', 'attendee' ], cabin_list=[ 'AVERAGE' ] )
 
-if True:
 
-  ietf_list = {
-    "name": "IETFTEST",
-    "meeting_list": [
-      {
-        "name": "IETF72",
-        "location": {
-          "country": "IE",
-          "city": "Dublin"
-        },
-        "attendee_list": "/home/mglt/.local/lib/python3.10/site-packages/co2eq/data/ietf/meeting_attendee_list/json/ietf72.json.gz"
+ietf_list = {
+  "name": "IETFTEST",
+  "meeting_list": [
+    {
+      "name": "IETF72",
+      "location": {
+        "country": "IE",
+        "city": "Dublin"
       },
-      {
-        "name": "IETF73",
-        "location": {
-          "country": "US",
-          "city": "Minneapolis"
-        },
-        "attendee_list": "/home/mglt/.local/lib/python3.10/site-packages/co2eq/data/ietf/meeting_attendee_list/json/ietf73.json.gz"
-      }] }
+      "attendee_list": "/home/mglt/.local/lib/python3.10/site-packages/co2eq/data/ietf/meeting_attendee_list/json/ietf72.json.gz"
+    },
+    {
+      "name": "IETF73",
+      "location": {
+        "country": "US",
+        "city": "Minneapolis"
+      },
+      "attendee_list": "/home/mglt/.local/lib/python3.10/site-packages/co2eq/data/ietf/meeting_attendee_list/json/ietf73.json.gz"
+    }] }
+
+## Plotting the CO2 emissions for the meeting list (only the figures)
+if False:
   ml = co2eq.meeting_list2.MeetingList( name=ietf_list[ 'name' ], 
                                         meeting_list=ietf_list[ 'meeting_list' ], 
                                         airportDB=True,
                                         cityDB=True,
                                         flightDB=True )
-  ml.plot_attendee_remote_ratio( show=True, print_grid=True  )
-  ml.plot_co2eq_remote_ratio( show=True, print_grid=True  )
+  ml.plot_co2eq_distribution( mode='flight', cabin='AVERAGE', on_site=None )
+    
+## Ploting Ratio (only the figures)
+if True:
+  ml = co2eq.meeting_list2.MeetingList( name=ietf_list[ 'name' ], 
+                                        meeting_list=ietf_list[ 'meeting_list' ], 
+                                        airportDB=True,
+                                        cityDB=True,
+                                        flightDB=True )
+  ml.plot_attendee_remote_ratio( show=True, print_grid=True, most_present=15 )
+  ml.plot_co2eq_remote_ratio( show=True, print_grid=True, most_emitters=15  )
+
+## Plotting the md files an all necessary files for the web site
+## md is then converted into HTML files via jekly
+if True:
+  ml = co2eq.meeting_list2.MeetingList( name=ietf_list[ 'name' ], 
+                                        meeting_list=ietf_list[ 'meeting_list' ], 
+                                        airportDB=True,
+                                        cityDB=True,
+                                        flightDB=True )
+
   ml.www( mode_list=[ 'flight', 'attendee' ], cabin_list=[ 'AVERAGE' ] )
-##  ml.plot_co2eq_distribution( mode='flight', cabin='AVERAGE', on_site=None )
 

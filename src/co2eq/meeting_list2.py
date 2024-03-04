@@ -9,6 +9,7 @@ import roman
 import math
 
 import co2eq.meeting2
+import co2eq.md
 
 class MeetingList( co2eq.meeting2.Meeting ): 
 
@@ -309,7 +310,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
 #        svg_file_name=svg_file_name )
 #      fig.fig.show()
 
-  def plot_co2eq_remote_ratio( self, mode='flight', cabin='AVERAGE', show=False, print_grid=False ):
+  def plot_co2eq_remote_ratio( self, mode='flight', cabin='AVERAGE', show=False, print_grid=False, most_emitters=None ):
     """ plots the ratio of remote/on-site """
 
     df = self.build_data( mode=mode, cabin=cabin )
@@ -405,13 +406,15 @@ class MeetingList( co2eq.meeting2.Meeting ):
         fig_df[ ratio ] = fig_remote[ co2eq_method ] / fig_df[ co2eq_method ] * 100 
         fig_df[ ratio ] = fig_df[ ratio ].fillna( 0 )
       fig_df = fig_df.reset_index()
-
+      ## getting the X most emitters
+      if most_emitters is not None:
+        fig_df = fig_df.nlargest( n=most_emitters, columns= [ co2eq_method ] )
 
       suffix = 'remote_ratio'
       html_file_name = self.image_file_name( suffix, 'html', mode,\
-              cluster_key=cluster_key )
+              cluster_key=cluster_key, most_emitters=most_emitters )
       svg_file_name=self.image_file_name( suffix, 'svg', mode,\
-              cluster_key=cluster_key)
+              cluster_key=cluster_key, most_emitters=most_emitters )
       ## scaling figure to the distribution mode.
       if len( self.co2eq_method_list ) != 0:
         fig_width = self.fig_width / len( self.co2eq_method_list )
@@ -468,7 +471,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
 
 #      fig = co2eq.fig.OneRowSubfig( \
 
-  def plot_attendee_remote_ratio( self, show=False, print_grid=False  ):
+  def plot_attendee_remote_ratio( self, show=False, print_grid=False, most_present=None ):
     """ plots the ratio of remote/on-site """
 
     df = self.build_data( mode='attendee' )
@@ -535,7 +538,8 @@ class MeetingList( co2eq.meeting2.Meeting ):
 #        meeting_list = [ f"{m.name} - {m.meeting_iata_city}"  for m in self.meeting_list ]
 #        fig_df = fig_df[ fig_df.sum >= 5 ]
       fig_df = fig_df.reset_index()
-
+      if most_present is not None:
+        fig_df = fig_df.nlargest( n=most_present, columns=['sum' ] )
 ####        fig = px.line( fig_df, x='meeting',  y='ratio',
 ####                color=cluster_key,\
 ####                # text=d.index.name, 
@@ -552,9 +556,9 @@ class MeetingList( co2eq.meeting2.Meeting ):
       suffix = 'remote_ratio'
       mode = 'attendee'
       html_file_name = self.image_file_name( suffix, 'html', mode,\
-              cluster_key=cluster_key )
+              cluster_key=cluster_key, most_present=most_present )
       svg_file_name=self.image_file_name( suffix, 'svg', mode,\
-              cluster_key=cluster_key)
+              cluster_key=cluster_key, most_present=most_present)
       ## scaling figure to the distribution mode.
       if len( self.co2eq_method_list ) != 0:
         fig_width = self.fig_width / len( self.co2eq_method_list )
@@ -598,7 +602,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
 #        fig_height=self.fig_height,
     
 
-  def md_subsection_txt( self, mode, on_site_list, cabin=None, section_no=None):
+  def md_subsection_txt( self, mode, on_site_list, cabin=None ): #, section_no=None):
     ## html_file name
 #    if mode in [ 'flight', 'distance' ]:
 #      html_file_name = self.image_file_name( 'distribution', 'html', mode,
@@ -612,22 +616,24 @@ class MeetingList( co2eq.meeting2.Meeting ):
     cluster_key_list.remove( 'co2eq' )
 
     md = "" 
-    subsubsection_no = 1
+####    subsubsection_no = 1
     for cluster_key in cluster_key_list:
       if mode in [ 'flight', 'distance' ]:  
         subsection_title = f"CO2eq Distribution by `{cluster_key}` with {self.co2eq_method_list}"  
       elif mode == 'attendee':  
         subsection_title = f"Attendee Distribution by `{cluster_key}`"  
-      if section_no is not None:
-        subsection_no_str = f"{section_no}.{subsubsection_no}"
-      else: 
-        subsection_no_str = f"{subsubsection_no}"
-      md += f"### {subsection_no_str} {subsection_title}\n\n"  
+####      if section_no is not None:
+####        subsection_no_str = f"{section_no}.{subsubsection_no}"
+####      else: 
+####        subsection_no_str = f"{subsubsection_no}"
+####      md += f"### {subsection_no_str} {subsection_title}\n\n"  
+      md += f"### {subsection_title}\n\n"  
       for on_site in on_site_list:
         html_file_name = self.image_file_name( 'distribution', 'html', mode,\
               cabin=cabin, cluster_key=cluster_key, on_site=on_site, no_path=True )
 #      if mode == 'attendee':
-        md += self.embed_html( f"./{html_file_name}")
+####        md += self.embed_html( f"./{html_file_name}")
+        md += self.co2eq.md.embed_html( f"./{html_file_name}" )
 #      elif mode in [ 'flight', 'distance' ]:     
 #        md += self.embed_html( f"./{html_file_name}")
 #          md += f"<iframe src='./{html_file_name}'></iframe>\n\n"
@@ -713,9 +719,65 @@ class MeetingList( co2eq.meeting2.Meeting ):
     banner += end_table
     return banner
 
+  def ratio_md( self, mode_list=[ 'flight' , 'attendee' ], 
+    cabin_list=[ 'AVERAGE' ], 
+    on_site_list=[ None, True, False], 
+    banner="",
+    toc=True, output_md="index.md",
+    most_emitters=None,
+    most_present=None ):
+ 
+    co2eq_dist = 'flight' in mode_list or 'distance' in mode_list
+    atten_dist = 'attendee' in mode_list
+    if atten_dist and co2eq_dist :
+      title = f"{self.name}: Remote Participation Ratio of CO2 Emission and Attendees"  
+      txt = f"This page estimates the remote participation CO2 emitted for {self.name} as well as the distribution of the attendees of {self.name}."
+    elif atten_dist and not co2eq_dist: 
+      txt = f"This page displays the distribution of the attendees of {self.name}."
+    elif not atten_dist and co2eq_dist :
+      txt = f"This page estimates the CO2 emitted according for {self.name}."
+    else: 
+      raise ValueError( f"only ")
+      
+    txt = """This page provides the ratio of users that attends the meeting remotely.
+
+Such ratio, seems to be a good indicator on how the meeting is achieving a transition toward a sustainable implementation with less flights. 
+
+A meeting MAY propose attendee to participate remotely, but such participation is only effective if the propose remote participation experience matches the expectation or contrains of the remote participants. In some meetings, this means for example, the ability to ask questions and queing in a list that is completely forgotten.
+The main argument for on site participation is the ability to 'socialize'. This makes remote attendancy especially difficult when the main purpose of attendee is to meet colleagues as opposed to exchange information.  
+
+There is a critical ratio to meet in order to make remote participation effective. As long as critical ratio has not been met, remote participant are still 'second class' participants. 
+
+Note that in some cases, attendes are considered as 'remote' when they registered as 'remote' all other categories are considered as non remote andf are assimilated to 'on-site' users. This includes for example users that are some times indicated as 'not-arrived'. The reasonning is that such attendee was expected to attend 'on-site'. Then, it is difficult to estimate if he effectively has not travelled or if he is attending as a remote user. Note also that these attendee does not represent a huge portion of the attendees. 
+
+The Remote Ratio is both expressed in term of CO2 Emission as well as in term of Particiapation. 
+"""
+    txt_co2 = """The Remote Ratio expressed with CO2 emission indicates the ratio of CO2 mission being offset by remote participants versus the CO2 emissions associated to the meetings. If the remote access is seen as a way to reduce the CO2 emissions associated to the meetings, this Remote Ratio illustrates the effectiveness of the remote policy of the meetings and its evolution.
+
+Note that this constitutes a first approximation as a participant that does not flight for example may still have some emission that may be associated to its life style. While further analysis, one can estimate that emissions associated to a flight remains way above the standard emissions associated to its every-day- life."""
+
+    txt_attend = """The Remote Ratio expressed with attendee numbers reflects the acceptance of teh remote participation and its evolution."""
+
+    for mode in mode_list:
+      if mode in [ 'flight', 'distance' ]:
+        for cabin in cabin_list :
+          md_txt += f"## CO2 Estimation for '{mode}' mode in cabin {cabin} for {self.name}\n\n"
+          md_txt += self.md_subsection_txt( mode, on_site_list, cabin )
+      elif mode == 'attendee':
+        md_txt += f"## Attendee Distribution for {self.name}\n\n"
+        md_txt += self.md_subsection_txt( mode, on_site_list ) #, secti
+
+    md = co2eq.md.MdFile( md_txt )
+    md.number_sections()
+    md.save( join( self.output_dir, output_md ) )
+
+
+  def summary_md( self ):    
+    pass
+
   def www( self,\
           mode_list=[ 'flight', 'attendee'],\
-          cabin_list=[ 'AVERAGE' ] ):
+          cabin_list=[ 'AVERAGE' ], most_emitters=None, most_present=None ):
 ##          on_site_list=[ None, True, False] ):
     """plots and generates the md for the web site
 
@@ -728,13 +790,21 @@ class MeetingList( co2eq.meeting2.Meeting ):
       on_site_list=[ None ]
 
     banner = self.md_banner( )
+    ## When 'co2eq' is computed and presence is mentioned generating 
+    ## figures and text for ratio. 
+    if 'presence' in self.cluster_key_list :
+      ##plot ratios
+      ## 
+      pass
 
+    ## generating the figures for the meeting_list as well as for each meeting
     self.plot_distribution( mode_list=mode_list, cabin_list=cabin_list )
     for m in self.meeting_list:
       m.plot_distribution( mode_list=mode_list, cabin_list=cabin_list )
 
-    self.md( mode_list=mode_list, cabin_list=cabin_list,\
-             on_site_list=on_site_list, banner=banner )
+    ## generating the md file
+    self.dist_md( mode_list=mode_list, cabin_list=cabin_list,\
+             on_site_list=on_site_list, banner=banner, output_md='dist.md' )
     for m in self.meeting_list:
-      m.md( mode_list=mode_list, cabin_list=cabin_list,
+      m.dist_md( mode_list=mode_list, cabin_list=cabin_list,
              on_site_list=on_site_list, banner=banner )

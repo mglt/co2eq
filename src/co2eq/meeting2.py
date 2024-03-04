@@ -20,7 +20,8 @@ import time
 from co2eq.flight_utils import AirportDB, CityDB, FlightDB, GoClimateDB, CountryDB, Flight, logger, MyClimate
 import co2eq.conf
 import co2eq.fig
-    
+import co2eq.md
+
 class Meeting:
 
   def __init__( self, name:str, 
@@ -462,7 +463,7 @@ class Meeting:
 #        co2eq_method=co2eq_method, cabin=cabin)
 #    return os.path.join( self.output_dir, data_file + ".json")
 
-  def image_file_name( self, name, ext, mode, cabin=None, cluster_key=None, co2eq_method=None, on_site=None, no_path=False ):
+  def image_file_name( self, name, ext, mode, cabin=None, cluster_key=None, co2eq_method=None, on_site=None, no_path=False, most_present=None, most_emitters=None ):
     """ return an image file name
    
     The intent is to ensure a certain format in the file names, as
@@ -1072,50 +1073,59 @@ The CO2eq is estimated using various methodology. I this report the following me
 
     return md 
 
-  def md( self, mode_list=[ 'flight' , 'attendee' ], 
+  def dist_md( self, mode_list=[ 'flight' , 'attendee' ], 
           cabin_list=[ 'AVERAGE' ], 
           on_site_list=[ None, True, False], 
           banner="",
-          toc=True ):
+          toc=True, output_md="index.md" ):
  
     if toc is True:
       toc_md = "\n\n* TOC\n{:toc}\n\n"
     else:
       toc_md = ""
 
-    md =f"# {self.name} Data\n{banner}\n{toc_md}"
+##    md_txt =f"# {self.name} Data \n{banner}\n{toc_md}"
 
     co2eq_dist = 'flight' in mode_list or 'distance' in mode_list
     atten_dist = 'attendee' in mode_list
     if atten_dist and co2eq_dist :
-      md += f"This page estimates the CO2 emitted for {self.name} as well as the distribution of the attendees of {self.name}."
+      title = f"{self.name}: Distribution of CO2 Emission and Attendees"   
+      txt = f"This page estimates the CO2 emitted for {self.name} as well as the distribution of the attendees of {self.name}."
     elif atten_dist and not co2eq_dist: 
-      txt += f"This page displays the distribution of the attendees of {self.name}."
+      title = f"{self.name}: Attendee Distribution"   
+      txt = f"This page displays the distribution of the attendees of {self.name}."
     elif not atten_dist and co2eq_dist :
-      txt += f"This page estimates the CO2 emitted according for {self.name}."
+      title = f"{self.name}: Distribution of CO2 Emission"   
+      txt = f"This page estimates the CO2 emitted according for {self.name}."
     else: 
       raise ValueError( f"only ")
 
-    md += "\n\n"
-    md += self.co2_info_txt( ) 
-    md += "\n\n"
+    md_txt =f"# {title} \n\n{banner}\n\n{toc_md}\n\n{txt}\n\n"
+   
+    
+    txt += self.co2_info_txt( ) 
+    if txt is not None:
+      md_txt += "## CO2 General Information\n\n"    
+      md_txt += f"{txt}\n\n"
 
     # mode (section)      | grouped for section
     ## cabin (subsection) |
     ### cluster_key (subsubsection)      | combined in one picture
     #### co2eq_method (subsubsubsection) |
-    section_no = 1
-    subsection_no = 1
+####    section_no = 1
+####    subsection_no = 1
     print( f"mode_list: {mode_list}" )
     for mode in mode_list:  
       if mode in [ 'flight', 'distance' ]:
         for cabin in cabin_list :
-          section_title = f"CO2 Estimation for '{mode}' mode in cabin {cabin} for {self.name}"
-          section_no_str = roman.toRoman( section_no )
-          md += f"## {section_no_str} {section_title}\n\n"
-          md += self.md_subsection_txt( mode, on_site_list, cabin,\
-                  section_no=section_no_str )
-          section_no += 1
+####          section_title = f"CO2 Estimation for '{mode}' mode in cabin {cabin} for {self.name}"
+####          section_no_str = roman.toRoman( section_no )
+####          md += f"## {section_no_str} {section_title}\n\n"
+####          md += f"## {section_title}\n\n"
+          md_txt += f"## CO2 Estimation for '{mode}' mode in cabin {cabin} for {self.name}\n\n"
+          md_txt += self.md_subsection_txt( mode, on_site_list, cabin )#,\
+####                  section_no=section_no_str )
+####          section_no += 1
           #for on_site in on_site_list:
           #  html_file_name = self.image_file_name( 'distribution', 'html', mode, 
           #          on_site=on_site )
@@ -1133,23 +1143,30 @@ The CO2eq is estimated using various methodology. I this report the following me
 ##                  cabin=cabin, on_site=on_site )
 ##          md += f"<iframe src='{html_file_name}'></iframe>\n\n"
       elif mode == 'attendee':
-        section_title = f"Attendee Distribution for {self.name}"
-        section_no_str = roman.toRoman( section_no )
-        md += f"## {section_no_str}. {section_title}\n\n"
-        md += self.md_subsection_txt( mode, on_site_list, section_no=section_no_str)
-        section_no += 1
+####        section_title = f"Attendee Distribution for {self.name}"
+####        section_no_str = roman.toRoman( section_no )
+####        md += f"## {section_no_str}. {section_title}\n\n"
+####        md += f"## {section_title}\n\n"
+        md_txt += f"## Attendee Distribution for {self.name}\n\n"
+        md_txt += self.md_subsection_txt( mode, on_site_list ) #, section_no=section_no_str)
+###        section_no += 1
 #        for on_site in on_site_list:
 #          html_file_name = self.image_file_name( 'distribution', 'html', mode, 
 #                  on_site=on_site )
 #          md += f"<iframe src='{html_file_name}'></iframe>\n\n"
+    
+####    with open( join( self.output_dir, output_md), 'wt', encoding='utf8' ) as f:
+####      f.write( md )
+    
+    md = co2eq.md.MdFile( md_txt )
+    md.number_sections()
+    md.save( join( self.output_dir, output_md ) )
 
-    with open( join( self.output_dir, "index.md"), 'wt', encoding='utf8' ) as f:
-      f.write( md )
 
-  def embed_html( self, html):
-      return f"<p><embed src='{html}' height={self.fig_height} width={self.fig_width}/></p>\n\n"
+####  def embed_html( self, html):
+####      return f"<p><embed src='{html}' height={self.fig_height} width={self.fig_width}/></p>\n\n"
       
-  def md_subsection_txt( self, mode, on_site_list, cabin=None, section_no=None):
+  def md_subsection_txt( self, mode, on_site_list, cabin=None ): #, section_no=None):
     ## html_file name
 #    if mode in [ 'flight', 'distance' ]:
 #      html_file_name = self.image_file_name( 'distribution', 'html', mode, 
