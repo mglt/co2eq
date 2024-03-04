@@ -633,7 +633,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
               cabin=cabin, cluster_key=cluster_key, on_site=on_site, no_path=True )
 #      if mode == 'attendee':
 ####        md += self.embed_html( f"./{html_file_name}")
-        md += self.co2eq.md.embed_html( f"./{html_file_name}" )
+        md += co2eq.md.embed_html( f"./{html_file_name}" )
 #      elif mode in [ 'flight', 'distance' ]:     
 #        md += self.embed_html( f"./{html_file_name}")
 #          md += f"<iframe src='./{html_file_name}'></iframe>\n\n"
