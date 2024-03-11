@@ -80,6 +80,7 @@ ietf_list = {
 
 ## Plotting the CO2 emissions for the meeting list (only the figures)
 if False:
+  print( "--- MeetingList: Building co2 distribution ---" )  
   ml = co2eq.meeting_list2.MeetingList( name=ietf_list[ 'name' ], 
                                         meeting_list=ietf_list[ 'meeting_list' ], 
                                         airportDB=True,
@@ -89,6 +90,7 @@ if False:
     
 ## Ploting Ratio (only the figures)
 if True:
+  print( "--- MeetingList: Building ratio_distribution ---" )  
   ml = co2eq.meeting_list2.MeetingList( name=ietf_list[ 'name' ], 
                                         meeting_list=ietf_list[ 'meeting_list' ], 
                                         airportDB=True,
@@ -100,6 +102,7 @@ if True:
 ## Plotting the md files an all necessary files for the web site
 ## md is then converted into HTML files via jekly
 if True:
+  print( "--- MeetingList: Building the web site ---" )  
   ml = co2eq.meeting_list2.MeetingList( name=ietf_list[ 'name' ], 
                                         meeting_list=ietf_list[ 'meeting_list' ], 
                                         airportDB=True,

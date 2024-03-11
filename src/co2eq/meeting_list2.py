@@ -602,7 +602,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
 #        fig_height=self.fig_height,
     
 
-  def md_subsection_txt( self, mode, on_site_list, cabin=None ): #, section_no=None):
+  def md_subsection_txt( self, mode, on_site_list, cabin=None, suffix='remote_ratio' ): #, section_no=None):
     ## html_file name
 #    if mode in [ 'flight', 'distance' ]:
 #      html_file_name = self.image_file_name( 'distribution', 'html', mode,
@@ -629,7 +629,8 @@ class MeetingList( co2eq.meeting2.Meeting ):
 ####      md += f"### {subsection_no_str} {subsection_title}\n\n"  
       md += f"### {subsection_title}\n\n"  
       for on_site in on_site_list:
-        html_file_name = self.image_file_name( 'distribution', 'html', mode,\
+#        html_file_name = self.image_file_name( 'distribution', 'html', mode,\
+        html_file_name = self.image_file_name( suffix, 'html', mode,\
               cabin=cabin, cluster_key=cluster_key, on_site=on_site, no_path=True )
 #      if mode == 'attendee':
 ####        md += self.embed_html( f"./{html_file_name}")
@@ -726,7 +727,14 @@ class MeetingList( co2eq.meeting2.Meeting ):
     toc=True, output_md="index.md",
     most_emitters=None,
     most_present=None ):
- 
+
+
+    if toc is True:
+      toc_md = "\n\n* TOC\n{:toc}\n\n"
+    else:
+      toc_md = ""
+
+
     co2eq_dist = 'flight' in mode_list or 'distance' in mode_list
     atten_dist = 'attendee' in mode_list
     if atten_dist and co2eq_dist :
@@ -738,46 +746,151 @@ class MeetingList( co2eq.meeting2.Meeting ):
       txt = f"This page estimates the CO2 emitted according for {self.name}."
     else: 
       raise ValueError( f"only ")
-      
-    txt = """This page provides the ratio of users that attends the meeting remotely.
+ 
+    md_txt =f"# {title} \n\n{banner}\n\n{toc_md}\n\n{txt}\n\n"
 
-Such ratio, seems to be a good indicator on how the meeting is achieving a transition toward a sustainable implementation with less flights. 
+    md_txt += """In term of CO2eq emissions, the most effective way to reduce these emissions is to 'not flight'. 'not flying' is represented by 'remote' participation in our current model. This comes with some simplifications, but remains overall quite realistic with the current behavior of 'flying by default' and the data we have. 
 
-A meeting MAY propose attendee to participate remotely, but such participation is only effective if the propose remote participation experience matches the expectation or contrains of the remote participants. In some meetings, this means for example, the ability to ask questions and queing in a list that is completely forgotten.
-The main argument for on site participation is the ability to 'socialize'. This makes remote attendancy especially difficult when the main purpose of attendee is to meet colleagues as opposed to exchange information.  
+Unless behaviors changes, the CO2eq Remote Ratio estimates the ratio of CO2eq being offset by 'remote' participation over the CO2eq if everyone where participating 'onsite'.
+The Attendee Remote Ratio estimates the number of 'remote' participants over the total number of participant.  
 
+Both Ratios provide indicators of a net-zero policy. The CO2 Remote Ratio measures its efficiency while the Attendee Remote Ratio indicates the level of acceptance of remote participation which can also be translated as the level of conciousness of a more sustainable meeting.  
+This could be seen as an indicator of the sustainability policy put in place which is usually designated as net-zero policy.
+
+Currently the CO2 estimation is considering that everyone flies unless the distance is too short - in which case the emission is set to zero. Unfortunately, the behavior of flying by default is pretty much what we can observe for ICANN and IETF meetings. As result, the current model do not reflect the efforts of someone taking the train over a long distance. It also does not consider someone taking the train even for a shorter distance when there is a flight between the meeting location and the capital of the city the participant is coming from. We can only encourage meeting organizer to enable participants to indicate the type of transport taken to go to the meeting.   
+
+
+A meeting MAY propose attendee to participate remotely, but such participation is only effective if the propose remote participation experience matches the expectation or contains of the remote participants. In some meetings, this means for example, the ability to ask questions and queuing in a list that is completely forgotten.
+The main argument for on site participation is the ability to 'socialize'. This makes remote attendance especially difficult when the main purpose of attendee is to meet colleagues as opposed to exchange information.  
 There is a critical ratio to meet in order to make remote participation effective. As long as critical ratio has not been met, remote participant are still 'second class' participants. 
 
-Note that in some cases, attendes are considered as 'remote' when they registered as 'remote' all other categories are considered as non remote andf are assimilated to 'on-site' users. This includes for example users that are some times indicated as 'not-arrived'. The reasonning is that such attendee was expected to attend 'on-site'. Then, it is difficult to estimate if he effectively has not travelled or if he is attending as a remote user. Note also that these attendee does not represent a huge portion of the attendees. 
-
-The Remote Ratio is both expressed in term of CO2 Emission as well as in term of Particiapation. 
+Note that in some cases, attendees are considered as 'remote' when they registered as 'remote' all other categories are considered as non remote and are assimilated to 'on-site' users. This includes for example users that are some times indicated as 'not-arrived'. The reasoning is that such attendee was expected to attend 'on-site'. Then, it is difficult to estimate if he effectively has not travelled or if he is attending as a remote user. Note also that these attendee does not represent a huge portion of the attendees. 
 """
-    txt_co2 = """The Remote Ratio expressed with CO2 emission indicates the ratio of CO2 mission being offset by remote participants versus the CO2 emissions associated to the meetings. If the remote access is seen as a way to reduce the CO2 emissions associated to the meetings, this Remote Ratio illustrates the effectiveness of the remote policy of the meetings and its evolution.
+    txt_co2 = """The Remote Ratio expressed with CO2 emission indicates the ratio of CO2 mission being offset by remote participants versus the CO2 emissions associated to the meetings. Such metric is a direct estimation of a successful net-zero strategy as it estimates the CO2eq offset over the total CO2eq emitted. """
 
-Note that this constitutes a first approximation as a participant that does not flight for example may still have some emission that may be associated to its life style. While further analysis, one can estimate that emissions associated to a flight remains way above the standard emissions associated to its every-day- life."""
-
-    txt_attend = """The Remote Ratio expressed with attendee numbers reflects the acceptance of teh remote participation and its evolution."""
+    txt_attend = """The Remote Ratio expressed with attendee numbers reflects the acceptance of the remote participation and its evolution.
+Acceptance of Remote participation is probably what leadership should focus on to develop a sustainable meeting. """
 
     for mode in mode_list:
       if mode in [ 'flight', 'distance' ]:
         for cabin in cabin_list :
-          md_txt += f"## CO2 Estimation for '{mode}' mode in cabin {cabin} for {self.name}\n\n"
-          md_txt += self.md_subsection_txt( mode, on_site_list, cabin )
+          md_txt += f"## CO2 Remote Ratio for '{mode}' mode in cabin {cabin} for {self.name}\n\n"
+          md_txt += txt_co2
+          md_txt += self.md_subsection_txt( mode, on_site_list, cabin, suffix='remote_ratio' )
       elif mode == 'attendee':
-        md_txt += f"## Attendee Distribution for {self.name}\n\n"
-        md_txt += self.md_subsection_txt( mode, on_site_list ) #, secti
+        md_txt += f"## Attendee Remote Ration for {self.name}\n\n"
+        md_txt += txt_attend
+        md_txt += self.md_subsection_txt( mode, on_site_list, suffix='remote_ratio' ) #, secti
 
     md = co2eq.md.MdFile( md_txt )
     md.number_sections()
     md.save( join( self.output_dir, output_md ) )
 
 
-  def summary_md( self ):    
-    pass
+  def summary_md( self, mode_list=[ 'flight' , 'attendee' ], 
+          cabin_list=[ 'AVERAGE' ],
+          on_site_list=[ None, True, False],
+          banner="",
+          toc=True, output_md="index.md", 
+          most_present=None, most_emitters=None ):   
+
+    if toc is True:
+      toc_md = "\n\n* TOC\n{:toc}\n\n"
+    else:
+      toc_md = ""
+
+    title = "{self.name} Highlights" 
+
+    txt = f"""# {self.name} Highlights
+
+    This page provides some selected highlights for {self.name} to depict the evolution of the CO2eq emissions  as well as the perspectives in term of offset."""
+
+    md_txt =f"# {title} \n\n{banner}\n\n{toc_md}\n\n{txt}\n\n"
+
+    md_txt += "## CO2 Offset "
+
+    if 'presence' in self.cluster_key_list and\
+        self.cabin_list != [] and\
+        'flight' in mode_list and\
+        None in on_site_list:
+      if 'AVERAGE' in cabin_list:
+        cabin = 'AVERAGE'
+      else: 
+        cabin = cabin_list[ 0 ] 
+      mode = 'flight'
+      on_site = None
+
+      md_txt += f"""The figure below depicts the evolution of the CO2eq associated by the meeting of the various meetings. The effective CO2eq is represented by the CO2eq emissions associated to 'on-site' participants. CO2eq emissions associated to 'remote' participants reflects the portion of CO2eq being offset. The total amount of CO2eq reflects a metric that can reveals an increase/decrease of participation and the evolution associated to 'on-site' and 'remote' participations. When a net-zero strategy has been defined, it is expected to favor 'offsetting' CO2eq and this figure measures how successful that strategy is.   
+
+The CO2eq emissions are estimated using different methods ({self.co2eq_method_list}) for the flight cabin {cabin}. Please check [Distributions](./distributions.html) for additional CO2eq distributions.
+"""
+      html_file_name = self.image_file_name( 'distribution', 'html', mode,
+          on_site=on_site, cabin=cabin, no_path=True )
+      md_txt +=  self.embed_html( f"./{html_file_name}" )
+
+      md_txt += """The Picture below depicts the Remote Ratio of the emissions being offset over the total emissions of the meeting. Please check [Remote Ratio](./remote_ratio.html) for additional CO2eq distributions."""
+      html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
+          on_site=on_site, cabin=cabin, no_path=True )
+      md_txt +=  self.embed_html( f"./{html_file_name}" )
+
+      if 'organization' in self.cluster_key:
+        cluster_key = 'organization' 
+      elif 'country' in self.cluster_key: 
+        cluster_key = 'country'
+      else:
+        cluster_key = None
+
+      if cluster_key is not None:
+
+        md_txt += f"""The figure below depicts the Remote Ratio of the emissions being offset per {cluster_key}. The overall performance in term of offsetof a meeting may reflect the performance of its main participants or might be influenced by its participants. The figures shows the evolution of the offset Remote Ratio for the {most_emitters} most contributors."""
+
+      html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
+          on_site=on_site, cabin=cabin, no_path=True )
+      md +=  self.embed_html( f"./{html_file_name}" )
+          
+
+    if 'presence' in self.cluster_key_list and\
+        cabin_list != [] and\
+        'attendee' in mode_list and\
+        None in on_site_list:
+      mode = 'attendee'
+      on_site = None
+      md_txt += f"""## Remote Participation
+
+      The figure below depicts the distribution between 'remote' and 'on-site' participants. The graph here reflects the how participants are inclined to participate 'remotely' and thus avoids the emissions associated to flying. Please check [Distributions](./distributions.html) for additional Attendee distributions."""
+      
+      html_file_name = self.image_file_name( 'distribution', 'html', mode,
+          on_site=on_site, no_path=True )
+      md_txt +=  self.embed_html( f"./{html_file_name}" )
+    
+      md_txt += """The Picture below depicts the Remote Ratio of the emissions being offset over the total emissions of the meeting. Please check [Remote Ratio](./remote_ratio.html) for additional Remote Ratio distributions."""
+      html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
+          on_site=on_site, cabin=cabin, no_path=True )
+      md_txt +=  self.embed_html( f"./{html_file_name}" )
+
+      if 'organization' in self.cluster_key:
+        cluster_key = 'organization' 
+      elif 'country' in self.cluster_key: 
+        cluster_key = 'country'
+      else:
+        cluster_key = None
+
+      if cluster_key is not None:
+
+        md_txt += f"""The figure below depicts the Remote Ratio of the emissions being offset per {cluster_key}. The overall performance in term of offset of a meeting may reflect the performance of its main participants or might be influenced by its participants. The figures shows the evolution of the offset Remote Ratio for the {most_present} most contributors."""
+
+        html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
+            on_site=on_site, cabin=cabin, most_present=most_present, \
+            no_path=True )
+        md_txt +=  self.embed_html( f"./{html_file_name}" )
+    md = co2eq.md.MdFile( md_txt )
+    md.number_sections()
+    md.save( join( self.output_dir, output_md ) )
+
 
   def www( self,\
           mode_list=[ 'flight', 'attendee'],\
-          cabin_list=[ 'AVERAGE' ], most_emitters=None, most_present=None ):
+          cabin_list=[ 'AVERAGE' ], most_emitters=20, most_present=20 ):
 ##          on_site_list=[ None, True, False] ):
     """plots and generates the md for the web site
 
@@ -786,25 +899,40 @@ Note that this constitutes a first approximation as a participant that does not 
     """
     if 'presence' in self.cluster_key_list :
       on_site_list=[ None, True, False] 
+      dist_md = 'distribution.md'
     else:
       on_site_list=[ None ]
+      dist_md = 'index.md'
 
     banner = self.md_banner( )
     ## When 'co2eq' is computed and presence is mentioned generating 
     ## figures and text for ratio. 
-    if 'presence' in self.cluster_key_list :
-      ##plot ratios
-      ## 
-      pass
 
-    ## generating the figures for the meeting_list as well as for each meeting
+    ## generating the figures for the meeting_list.
+    ## When 'presence' is a cluster_key, remote_ratio figures are generated
     self.plot_distribution( mode_list=mode_list, cabin_list=cabin_list )
+    if 'presence' in self.cluster_key_list :
+      self.plot_attendee_remote_ratio( self, show=False, print_grid=False, most_present=most_present )
+      self.plot_attendee_remote_ratio( self, show=False, print_grid=False, most_present=most_present )
+      ## generating figures for all meetings
     for m in self.meeting_list:
       m.plot_distribution( mode_list=mode_list, cabin_list=cabin_list )
 
     ## generating the md file
+    ## When 'presence' is a cluster_key, remote_ratio figures are generated
     self.dist_md( mode_list=mode_list, cabin_list=cabin_list,\
-             on_site_list=on_site_list, banner=banner, output_md='dist.md' )
+             on_site_list=on_site_list, banner=banner, 
+             output_md=dist_md )
+    if 'presence' in self.cluster_key_list :
+      self.ratio_md( self, mode_list=mode_list, cabin_list=cabin_list, 
+        on_site_list=on_site_list, banner=banner, toc=True,
+        output_md="remote_ratio.md", most_emitters=most_emitters,
+        most_present=most_present )
+      self.summary_md( self, mode_list=mode_list, cabin_list=cabin_list, 
+        on_site_list=on_site_list, banner=banner, toc=True,
+        output_md="index.md", most_emitters=most_emitters,
+        most_present=most_present )
+      ## generating md files for all meetings
     for m in self.meeting_list:
       m.dist_md( mode_list=mode_list, cabin_list=cabin_list,
              on_site_list=on_site_list, banner=banner )
