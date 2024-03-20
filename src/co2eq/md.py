@@ -1,3 +1,5 @@
+import roman
+
 class MdFile:
 
   def __init__( self, md_txt ):
@@ -37,11 +39,14 @@ class MdFile:
 
    
 def embed_html( html_page, height=None, width=None):
-    md =  f"<p><embed src='{html}'"
+    """ embeds an HTML page 
+    This is a pretty heavy alternative so we may favor displaying svg with a link to the HTML page.
+    """
+    md =  f"\n\n<p><embed src='{html_page}'"
     if height is not None:
-      md += f" height={height}"
+      md += f" height={ int( height ) }"
     if width is not None:
-      md += f" width={width}"
+      md += f" width={ int( width ) }"
     md += "/></p>\n\n"
     return md
 

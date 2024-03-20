@@ -55,7 +55,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
     self.meeting_list_url="http://127.0.0.1:4000/"
     ## The home URL to the web site
     self.home_url=self.meeting_list_url
-    self.banner_col=10
+    self.banner_col=12
 
   def init_meeting_list( self, mode_list=[ 'attendee', 'flight'], cabine_list=[ 'AVERAGE' ] ):
     self.meeting_list = []
@@ -114,21 +114,39 @@ class MeetingList( co2eq.meeting2.Meeting ):
 
   def plot_co2eq_distribution( self, mode='flight', cabin='AVERAGE', on_site=None, show=False, print_grid=False):
 
+    if on_site not in [ True, False, None ]:
+      raise ValueError( f"Unknown value {on_site} for on_site.\
+        Expecting True, False or None" )
+
+    cluster_key_list = self.cluster_key_list[ : ]
+    cluster_key_list.remove( 'co2eq' )
+
+    suffix = 'distribution'
+
+    is_file_list = []
+    for cluster_key in cluster_key_list :
+      html_file_name = self.image_file_name( suffix, 'html', mode, cabin=cabin,
+              cluster_key=cluster_key, on_site=on_site )
+      svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin=cabin,
+              cluster_key=cluster_key, on_site=on_site )
+      is_file_list.append( os.path.isfile( html_file_name ) and\
+              os.path.isfile( svg_file_name ) )
+    if False not in is_file_list :
+      return None
+
+
     df = self.build_data( mode=mode, cabin=cabin )
     print( f"df: {df}" )
     print( f"df.columns: {df.columns}" )
     print( f"df.head: {df.head}" )
 
-    if on_site not in [ True, False, None ]:
-      raise ValueError( f"Unknown value {on_site} for on_site.\
-        Expecting True, False or None" )
     if 'presence' not in df.columns and on_site is not None:
       raise ValueError( f"on_site is specified to {on_site} but "\
         f"'presence' is not specified in the data frame.\n"\
         f"{df.info}\ndf.columns: {df.columns}" )
  
-    cluster_key_list = self.cluster_key_list[ : ]
-    cluster_key_list.remove( 'co2eq' )
+#    cluster_key_list = self.cluster_key_list[ : ]
+#    cluster_key_list.remove( 'co2eq' )
     agg_dict = {}
     for co2eq_method in self.co2eq_method_list :
       agg_dict[ co2eq_method ] = 'sum'
@@ -166,7 +184,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
         subfig_list.append( subfig )
 #        subfig_title_list.append( subfig_title )
       
-      suffix = 'distribution'
+#      suffix = 'distribution'
       if on_site is True:
         title = f"CO2eq Distribution for On-Site Participants (Effective CO2eq)"
       elif on_site is False:
@@ -197,6 +215,20 @@ class MeetingList( co2eq.meeting2.Meeting ):
 
   def plot_attendee_distribution( self, on_site=None, show=False, print_grid=False ):
 
+    cluster_key_list = self.cluster_key_list[ : ]
+    cluster_key_list.remove( 'co2eq' )
+    is_file_list = []
+    suffix = 'distribution'
+    mode = 'attendee'
+    for cluster_key in cluster_key_list :
+      html_file_name = self.image_file_name( suffix, 'html', mode,\
+              cluster_key=cluster_key, on_site=on_site )
+      svg_file_name=self.image_file_name( suffix, 'svg', mode,\
+              cluster_key=cluster_key, on_site=on_site )
+      is_file_list.append( os.path.isfile( html_file_name ) and\
+              os.path.isfile( svg_file_name ) )
+    if False not in is_file_list :
+      return None
 
     df = self.build_data( mode='attendee' )
     if on_site not in [ True, False, None ]:
@@ -206,8 +238,8 @@ class MeetingList( co2eq.meeting2.Meeting ):
       raise ValueError( f"on_site is specified to {on_site} but "\
         f"'presence' is not specified in the data frame.\n"\
         f"{df.info}\ndf.columns: {df.columns}" )
-    cluster_key_list = self.cluster_key_list[ : ]
-    cluster_key_list.remove( 'co2eq' )
+##    cluster_key_list = self.cluster_key_list[ : ]
+##    cluster_key_list.remove( 'co2eq' )
     subfig_list = []
 ##    agg_dict = { 'count' : 'sum' }
 ##      agg_dict[ 'count' ] = 'sum'
@@ -265,8 +297,8 @@ class MeetingList( co2eq.meeting2.Meeting ):
 ##      raise ValueError
 ##      subfig_list.append( subfig )
 ##      subfig_title_list.append( subfig_title )
-      suffix = 'distribution'
-      mode = 'attendee'
+##      suffix = 'distribution'
+##      mode = 'attendee'
       html_file_name = self.image_file_name( suffix, 'html', mode,\
               cluster_key=cluster_key, on_site=on_site )
       svg_file_name=self.image_file_name( suffix, 'svg', mode,\
@@ -313,13 +345,29 @@ class MeetingList( co2eq.meeting2.Meeting ):
   def plot_co2eq_remote_ratio( self, mode='flight', cabin='AVERAGE', show=False, print_grid=False, most_emitters=None ):
     """ plots the ratio of remote/on-site """
 
+    cluster_key_list = self.cluster_key_list[ : ]
+    cluster_key_list.remove( 'co2eq' )
+    suffix = 'remote_ratio'
+    is_file_list = []
+    for cluster_key in cluster_key_list :
+      html_file_name = self.image_file_name( suffix, 'html', mode,\
+              cabin=cabin, cluster_key=cluster_key, \
+              most_emitters=most_emitters )
+      svg_file_name=self.image_file_name( suffix, 'svg', mode,\
+              cabin=cabin, cluster_key=cluster_key, \
+              most_emitters=most_emitters )
+      is_file_list.append( os.path.isfile( html_file_name ) and\
+              os.path.isfile( svg_file_name ) )
+    if False not in is_file_list:
+      return    
+
     df = self.build_data( mode=mode, cabin=cabin )
     if 'presence' not in df.columns :
       raise ValueError( f"on_site is specified to {on_site} but "\
         f"'presence' is not specified in the data frame.\n"\
         f"{df.info}\ndf.columns: {df.columns}" )
-    cluster_key_list = self.cluster_key_list[ : ]
-    cluster_key_list.remove( 'co2eq' )
+#    cluster_key_list = self.cluster_key_list[ : ]
+#    cluster_key_list.remove( 'co2eq' )
     subfig_list = []
 
     agg_dict = {}
@@ -410,11 +458,13 @@ class MeetingList( co2eq.meeting2.Meeting ):
       if most_emitters is not None:
         fig_df = fig_df.nlargest( n=most_emitters, columns= [ co2eq_method ] )
 
-      suffix = 'remote_ratio'
+#      suffix = 'remote_ratio'
       html_file_name = self.image_file_name( suffix, 'html', mode,\
-              cluster_key=cluster_key, most_emitters=most_emitters )
+              cabin=cabin, cluster_key=cluster_key, \
+              most_emitters=most_emitters )
       svg_file_name=self.image_file_name( suffix, 'svg', mode,\
-              cluster_key=cluster_key, most_emitters=most_emitters )
+              cabin=cabin, cluster_key=cluster_key, \
+              most_emitters=most_emitters )
       ## scaling figure to the distribution mode.
       if len( self.co2eq_method_list ) != 0:
         fig_width = self.fig_width / len( self.co2eq_method_list )
@@ -474,13 +524,29 @@ class MeetingList( co2eq.meeting2.Meeting ):
   def plot_attendee_remote_ratio( self, show=False, print_grid=False, most_present=None ):
     """ plots the ratio of remote/on-site """
 
+    cluster_key_list = self.cluster_key_list[ : ]
+    cluster_key_list.remove( 'co2eq' )
+    suffix = 'remote_ratio'
+    mode = 'attendee'
+    is_file_list = []
+    for cluster_key in cluster_key_list :
+      html_file_name = self.image_file_name( suffix, 'html', mode,\
+              cluster_key=cluster_key, most_present=most_present )
+      svg_file_name=self.image_file_name( suffix, 'svg', mode,\
+              cluster_key=cluster_key, most_present=most_present)
+      is_file_list.append( os.path.isfile( html_file_name ) and\
+              os.path.isfile( svg_file_name ) )
+    if False not in is_file_list:
+      return    
+
+
     df = self.build_data( mode='attendee' )
     if 'presence' not in df.columns :
       raise ValueError( f"on_site is specified to {on_site} but "\
         f"'presence' is not specified in the data frame.\n"\
         f"{df.info}\ndf.columns: {df.columns}" )
-    cluster_key_list = self.cluster_key_list[ : ]
-    cluster_key_list.remove( 'co2eq' )
+#    cluster_key_list = self.cluster_key_list[ : ]
+#    cluster_key_list.remove( 'co2eq' )
     subfig_list = []
 
     title = f"Remote Attendee Ratio Distribution"
@@ -553,8 +619,8 @@ class MeetingList( co2eq.meeting2.Meeting ):
 ##      raise ValueError
 ##      subfig_list.append( subfig )
 ##      subfig_title_list.append( subfig_title )
-      suffix = 'remote_ratio'
-      mode = 'attendee'
+#      suffix = 'remote_ratio'
+#      mode = 'attendee'
       html_file_name = self.image_file_name( suffix, 'html', mode,\
               cluster_key=cluster_key, most_present=most_present )
       svg_file_name=self.image_file_name( suffix, 'svg', mode,\
@@ -600,9 +666,20 @@ class MeetingList( co2eq.meeting2.Meeting ):
 #        fig_title=title,
 #        fig_width=self.fig_width,
 #        fig_height=self.fig_height,
-    
 
-  def md_subsection_txt( self, mode, on_site_list, cabin=None, suffix='remote_ratio' ): #, section_no=None):
+  def dist_md_subsection_txt( self, mode, on_site_list, cabin=None ):
+    """ overwrite the dist_md_subsection
+    
+    The dist_md_subsection_txt outputs a single figure with all
+    cluster_key. This is not possible to display them all as we
+    already agregate th emultiple meetings. To address this we 
+    generate a scetion for each cluster_key.
+    """
+
+    return self.md_subsection_txt( 'distribution', mode, 
+            on_site_list=on_site_list, cabin=cabin )     
+  
+  def md_subsection_txt( self, suffix, mode, on_site_list=[ None ], cabin=None, most_emitters=None, most_present=None ): #, section_no=None):
     ## html_file name
 #    if mode in [ 'flight', 'distance' ]:
 #      html_file_name = self.image_file_name( 'distribution', 'html', mode,
@@ -615,33 +692,47 @@ class MeetingList( co2eq.meeting2.Meeting ):
     cluster_key_list = self.cluster_key_list[ : ]
     cluster_key_list.remove( 'co2eq' )
 
-    md = "" 
+    md_txt = "" 
 ####    subsubsection_no = 1
     for cluster_key in cluster_key_list:
       if mode in [ 'flight', 'distance' ]:  
+        most_present=None  
         subsection_title = f"CO2eq Distribution by `{cluster_key}` with {self.co2eq_method_list}"  
       elif mode == 'attendee':  
+        most_emitters=None  
         subsection_title = f"Attendee Distribution by `{cluster_key}`"  
 ####      if section_no is not None:
 ####        subsection_no_str = f"{section_no}.{subsubsection_no}"
 ####      else: 
 ####        subsection_no_str = f"{subsubsection_no}"
 ####      md += f"### {subsection_no_str} {subsection_title}\n\n"  
-      md += f"### {subsection_title}\n\n"  
+      md_txt += f"\n\n### {subsection_title}\n\n" 
       for on_site in on_site_list:
+        md_txt += self.fig_svg_md( suffix, mode, cabin=cabin, 
+                cluster_key=cluster_key, on_site=on_site,\
+                most_emitters=most_emitters, most_present=most_present )
 #        html_file_name = self.image_file_name( 'distribution', 'html', mode,\
-        html_file_name = self.image_file_name( suffix, 'html', mode,\
-              cabin=cabin, cluster_key=cluster_key, on_site=on_site, no_path=True )
+#000        svg_file_name = self.image_file_name( suffix, 'svg', mode,\
+#000              cabin=cabin, cluster_key=cluster_key, on_site=on_site,\
+#000              most_emitters=most_emitters, most_present=most_present, \
+#000              no_path=True )
+#000        html_file_name = self.image_file_name( suffix, 'svg', mode,\
+#000              cabin=cabin, cluster_key=cluster_key, on_site=on_site,\
+#000              most_emitters=most_emitters, most_present=most_present, \
+#000              no_path=True )
 #      if mode == 'attendee':
 ####        md += self.embed_html( f"./{html_file_name}")
-        md += co2eq.md.embed_html( f"./{html_file_name}" )
+#        md += co2eq.md.embed_html( f"./{html_file_name}" )
+#        md += "\n\n![](./html_file_name)\n\n"     
+#000        md += f"\n\n<img src='./{svg_file_name}'>\n\n" 
+#000        md += f"<a href='./{html_file_name}'>View the figure in HTML</a>"
 #      elif mode in [ 'flight', 'distance' ]:     
 #        md += self.embed_html( f"./{html_file_name}")
 #          md += f"<iframe src='./{html_file_name}'></iframe>\n\n"
 #          md += f"<iframe src='./{html_file_name}'></iframe>\n\n"
 #      else: 
 #        raise ValueError( f"Uknown mode {mode}. Expecting 'attendee', 'flight', 'distance'" )
-    return md 
+    return md_txt 
 
 
 
@@ -675,7 +766,8 @@ class MeetingList( co2eq.meeting2.Meeting ):
     cell_list = []
     cell_style = "text-decoration: none; padding: 0px; margin: 0px;"
     if home_url != None:
-      cell_list.append( f"<a href='{home_url}' style='font-size: 30px; {cell_style}'>⌂</a>" )
+#      cell_list.append( f"<a href='{home_url}' style='font-size: 10px; {cell_style}'>⌂</a>" )
+      cell_list.append( f"<a href='{home_url}' style='font-size: 10px; {cell_style}'>&#127968;</a>" )
     cell_list.append( f"<a href='{meeting_list_url}{self.name}' style='{cell_style}' >{self.name}</a>" )
     for m in self.meeting_list :
       cell_list.append( f"<a href='{meeting_list_url}{self.name}/{m.name}' style='{cell_style}' >{m.name}</a>" )
@@ -722,33 +814,42 @@ class MeetingList( co2eq.meeting2.Meeting ):
 
   def ratio_md( self, mode_list=[ 'flight' , 'attendee' ], 
     cabin_list=[ 'AVERAGE' ], 
-    on_site_list=[ None, True, False], 
+#    on_site_list=[ None, True, False], 
     banner="",
     toc=True, output_md="index.md",
     most_emitters=None,
     most_present=None ):
 
-
-    if toc is True:
-      toc_md = "\n\n* TOC\n{:toc}\n\n"
-    else:
-      toc_md = ""
-
+  
+    md_file = os.path.join( self.output_dir, output_md )
+#    if os.path.isfile( md_file ):
+#      return None
+#
+#    if toc is True:
+#      toc_md = "\n\n* TOC\n{:toc}\n\n"
+#    else:
+#      toc_md = ""
+###    on_site_list = [ None ]
 
     co2eq_dist = 'flight' in mode_list or 'distance' in mode_list
     atten_dist = 'attendee' in mode_list
     if atten_dist and co2eq_dist :
-      title = f"{self.name}: Remote Participation Ratio of CO2 Emission and Attendees"  
+      title = f"{self.name} Remote Participation" # (CO2 and Attendees)"  
       txt = f"This page estimates the remote participation CO2 emitted for {self.name} as well as the distribution of the attendees of {self.name}."
     elif atten_dist and not co2eq_dist: 
+      title = f"{self.name}: Remote Attendance Ratio"  
       txt = f"This page displays the distribution of the attendees of {self.name}."
     elif not atten_dist and co2eq_dist :
+      title = f"{self.name}: Remote Ratio of CO2 Emissions"  
       txt = f"This page estimates the CO2 emitted according for {self.name}."
     else: 
       raise ValueError( f"only ")
  
-    md_txt =f"# {title} \n\n{banner}\n\n{toc_md}\n\n{txt}\n\n"
-
+    header = self.header_md( title, banner=banner, toc=toc, md_file=md_file)
+    if header is None:
+      return None
+#    md_txt =f"# {title} \n\n{banner}\n\n{toc_md}\n\n{txt}\n\n"
+    md_txt =f"{header}\n\n{txt}\n\n"
     md_txt += """In term of CO2eq emissions, the most effective way to reduce these emissions is to 'not flight'. 'not flying' is represented by 'remote' participation in our current model. This comes with some simplifications, but remains overall quite realistic with the current behavior of 'flying by default' and the data we have. 
 
 Unless behaviors changes, the CO2eq Remote Ratio estimates the ratio of CO2eq being offset by 'remote' participation over the CO2eq if everyone where participating 'onsite'.
@@ -774,119 +875,151 @@ Acceptance of Remote participation is probably what leadership should focus on t
     for mode in mode_list:
       if mode in [ 'flight', 'distance' ]:
         for cabin in cabin_list :
-          md_txt += f"## CO2 Remote Ratio for '{mode}' mode in cabin {cabin} for {self.name}\n\n"
+          md_txt += f"\n\n## CO2 Remote Ratio for '{mode}' mode in cabin {cabin} for {self.name}\n\n"
           md_txt += txt_co2
-          md_txt += self.md_subsection_txt( mode, on_site_list, cabin, suffix='remote_ratio' )
+#          md_txt += self.md_subsection_txt( mode, on_site_list, cabin, suffix='remote_ratio',  most_emitters=most_emitters, most_present=most_present )
+          md_txt += self.md_subsection_txt( 'remote_ratio', mode,
+                  cabin=cabin, most_emitters=most_emitters, 
+                  most_present=most_present )
       elif mode == 'attendee':
-        md_txt += f"## Attendee Remote Ration for {self.name}\n\n"
+        md_txt += f"\n\n## Attendee Remote Ratio for {self.name}\n\n"
         md_txt += txt_attend
-        md_txt += self.md_subsection_txt( mode, on_site_list, suffix='remote_ratio' ) #, secti
+###        md_txt += self.md_subsection_txt( mode, on_site_list, suffix='remote_ratio', most_emitters=most_emitters, most_present=most_present ) #, secti
+        md_txt += self.md_subsection_txt( 'remote_ratio', mode,
+                most_emitters=most_emitters, 
+                most_present=most_present ) #, secti
 
     md = co2eq.md.MdFile( md_txt )
     md.number_sections()
-    md.save( join( self.output_dir, output_md ) )
+#    md.save( os.path.join( self.output_dir, output_md ) )
+    md.save( md_file )
 
 
-  def summary_md( self, mode_list=[ 'flight' , 'attendee' ], 
+  def highlights_md( self, mode_list=[ 'flight' , 'attendee' ], 
           cabin_list=[ 'AVERAGE' ],
           on_site_list=[ None, True, False],
           banner="",
           toc=True, output_md="index.md", 
           most_present=None, most_emitters=None ):   
+    
+    md_file = os.path.join( self.output_dir, output_md )
+#    if os.path.isfile( md_file ):
+#      return None
+#
+#    if toc is True:
+#      toc_md = "\n\n* TOC\n{:toc}\n\n"
+#    else:
+#      toc_md = ""
+#
+    title = f"{self.name} Highlights" 
+#
+ #   txt = f"# {self.name} Highlights\n"
 
-    if toc is True:
-      toc_md = "\n\n* TOC\n{:toc}\n\n"
-    else:
-      toc_md = ""
 
-    title = "{self.name} Highlights" 
+#    md_txt =f"# {title} \n\n{banner}\n\n{toc_md}\n\n"
+    md_txt = self.header_md( title, banner=banner, toc=toc, md_file=md_file)
+    if md_txt is None:
+      return None
 
-    txt = f"""# {self.name} Highlights
 
-    This page provides some selected highlights for {self.name} to depict the evolution of the CO2eq emissions  as well as the perspectives in term of offset."""
-
-    md_txt =f"# {title} \n\n{banner}\n\n{toc_md}\n\n{txt}\n\n"
-
-    md_txt += "## CO2 Offset "
+    md_txt += f"This page provides some selected highlights for {self.name} to depict the evolution of the CO2eq emissions  as well as the perspectives in term of offset.\n\n"
+    md_txt += "## CO2 Offset\n\n"
 
     if 'presence' in self.cluster_key_list and\
-        self.cabin_list != [] and\
+        cabin_list != [] and\
         'flight' in mode_list and\
         None in on_site_list:
       if 'AVERAGE' in cabin_list:
         cabin = 'AVERAGE'
       else: 
-        cabin = cabin_list[ 0 ] 
-      mode = 'flight'
-      on_site = None
+        cabin = cabin_list[ 0 ]
 
+      mode = 'flight'
+#      on_site = None
       md_txt += f"""The figure below depicts the evolution of the CO2eq associated by the meeting of the various meetings. The effective CO2eq is represented by the CO2eq emissions associated to 'on-site' participants. CO2eq emissions associated to 'remote' participants reflects the portion of CO2eq being offset. The total amount of CO2eq reflects a metric that can reveals an increase/decrease of participation and the evolution associated to 'on-site' and 'remote' participations. When a net-zero strategy has been defined, it is expected to favor 'offsetting' CO2eq and this figure measures how successful that strategy is.   
 
-The CO2eq emissions are estimated using different methods ({self.co2eq_method_list}) for the flight cabin {cabin}. Please check [Distributions](./distributions.html) for additional CO2eq distributions.
+The CO2eq emissions are estimated using different methods ({self.co2eq_method_list}) for the flight cabin {cabin}. Please check [Distributions](./distributions.html) for additional CO2eq distributions.\n\n
 """
-      html_file_name = self.image_file_name( 'distribution', 'html', mode,
-          on_site=on_site, cabin=cabin, no_path=True )
-      md_txt +=  self.embed_html( f"./{html_file_name}" )
+#)))      html_file_name = self.image_file_name( 'distribution', 'html', mode,
+#)))          cabin=cabin, cluster_key='presence', on_site=on_site, \
+#)))          no_path=True )
+#)))      md_txt +=  co2eq.md.embed_html( f"./{html_file_name}", height=1.1 *self.fig_height, width=1.1 *self.fig_width )
+      md_txt += self.fig_svg_md( 'distribution', mode, cabin=cabin, 
+             cluster_key='presence' ) 
 
-      md_txt += """The Picture below depicts the Remote Ratio of the emissions being offset over the total emissions of the meeting. Please check [Remote Ratio](./remote_ratio.html) for additional CO2eq distributions."""
-      html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
-          on_site=on_site, cabin=cabin, no_path=True )
-      md_txt +=  self.embed_html( f"./{html_file_name}" )
-
-      if 'organization' in self.cluster_key:
+      md_txt += """The Picture below depicts the Remote Ratio of the emissions being offset over the total emissions of the meeting. Please check [Remote Ratio](./remote_ratio.html) for additional CO2eq distributions.\n\n"""
+#)))      html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
+#)))          cabin=cabin, cluster_key='presence', most_emitters=most_emitters,\
+#)))          no_path=True )
+#)))      md_txt +=  co2eq.md.embed_html( f"./{html_file_name}", height=1.1 * self.fig_height, width=1.1 * self.fig_width )
+      md_txt += self.fig_svg_md( 'remote_ratio', mode, cabin=cabin, 
+          cluster_key='presence', most_emitters=most_emitters )
+      if 'organization' in self.cluster_key_list:
         cluster_key = 'organization' 
-      elif 'country' in self.cluster_key: 
+      elif 'country' in self.cluster_key_list: 
         cluster_key = 'country'
       else:
         cluster_key = None
 
       if cluster_key is not None:
-
         md_txt += f"""The figure below depicts the Remote Ratio of the emissions being offset per {cluster_key}. The overall performance in term of offsetof a meeting may reflect the performance of its main participants or might be influenced by its participants. The figures shows the evolution of the offset Remote Ratio for the {most_emitters} most contributors."""
 
-      html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
-          on_site=on_site, cabin=cabin, no_path=True )
-      md +=  self.embed_html( f"./{html_file_name}" )
-          
+#)))      html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
+#)))          cabin=cabin, cluster_key=cluster_key, on_site=on_site, \
+#)))          most_emitters=most_emitters, no_path=True )
+#)))      md_txt +=  co2eq.md.embed_html( f"./{html_file_name}", height=1.1 * self.fig_height, width=1.1 * self.fig_width )
+      md_txt += self.fig_svg_md( 'remote_ratio', mode, cabin=cabin, 
+          cluster_key=cluster_key, most_emitters=most_emitters )
 
     if 'presence' in self.cluster_key_list and\
         cabin_list != [] and\
         'attendee' in mode_list and\
         None in on_site_list:
       mode = 'attendee'
-      on_site = None
-      md_txt += f"""## Remote Participation
+#      on_site = None
+      md_txt += f"\n## Remote Participation\n\n"
 
-      The figure below depicts the distribution between 'remote' and 'on-site' participants. The graph here reflects the how participants are inclined to participate 'remotely' and thus avoids the emissions associated to flying. Please check [Distributions](./distributions.html) for additional Attendee distributions."""
+      md_txt += f"The figure below depicts the distribution between 'remote' and 'on-site' participants. The graph here reflects the how participants are inclined to participate 'remotely' and thus avoids the emissions associated to flying. Please check [Distributions](./distributions.html) for additional Attendee distributions.\n\n"""
       
-      html_file_name = self.image_file_name( 'distribution', 'html', mode,
-          on_site=on_site, no_path=True )
-      md_txt +=  self.embed_html( f"./{html_file_name}" )
+#)))       html_file_name = self.image_file_name( 'distribution', 'html', mode,
+#)))          cluster_key='presence', on_site=on_site, no_path=True )
+#)))      md_txt +=  co2eq.md.embed_html( f"./{html_file_name}", height=1.1 * self.fig_height, width=1.1 * self.fig_width )
+      md_txt += self.fig_svg_md( 'distribution', mode, cluster_key='presence' ) 
     
-      md_txt += """The Picture below depicts the Remote Ratio of the emissions being offset over the total emissions of the meeting. Please check [Remote Ratio](./remote_ratio.html) for additional Remote Ratio distributions."""
-      html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
-          on_site=on_site, cabin=cabin, no_path=True )
-      md_txt +=  self.embed_html( f"./{html_file_name}" )
+      md_txt += """The Picture below depicts the Ratio of Remote participants  over the meeting total number of participants. Please check [Remote Ratio](./remote_ratio.html) for additional Remote Ratio distributions.\n\n"""
+#      html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
+#          on_site=on_site, cabin=cabin, no_path=True )
+#)))      html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
+#)))          cluster_key='presence', most_present=most_present,\
+#)))          no_path=True )
+#)))      md_txt +=  co2eq.md.embed_html( f"./{html_file_name}", height=1.1 * self.fig_height, width=1.1 * self.fig_width )
+      md_txt += self.fig_svg_md( 'remote_ratio', mode, 
+          cluster_key='presence' )
 
-      if 'organization' in self.cluster_key:
+      if 'organization' in self.cluster_key_list:
         cluster_key = 'organization' 
-      elif 'country' in self.cluster_key: 
+      elif 'country' in self.cluster_key_list: 
         cluster_key = 'country'
       else:
         cluster_key = None
 
       if cluster_key is not None:
+        md_txt += f"""The figure below depicts the Remote Ratio of the remote participants per {cluster_key}. The overall performance in term of offset of a meeting may reflect the performance of its main participants or might be influenced by its participants. The figures shows the evolution of the offset Remote Ratio for the {most_present} most contributors."""
 
-        md_txt += f"""The figure below depicts the Remote Ratio of the emissions being offset per {cluster_key}. The overall performance in term of offset of a meeting may reflect the performance of its main participants or might be influenced by its participants. The figures shows the evolution of the offset Remote Ratio for the {most_present} most contributors."""
+#        html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
+#            on_site=on_site, cabin=cabin, most_present=most_present, \
+#            no_path=True )
+#)))        html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
+#)))            cluster_key=cluster_key, most_present=most_present, \
+#)))            no_path=True )
+#)))        md_txt +=  co2eq.md.embed_html( f"./{html_file_name}", height=1.1 * self.fig_height, width=1.1 * self.fig_width )
+        md_txt += self.fig_svg_md( 'remote_ratio', mode, 
+          cluster_key=cluster_key, most_present=most_present )
 
-        html_file_name = self.image_file_name( 'remote_ratio', 'html', mode,
-            on_site=on_site, cabin=cabin, most_present=most_present, \
-            no_path=True )
-        md_txt +=  self.embed_html( f"./{html_file_name}" )
     md = co2eq.md.MdFile( md_txt )
     md.number_sections()
-    md.save( join( self.output_dir, output_md ) )
-
+#    md.save( join( self.output_dir, output_md ) )
+    md.save( md_file )
 
   def www( self,\
           mode_list=[ 'flight', 'attendee'],\
@@ -899,7 +1032,7 @@ The CO2eq emissions are estimated using different methods ({self.co2eq_method_li
     """
     if 'presence' in self.cluster_key_list :
       on_site_list=[ None, True, False] 
-      dist_md = 'distribution.md'
+      dist_md = 'distributions.md'
     else:
       on_site_list=[ None ]
       dist_md = 'index.md'
@@ -912,8 +1045,15 @@ The CO2eq emissions are estimated using different methods ({self.co2eq_method_li
     ## When 'presence' is a cluster_key, remote_ratio figures are generated
     self.plot_distribution( mode_list=mode_list, cabin_list=cabin_list )
     if 'presence' in self.cluster_key_list :
-      self.plot_attendee_remote_ratio( self, show=False, print_grid=False, most_present=most_present )
-      self.plot_attendee_remote_ratio( self, show=False, print_grid=False, most_present=most_present )
+      self.plot_co2eq_remote_ratio( show=False, print_grid=False, most_emitters=most_emitters )
+      ## ratio md pages are plotting everything.
+      if most_emitters is not None:
+        self.plot_co2eq_remote_ratio( show=False, print_grid=False, most_emitters=None )
+        
+      self.plot_attendee_remote_ratio( show=False, print_grid=False, most_present=most_present )
+      if most_present is not None:
+        self.plot_attendee_remote_ratio( show=False, print_grid=False, most_present=None )
+          
       ## generating figures for all meetings
     for m in self.meeting_list:
       m.plot_distribution( mode_list=mode_list, cabin_list=cabin_list )
@@ -924,11 +1064,12 @@ The CO2eq emissions are estimated using different methods ({self.co2eq_method_li
              on_site_list=on_site_list, banner=banner, 
              output_md=dist_md )
     if 'presence' in self.cluster_key_list :
-      self.ratio_md( self, mode_list=mode_list, cabin_list=cabin_list, 
-        on_site_list=on_site_list, banner=banner, toc=True,
+      self.ratio_md( mode_list=mode_list, cabin_list=cabin_list, 
+        #on_site_list=on_site_list, 
+        banner=banner, toc=True,
         output_md="remote_ratio.md", most_emitters=most_emitters,
         most_present=most_present )
-      self.summary_md( self, mode_list=mode_list, cabin_list=cabin_list, 
+      self.highlights_md( mode_list=mode_list, cabin_list=cabin_list, 
         on_site_list=on_site_list, banner=banner, toc=True,
         output_md="index.md", most_emitters=most_emitters,
         most_present=most_present )

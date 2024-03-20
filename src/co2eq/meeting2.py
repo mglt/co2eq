@@ -89,6 +89,11 @@ class Meeting:
     df = pd.read_json( attendee_list )
     ## to build flightDB
     self.country_list = df[ 'country' ].unique().tolist()
+    if None in self.country_list:
+      raise ValueError( f"""{self.name} has country set to None. 
+      Please check your data. Eitrher replace this value 
+      or remove the entrance. 
+      {self.country_list} """ )
  #   self.total_attendee_nbr = len( df )
     self.init_cluster_key_list( df )
     self.co2eq_method_list = [ 'myclimate', 'goclimate', 'ukgov' ]
@@ -687,6 +692,13 @@ class Meeting:
 
     """
 
+    suffix = 'distribution'
+    html_file_name = self.image_file_name( suffix, 'html', mode, cabin=cabin, on_site=on_site )
+    svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin=cabin, on_site=on_site )
+    if os.path.isfile( html_file_name ) and\
+       os.path.isfile( svg_file_name ): 
+      return None
+
     df = self.build_data( mode=mode, cabin=cabin )
 
     
@@ -752,15 +764,15 @@ class Meeting:
       subfig_list.append( subfig )
 
 
-    suffix = 'distribution'
+#    suffix = 'distribution'
     if on_site is True:
       title = f"CO2eq Distribution for On-Site Participants (Effective CO2eq)"
     elif on_site is False:
       title = f"CO2eq Distribution for Remote Participants (~Offset CO2eq)"
     elif on_site is None:
       title = "CO2eq Distribution for ALL Participants (On-Site and Remote)" 
-    html_file_name = self.image_file_name( suffix, 'html', mode, cabin=cabin, on_site=on_site )
-    svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin=cabin, on_site=on_site )
+#    html_file_name = self.image_file_name( suffix, 'html', mode, cabin=cabin, on_site=on_site )
+#    svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin=cabin, on_site=on_site )
 
     fig = co2eq.fig.OneRowSubfig( \
       subfig_list, 
@@ -796,6 +808,14 @@ class Meeting:
     args:
       on_site: defines the subset of the attendees. None True False
     """
+
+    suffix = 'distribution'
+    html_file_name = self.image_file_name( suffix, 'html', 'attendee', on_site=on_site,  )
+    svg_file_name=self.image_file_name( suffix, 'svg', 'attendee', on_site=on_site )
+
+    if os.path.isfile( html_file_name ) and\
+       os.path.isfile( svg_file_name ): 
+      return None
 
     df = self.build_data( mode='attendee' )
 
@@ -897,15 +917,15 @@ class Meeting:
       )
       subfig_list.append( subfig )
 
-    suffix = 'distribution'
+#    suffix = 'distribution'
     if on_site is True:
       title = f"On-Site Attendee Distribution"
     elif on_site is False:
       title = f"Remote Attendee Distribution"
     else:
       title = f"Attendee Distribution" 
-    html_file_name = self.image_file_name( suffix, 'html', 'attendee', on_site=on_site,  )
-    svg_file_name=self.image_file_name( suffix, 'svg', 'attendee', on_site=on_site )
+#    html_file_name = self.image_file_name( suffix, 'html', 'attendee', on_site=on_site,  )
+#    svg_file_name=self.image_file_name( suffix, 'svg', 'attendee', on_site=on_site )
 
     fig = co2eq.fig.OneRowSubfig( \
       subfig_list, 
@@ -1073,23 +1093,80 @@ The CO2eq is estimated using various methodology. I this report the following me
 
     return md 
 
+  def fig_html_md( self, name, mode, cabin=None, cluster_key=None,
+          co2eq_method=None, on_site=None, no_path=True, most_present=None,
+          most_emitters=None, width=None, height=None ):
+    """includes the html in to the md file 
+
+    HTML files happens to be quite heavy as so the fig_svg_md 
+    is recommended to be used instead.
+    """
+
+    html_file_name = self.image_file_name( name, 'html', mode, 
+            cabin=cabin, cluster_key=cluster_key, co2eq_method=None,
+            on_site=on_site, most_emitters=most_emitters, 
+            most_present=most_present, no_path=no_path )
+    if height is None:
+      height = self.fig_height  
+    height = int( 1.1 * height )
+    if width is None:
+      width = self.fig_width  
+    width = int( 1.1 * width )    
+    return co2eq.md.embed_html( f"./{html_file_name}", 
+            height=1.1 * self.fig_height, 
+            width=1.1 * self.fig_width )
+
+  def fig_svg_md( self, name, mode, cabin=None, cluster_key=None, 
+          co2eq_method=None, on_site=None, no_path=True, most_present=None,
+          most_emitters=None, html=True ):
+    """includes svg figure with link to html version of the figure"""  
+    svg_file_name = self.image_file_name( name, 'svg', mode, cabin=cabin, 
+            cluster_key=cluster_key, co2eq_method=None, on_site=on_site, 
+            most_emitters=most_emitters, most_present=most_present, 
+            no_path=no_path )
+    html_file_name = self.image_file_name( name, 'html', mode, cabin=cabin,
+            cluster_key=cluster_key, co2eq_method=None, on_site=on_site, 
+            most_emitters=most_emitters, most_present=most_present, 
+            no_path=no_path )
+    return f"\n\n<img src='./{svg_file_name}'>\n<a href='./{html_file_name}'>View in HTML</a>\n\n"
+
+  def header_md( self, title, banner="", toc=True, md_file="index.md" ):
+    """ returns None if the file exists, the md stringotherwise """
+    if os.path.isfile( md_file ):
+      return None
+#    if os.path.isfile( md_file ):
+#      return None
+#      
+    if toc is True:
+      toc_md = "Table of Contents\n* TOC\n{:toc}"
+    else:
+      toc_md = ""
+    return f"# {title} \n\n{banner}\n\n<br>\n\n{toc_md}\n\n"
+      
+
   def dist_md( self, mode_list=[ 'flight' , 'attendee' ], 
           cabin_list=[ 'AVERAGE' ], 
           on_site_list=[ None, True, False], 
           banner="",
           toc=True, output_md="index.md" ):
  
-    if toc is True:
-      toc_md = "\n\n* TOC\n{:toc}\n\n"
-    else:
-      toc_md = ""
+#    md_file = join( self.output_dir, output_md )
+#    if os.path.isfile( md_file ):
+#      return None
+#           
+#
+#    if toc is True:
+#      toc_md = "\n\n* TOC\n{:toc}\n\n"
+#    else:
+#      toc_md = ""
 
 ##    md_txt =f"# {self.name} Data \n{banner}\n{toc_md}"
+    md_file = join( self.output_dir, output_md )
 
     co2eq_dist = 'flight' in mode_list or 'distance' in mode_list
     atten_dist = 'attendee' in mode_list
     if atten_dist and co2eq_dist :
-      title = f"{self.name}: Distribution of CO2 Emission and Attendees"   
+      title = f"{self.name} CO2 and Attendee Distribution"   
       txt = f"This page estimates the CO2 emitted for {self.name} as well as the distribution of the attendees of {self.name}."
     elif atten_dist and not co2eq_dist: 
       title = f"{self.name}: Attendee Distribution"   
@@ -1100,7 +1177,12 @@ The CO2eq is estimated using various methodology. I this report the following me
     else: 
       raise ValueError( f"only ")
 
-    md_txt =f"# {title} \n\n{banner}\n\n{toc_md}\n\n{txt}\n\n"
+    header = self.header_md( title, toc=toc, md_file=md_file)
+    if header is None:
+      return None
+
+#    md_txt =f"# {title} \n\n{banner}\n\n{toc_md}\n\n{txt}\n\n"
+    md_txt =f"{header}\n\n{txt}\n\n"
    
     
     txt += self.co2_info_txt( ) 
@@ -1123,7 +1205,7 @@ The CO2eq is estimated using various methodology. I this report the following me
 ####          md += f"## {section_no_str} {section_title}\n\n"
 ####          md += f"## {section_title}\n\n"
           md_txt += f"## CO2 Estimation for '{mode}' mode in cabin {cabin} for {self.name}\n\n"
-          md_txt += self.md_subsection_txt( mode, on_site_list, cabin )#,\
+          md_txt += self.dist_md_subsection_txt( mode, on_site_list, cabin=cabin )#,\
 ####                  section_no=section_no_str )
 ####          section_no += 1
           #for on_site in on_site_list:
@@ -1148,7 +1230,7 @@ The CO2eq is estimated using various methodology. I this report the following me
 ####        md += f"## {section_no_str}. {section_title}\n\n"
 ####        md += f"## {section_title}\n\n"
         md_txt += f"## Attendee Distribution for {self.name}\n\n"
-        md_txt += self.md_subsection_txt( mode, on_site_list ) #, section_no=section_no_str)
+        md_txt += self.dist_md_subsection_txt( mode, on_site_list ) #, section_no=section_no_str)
 ###        section_no += 1
 #        for on_site in on_site_list:
 #          html_file_name = self.image_file_name( 'distribution', 'html', mode, 
@@ -1160,13 +1242,14 @@ The CO2eq is estimated using various methodology. I this report the following me
     
     md = co2eq.md.MdFile( md_txt )
     md.number_sections()
-    md.save( join( self.output_dir, output_md ) )
+#    md.save( join( self.output_dir, output_md ) )
+    md.save( md_file )
 
 
 ####  def embed_html( self, html):
 ####      return f"<p><embed src='{html}' height={self.fig_height} width={self.fig_width}/></p>\n\n"
       
-  def md_subsection_txt( self, mode, on_site_list, cabin=None ): #, section_no=None):
+  def dist_md_subsection_txt( self, mode, on_site_list, cabin=None ): #, section_no=None):
     ## html_file name
 #    if mode in [ 'flight', 'distance' ]:
 #      html_file_name = self.image_file_name( 'distribution', 'html', mode, 
@@ -1178,14 +1261,17 @@ The CO2eq is estimated using various methodology. I this report the following me
 #      raise ValueError( f"Unknown mode {mode}. Expecting 'attendee', 'distance' or 'flight'" )
 
     ## in this class any figure contains all cluster keys
-    md = ""  
-    for on_site in on_site_list:
-      html_file_name = self.image_file_name( 'distribution', 'html', mode, 
-          on_site=on_site, cabin=cabin, no_path=True )
+#    md = ""  
+#    for on_site in on_site_list:
+#      html_file_name = self.image_file_name( 'distribution', 'html', mode, 
+#          on_site=on_site, cabin=cabin, no_path=True )
 #      md +=  f"<iframe src='./{html_file_name}'></iframe>\n\n"
-      md +=  self.embed_html( f"./{html_file_name}" )
-    return md
-
+#      md +=  co2eq.md.embed_html( f"./{html_file_name}" )
+#    return md
+    md_txt = ""
+    for on_site in on_site_list:
+      md_txt += self.fig_svg_md( 'distribution', mode, cabin=cabin, on_site=on_site )
+    return md_txt
 ## x= companies, y=CO2eq [methods], 
 ## x= companies, y=CO2eq [methods] / remote[Co2], 
 

@@ -79,7 +79,7 @@ ietf_list = {
     }] }
 
 ## Plotting the CO2 emissions for the meeting list (only the figures)
-if False:
+if True:
   print( "--- MeetingList: Building co2 distribution ---" )  
   ml = co2eq.meeting_list2.MeetingList( name=ietf_list[ 'name' ], 
                                         meeting_list=ietf_list[ 'meeting_list' ], 
