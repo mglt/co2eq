@@ -128,8 +128,8 @@ ORG_MATCH = { 'huaw' : "Huawei",
               ( 'internet', 'society' ) : "ISOC",
               'akama' : "Akamai",
               'nist' : "NIST",
-              ( 'dehli', 'institute' ) : "Dehli Institute of Advanced studies",
-              ( 'amity', 'university' ) : "Amity University",
+              ( 'dehli', 'institute' ) : "DIAS Univ.",
+              ( 'amity', 'university' ) : "Amity Univ.",
               'intel'  : "Intel",
               'verisign' : "Verisign",
               'salesforce' : "Salesforce",
@@ -154,15 +154,53 @@ ORG_MATCH = { 'huaw' : "Huawei",
               'nortel' : "Nortel",
               ( 'british', 'telecom' ) : 'BT',
               ( 'deutsche', 'telekom' ) : 'DT',
-              'tsinghua' : 'Tsinghua University',
               'hitachi' : 'Hitachi',
               'siemens' : 'Siemens',
               ( 'china', 'mobile' ): 'China Mobile',
               'icann' : 'ICANN',
               'comcast' : 'Comcast',
-              'mozilla' : 'Mozilla'
+              'mozilla' : 'Mozilla', 
+              'tsinghua' : 'Tsinghua Univ.',
+              ('technische', 'dresden' ) : 'TU Dresden', 
+              ( 'check', 'point' ) : 'Check Point',
+              'comodo' : 'Comodo', 
+              'toshiba' : 'Toshiba',
+              ('university', 'tokyo' ) : 'Tokyo Univ.', 
+              ( 'karlsruhe', 'institute', 'technology' ) : 'KIT', 
+              ( 'uni', 'bremen') : 'TZI',
+              'airbus' : 'Airbus'
+              ( 'paris', 'diderot' ) : 'Paris7', 
+              'inria' : 'INRIA', 
+              ( 'hewlett', 'packard' ) : 'HP', 
+              'mitre' : 'MITRE',
+              'meetecho', 'Meetecho',
+              'ciena' : 'Ciena', 
+              'fujitsu' : 'Fujitsu',
+              ( 'vigil', 'security' ) : 'Vigil Security' 
+
           }
 
+## Replave University of X by X Univ. with X having a capital letter
+##         Universidad de X by X Univ. 
+## Replacing Univers.... by Univ.
+## X university -> X Univ. 
+
+shortcut_org( 'ietf100.json.gz', 15 )
+def shortcut_org( gzfile, size ):
+  with gzip.open( gzfile, 'rt', encoding='utf8' ) as f:
+    l = json.loads( f.read() )
+    for i in l:
+      if i[ 'organization' ] == 'Not Provided' or i[ 'organization' ] is None:
+        i[ 'organization' ] = 'NA'
+      if len( i[ 'organization' ] ) > size:
+        new_org = i[ 'organization' ][ : size ]
+        print( f"  {i[ 'organization' ]} -> {new_org}" )
+        i[ 'organization' ] = new_org
+  with gzip.open( gzfile, 'wt', encoding='utf8' ) as f:
+    json.dump( l, f, indent=2 )
+
+for i in os.listdir():
+  shortcut_org( i, 15 )
 
 
 def ietf_clean_org( org_value ):
@@ -226,6 +264,7 @@ def ietf2json( ietf_meeting, json_file=None ):
       print( "unspecified country: Unable to consider {attendee}" )
       continue
     org =  ietf_clean_org( attendee[ "affiliation" ] )
+    org = org[ : 10 ]
     pres = attendee[ "reg_type" ]
     if pres not in [ 'remote', 'onsite', 'hackathon_onsite', 'hackathon_remote' ]:
       raise ValueError ( f"Unexpected reg_type in {attendee}" )

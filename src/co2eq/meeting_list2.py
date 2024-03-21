@@ -20,7 +20,13 @@ class MeetingList( co2eq.meeting2.Meeting ):
                   airportDB=True, 
                   cityDB=True, 
                   flightDB=True,
-                  goclimateDB=True ):
+                  goclimateDB=True,
+                  mode_list= [ 'attendee', 'flight'], 
+                  cabin_list=[ 'AVERAGE' ], 
+                  ## can be derived from the meeting objects
+                  cluster_key_list=None,
+                  co2eq_method_list=None
+                  ):
 
     """ instantiates a MeetingList object 
 
@@ -41,7 +47,10 @@ class MeetingList( co2eq.meeting2.Meeting ):
     self.init_DB( airportDB, cityDB, flightDB, goclimateDB )
     self.init_output_dir( base_output_dir )
     self.json_meeting_list = meeting_list
-    self.init_meeting_list()
+    self.init_meeting_list( mode_list=mode_list, 
+            cabin_list=cabin_list, 
+            cluster_key_list=cluster_key_list, 
+            co2eq_method_list=co2eq_method_list)
     self.df_data = {}
     self.info = {}
     self.fig_height=600
@@ -55,12 +64,22 @@ class MeetingList( co2eq.meeting2.Meeting ):
     self.meeting_list_url="http://127.0.0.1:4000/"
     ## The home URL to the web site
     self.home_url=self.meeting_list_url
-    self.banner_col=12
+    ## number of meeting names per line displayed in the banner
+    self.banner_col=11
 
-  def init_meeting_list( self, mode_list=[ 'attendee', 'flight'], cabine_list=[ 'AVERAGE' ] ):
+
+    ## we remove 'co2eq' 
+    if 'co2eq' in self.cluster_key_list: 
+      self.cluster_key_list.remove( 'co2eq' )
+
+  def init_meeting_list( self, 
+          mode_list=[ 'attendee', 'flight'],
+          cabin_list=[ 'AVERAGE' ], 
+          cluster_key_list=None, 
+          co2eq_method_list=None ):
     self.meeting_list = []
-    self.cluster_key_list = None 
-    self.co2eq_method_list = None
+    self.cluster_key_list = cluster_key_list
+    self.co2eq_method_list = co2eq_method_list
     for json_meeting in self.json_meeting_list:
       m_name = json_meeting[ 'name' ]  
       m_loc = json_meeting[ 'location' ] 
@@ -78,18 +97,24 @@ class MeetingList( co2eq.meeting2.Meeting ):
               cityDB=self.cityDB, 
               flightDB=self.flightDB, 
               goclimateDB=self.goclimateDB )
-      if self.cluster_key_list is None:
-        self.cluster_key_list = meeting.cluster_key_list
-      else:
-        for cluster_key in meeting.cluster_key_list:
-          if cluster_key not in self.cluster_key_list:
-            self.cluster_key_list.append( cluster_key )
-      if self.co2eq_method_list is None:
-        self.co2eq_method_list = meeting.co2eq_method_list
-      else:
-        for co2eq_method in meeting.co2eq_method_list:
-          if co2eq_method not in self.co2eq_method_list:
-            self.co2eq_method_list.append( co2eq_method )
+      ## self.cluster_key_list is derived from meetings 
+      ## only when cluster_key_list is not provided
+      if cluster_key_list is None:
+        if self.cluster_key_list is None:
+          self.cluster_key_list = meeting.cluster_key_list
+        else:
+          for cluster_key in meeting.cluster_key_list:
+            if cluster_key not in self.cluster_key_list:
+              self.cluster_key_list.append( cluster_key )
+      ## self.co2eq_method_list is derived from meetings 
+      ## only when co2eq_method_list is not provided
+      if co2eq_method_list is None:
+        if self.co2eq_method_list is None:
+          self.co2eq_method_list = meeting.co2eq_method_list
+        else:
+          for co2eq_method in meeting.co2eq_method_list:
+            if co2eq_method not in self.co2eq_method_list:
+              self.co2eq_method_list.append( co2eq_method )
       self.meeting_list.append( meeting )
 
   def build_data( self, mode='flight', cabin=None):
@@ -99,9 +124,12 @@ class MeetingList( co2eq.meeting2.Meeting ):
       return self.df_data[ ( mode, cabin ) ]
 
     df_list = []
-    for meeting in self.meeting_list:
+    ## to keep the order of the meeting_list we provide the 
+    ## index as opposed to the meeting name.
+    for i, meeting in enumerate( self.meeting_list ):
       m_df = meeting.build_data( mode=mode, cabin=cabin )
-      m_df.insert( 0, 'meeting', f"{meeting.name} - {meeting.meeting_iata_city}"  )
+      # m_df.insert( 0, 'meeting', f"{meeting.name} - {meeting.meeting_iata_city}"  )
+      m_df.insert( 0, 'meeting', i  )
 ##      m_df = df_list.append( m_df )
       df_list.append( m_df )
     df = pd.concat( df_list, ignore_index=True, sort=False)
@@ -116,7 +144,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
         Expecting True, False or None" )
 
     cluster_key_list = self.cluster_key_list[ : ]
-    cluster_key_list.remove( 'co2eq' )
+#    cluster_key_list.remove( 'co2eq' )
 
     suffix = 'distribution'
 
@@ -155,11 +183,23 @@ class MeetingList( co2eq.meeting2.Meeting ):
           sub_df = df[ df.presence != 'on-site' ].groupby( by=[ 'meeting', cluster_key, ], sort=False ).agg( agg_dict ).reset_index().sort_values(by=[ 'meeting', 'myclimate'], ascending=[ True, False ] )
         elif on_site is None:
           sub_df = df.groupby( by=[ 'meeting', cluster_key, ], sort=False ).agg( agg_dict ).reset_index().sort_values(by=[ 'meeting', 'myclimate' ], ascending=[ True, False ] )
+#      x = [ f"{m.name} - {m.meeting_iata_city}" for m in self.meeting_list ]
+#      print( f"sub_df : {sub_df}" )
+#      print( f"sub_df.shape: {sub_df.shape}" )
+#      print( f"sub_df[ 'meeting' ]: {sub_df[ 'meeting' ].tolist()}" )
+#      print( f" x [{len(x)}]: {x}" )
       subfig_list = []
 #      subfig_title_list = []
       for co2eq_method in self.co2eq_method_list:
         subfig_title = f"Estimated with {co2eq_method}"
-        subfig = px.bar( sub_df, x='meeting',  y=co2eq_method,
+        ## meetings must be displayed in the meeting list order
+        ## not the alphabetical order.
+        #subfig = px.bar( sub_df, x='meeting',  y=co2eq_method,
+        x = []
+        for i in sub_df[ 'meeting' ].tolist():
+          m = self.meeting_list[ i ]  
+          x.append( f"{m.name} - {m.meeting_iata_city}" )    
+        subfig = px.bar( sub_df, x=x,  y=co2eq_method,
                   color=cluster_key,\
                   ##color=d.index.name,\
                   # text=d.index.name, 
@@ -167,7 +207,8 @@ class MeetingList( co2eq.meeting2.Meeting ):
                   ## labels are displayed when mouse is hand over the value.
                   labels={ 'value': "CO2eq (Kg)", 'index': "Meetings" },
                 )
-        subfig.update_xaxes(tickangle=90)
+        subfig.update_xaxes(tickangle=90, tickvals=x, ticktext=x)
+#        subfig.update_traces(width=2)
         subfig_list.append( subfig )
 
       if on_site is True:
@@ -180,18 +221,18 @@ class MeetingList( co2eq.meeting2.Meeting ):
               cluster_key=cluster_key, on_site=on_site )
       svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin=cabin,
               cluster_key=cluster_key, on_site=on_site )
-      
+      print_grid=True 
       fig = co2eq.fig.OneRowSubfig( \
         subfig_list,
         fig_title=title,
-        fig_width=self.fig_width,
-        fig_height=self.fig_height,
+        fig_width=int( 2 * self.fig_width ),
+        fig_height=int( 1 * self.fig_height ),
         print_grid=print_grid,
         show=show,
         shared_xaxes=False,
         shared_yaxes=False,
-        legend_offset=0,
-        horizontal_spacing=0.3,
+        legend_offset=[ -0.1, -0.2, -0.3 ],
+        horizontal_spacing=0.1,
         html_file_name=html_file_name,
         svg_file_name=svg_file_name )
 #      fig.fig.show()
@@ -199,7 +240,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
   def plot_attendee_distribution( self, on_site=None, show=False, print_grid=False ):
 
     cluster_key_list = self.cluster_key_list[ : ]
-    cluster_key_list.remove( 'co2eq' )
+#    cluster_key_list.remove( 'co2eq' )
     is_file_list = []
     suffix = 'distribution'
     mode = 'attendee'
@@ -283,7 +324,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
     """ plots the ratio of remote/on-site """
 
     cluster_key_list = self.cluster_key_list[ : ]
-    cluster_key_list.remove( 'co2eq' )
+#    cluster_key_list.remove( 'co2eq' )
     suffix = 'remote_ratio'
     is_file_list = []
     for cluster_key in cluster_key_list :
@@ -405,7 +446,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
     """ plots the ratio of remote/on-site """
 
     cluster_key_list = self.cluster_key_list[ : ]
-    cluster_key_list.remove( 'co2eq' )
+#    cluster_key_list.remove( 'co2eq' )
     suffix = 'remote_ratio'
     mode = 'attendee'
     is_file_list = []
@@ -519,7 +560,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
   
   def md_subsection_txt( self, suffix, mode, on_site_list=[ None ], cabin=None, most_emitters=None, most_present=None ): #, section_no=None):
     cluster_key_list = self.cluster_key_list[ : ]
-    cluster_key_list.remove( 'co2eq' )
+#    cluster_key_list.remove( 'co2eq' )
 
     md_txt = "" 
     for cluster_key in cluster_key_list:
