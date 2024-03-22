@@ -433,20 +433,22 @@ class Meeting:
       kw[ split_seg[ 0 ] ] = split_seg[ 1 ]
     return kw
 
-  def json_file_name( self, name, mode, cluster_key=None, co2eq_method=None, cabin=None ):
-    if mode == 'attendee' : 
-      if co2eq_method is not None and cabin is not None :
-        raise ValueError( f"with mode 'attendee', co2eq_method"\
-                f" and cabin MUST be None. Got {locals()}" ) 
-    f_kwargs = { } 
-##    print( locals() )
-    for k in list( locals().keys() ):
-      if k in [ 'self', 'ext', 'f_kwargs' ]:
-        continue
-      if locals()[ k ] is not None:
-        f_kwargs[ k] = locals()[ k ]
-    data_file = self.kwargs_to_str( **f_kwargs )
-    return os.path.join( self.output_dir, data_file + ".json")
+#  def json_file_name( self, name, mode, cluster_key=None, co2eq_method=None, cabin=None ):
+#    return image_file_name( name, 'json', mode, cabin=cabin, cluster_key=cluster_key, co2eq_method=co2eq_method )  
+#    if mode == 'attendee' : 
+#      if co2eq_method is not None and cabin is not None :
+#        raise ValueError( f"with mode 'attendee', co2eq_method"\
+#                f" and cabin MUST be None. Got {locals()}" ) 
+#    f_kwargs = { } 
+###    print( locals() )
+#    for k in list( locals().keys() ):
+#      if k in [ 'self', 'ext', 'f_kwargs' ]:
+#        continue
+#      if locals()[ k ] is not None:
+#        f_kwargs[ k] = locals()[ k ]
+#    data_file = self.kwargs_to_str( **f_kwargs )
+#    return os.path.join( self.output_dir, data_file + ".json")
+    
 
   def image_file_name( self, name, ext, mode, cabin=None, cluster_key=None, co2eq_method=None, on_site=None, no_path=False, most_present=None, most_emitters=None ):
     """ return an image file name
@@ -510,14 +512,15 @@ class Meeting:
     ## read from json if already computed
     ## commenting to force the generation of the pd
     if mode == 'attendee':
-      data_file = self.json_file_name( 'data', mode )
+      data_file = self.image_file_name( 'data', 'json', mode )
       cluster_key_list = self.cluster_key_list[:]
       cluster_key_list.remove( 'co2eq' )
       cabin = None 
     else: 
       if cabin is None: 
         cabin = 'AVERAGE'
-      data_file = self.json_file_name( 'data', mode, cabin=cabin ) 
+      #data_file = self.json_file_name( 'data', mode, cabin=cabin ) 
+      data_file = self.image_file_name( 'data', 'json', mode, cabin=cabin ) 
 
     if data_file is True: 
       self.df_data[ ( mode, cabin ) ] =  pd.read_json( data_file )
@@ -892,7 +895,9 @@ The CO2eq is estimated using various methodology. I this report the following me
             cluster_key=cluster_key, co2eq_method=None, on_site=on_site, 
             most_emitters=most_emitters, most_present=most_present, 
             no_path=no_path )
-    return f"\n\n<img src='./{svg_file_name}'>\n<a href='./{html_file_name}'>View in HTML</a>\n\n"
+    return f"\n\n<p><embed src='./{svg_file_name}'></p>\n<p><a href='./{html_file_name}'>View in HTML</a></p>\n\n"
+#    return f"\n\n<p><embed src='./{svg_file_name}' height={int( 1.1 * self.height)} width={int( 1.1 * self.width )}></p>\n<p><a href='./{html_file_name}'>View in HTML</a></p>\n\n"
+#    return f"\n\n<img src='./{svg_file_name}'>\n<p><a href='./{html_file_name}'>View in HTML</a></p>\n\n"
 
   def header_md( self, title, banner="", toc=True, md_file="index.md" ):
     """ returns None if the file exists, the md stringotherwise """

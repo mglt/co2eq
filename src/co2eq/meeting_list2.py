@@ -123,6 +123,16 @@ class MeetingList( co2eq.meeting2.Meeting ):
     if ( mode, cabin )  in self.df_data.keys():
       return self.df_data[ ( mode, cabin ) ]
 
+    ## this is useful to adjust presentation
+    pickle_file = self.image_file_name( 'data', 'pickle', mode, cabin=cabin )
+#    file_name = f"meeting_list--name-{self.name}--mode-{mode}"
+#    if cabin is not None:
+#      file_name = f"{file_name}--cabin-{cabin}"
+#    file_name = f"{file_name}.pickle"  
+#    file_name = os.path.join( self.output_dir, file_name )
+    if os.path.isfile( pickle_file ) :
+      return pd.read_pickle( pickle_file )    
+
     df_list = []
     ## to keep the order of the meeting_list we provide the 
     ## index as opposed to the meeting name.
@@ -134,22 +144,20 @@ class MeetingList( co2eq.meeting2.Meeting ):
       df_list.append( m_df )
     df = pd.concat( df_list, ignore_index=True, sort=False)
     self.df_data[ ( mode, cabin ) ] =  df
+
+    df.to_pickle( file_name )
     return df
 
+  def is_fig_generated( self, suffix, mode, cabin, on_site ):
+    """ returns True is html/svg files are already generated
 
-  def plot_co2eq_distribution( self, mode='flight', cabin='AVERAGE', on_site=None, show=False, print_grid=False):
-
+    """
     if on_site not in [ True, False, None ]:
       raise ValueError( f"Unknown value {on_site} for on_site.\
         Expecting True, False or None" )
 
-    cluster_key_list = self.cluster_key_list[ : ]
-#    cluster_key_list.remove( 'co2eq' )
-
-    suffix = 'distribution'
-
     is_file_list = []
-    for cluster_key in cluster_key_list :
+    for cluster_key in self.cluster_key_list :
       html_file_name = self.image_file_name( suffix, 'html', mode, cabin=cabin,
               cluster_key=cluster_key, on_site=on_site )
       svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin=cabin,
@@ -157,21 +165,85 @@ class MeetingList( co2eq.meeting2.Meeting ):
       is_file_list.append( os.path.isfile( html_file_name ) and\
               os.path.isfile( svg_file_name ) )
     if False not in is_file_list :
+      return True
+    return False
+
+  def meeting_axis( self, sub_df ):
+    """generates the x-axis with meeting names
+
+    Meetings are represented with their index, This function
+    provides the names associated to the meetings. The order
+    is the one of the meeting list. 
+    """
+    meeting_index_list = sub_df[ 'meeting' ].tolist()
+#    print( f"meeting_index_list: [{meeting_index_list}] {meeting_index_list}" )
+#    for i in meeting_index_list:
+    x = []
+    for i in sub_df[ 'meeting' ].tolist():
+      m = self.meeting_list[ i ]  
+      x.append( f"{m.name} - {m.meeting_iata_city}" )    
+#    print( f"x: [{type(x)}] {x}" )
+    return x
+
+  def zero_fill_df( self, sub_df, cluster_key ):
+    """Ensures non defined values are set to zero
+    
+    Histograms do not handle missing values appropriately. In our case, we observed that when a category was missing in a cluster_key, the full column was 're-ordered' and put at the end.   
+    """
+    for m in sub_df[ 'meeting' ].unique():
+      for v in sub_df[ cluster_key ].unique():  
+        if not sub_df.loc[(sub_df['meeting'] == m ) & (sub_df[ cluster_key ] == v)].any().all():
+          d = {}  
+          for col in sub_df.columns: 
+            if col == 'meeting' :
+              d[ 'meeting' ] = m
+            elif col == cluster_key :
+              d[ cluster_key ] = v
+            else:
+              d[ col ] = 0  
+          sub_df = pd.concat( [ sub_df, pd.DataFrame ( [ d ] ) ], ignore_index = True )
+
+    return sub_df
+#    return sub_df.sort_values(by=[ 'meeting', 'myclimate' ], ascending=[ True, False ] )
+      
+#     print( f"sub_df with zeros: {sub_df.head(100)}" )
+
+
+
+  def plot_co2eq_distribution( self, mode='flight', cabin='AVERAGE', on_site=None, show=False, print_grid=False):
+
+
+#    cluster_key_list = self.cluster_key_list[ : ]
+#    cluster_key_list.remove( 'co2eq' )
+
+    suffix = 'distribution'
+    if self.is_fig_generated( suffix, mode, cabin, on_site ) :
       return None
+
+##    is_file_list = []
+##    for cluster_key in cluster_key_list :
+##      html_file_name = self.image_file_name( suffix, 'html', mode, cabin=cabin,
+##              cluster_key=cluster_key, on_site=on_site )
+##      svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin=cabin,
+##              cluster_key=cluster_key, on_site=on_site )
+##      is_file_list.append( os.path.isfile( html_file_name ) and\
+##              os.path.isfile( svg_file_name ) )
+##    if False not in is_file_list :
+##      return None
 
 
     df = self.build_data( mode=mode, cabin=cabin )
-
+    
     if 'presence' not in df.columns and on_site is not None:
       raise ValueError( f"on_site is specified to {on_site} but "\
         f"'presence' is not specified in the data frame.\n"\
         f"{df.info}\ndf.columns: {df.columns}" )
- 
+
     agg_dict = {}
     for co2eq_method in self.co2eq_method_list :
       agg_dict[ co2eq_method ] = 'sum'
 
-    for cluster_key in cluster_key_list :
+    for cluster_key in self.cluster_key_list :
       if cluster_key in [ 'presence' ] :
         sub_df = df.groupby( by=[ 'meeting', cluster_key, ], sort=False).agg( agg_dict ).reset_index().sort_values(by=[ 'meeting', 'myclimate'], ascending=[ True, False ] )
       ## for other cluster_key we only focus on the CO2 associated to 
@@ -183,11 +255,13 @@ class MeetingList( co2eq.meeting2.Meeting ):
           sub_df = df[ df.presence != 'on-site' ].groupby( by=[ 'meeting', cluster_key, ], sort=False ).agg( agg_dict ).reset_index().sort_values(by=[ 'meeting', 'myclimate'], ascending=[ True, False ] )
         elif on_site is None:
           sub_df = df.groupby( by=[ 'meeting', cluster_key, ], sort=False ).agg( agg_dict ).reset_index().sort_values(by=[ 'meeting', 'myclimate' ], ascending=[ True, False ] )
-#      x = [ f"{m.name} - {m.meeting_iata_city}" for m in self.meeting_list ]
-#      print( f"sub_df : {sub_df}" )
-#      print( f"sub_df.shape: {sub_df.shape}" )
-#      print( f"sub_df[ 'meeting' ]: {sub_df[ 'meeting' ].tolist()}" )
-#      print( f" x [{len(x)}]: {x}" )
+
+      ## completing values that are not filled with zero.
+      ## This is to prevent the histogram to re-order 
+      ## the meetings as it as not found a value.
+      sub_df = self.zero_fill_df( sub_df, cluster_key )
+      sub_df = sub_df.sort_values(by=[ 'meeting', 'myclimate' ], ascending=[ True, False ] )
+                
       subfig_list = []
 #      subfig_title_list = []
       for co2eq_method in self.co2eq_method_list:
@@ -195,11 +269,16 @@ class MeetingList( co2eq.meeting2.Meeting ):
         ## meetings must be displayed in the meeting list order
         ## not the alphabetical order.
         #subfig = px.bar( sub_df, x='meeting',  y=co2eq_method,
-        x = []
-        for i in sub_df[ 'meeting' ].tolist():
-          m = self.meeting_list[ i ]  
-          x.append( f"{m.name} - {m.meeting_iata_city}" )    
-        subfig = px.bar( sub_df, x=x,  y=co2eq_method,
+#        x = []
+        meeting_index_list = sub_df[ 'meeting' ].tolist()
+#        print( f"meeting_index_list: [{meeting_index_list}] {meeting_index_list}" )
+#        for i in meeting_index_list:
+#          m = self.meeting_list[ i ]  
+#          x.append( f"{m.name} - {m.meeting_iata_city}" )    
+#        print( f"x: [{type(x)}] {x}" )
+#        def meeting_axis( self, sub_df ):
+        subfig = px.bar( sub_df, x=self.meeting_axis( sub_df ),\
+                  y=co2eq_method,
                   color=cluster_key,\
                   ##color=d.index.name,\
                   # text=d.index.name, 
@@ -207,9 +286,17 @@ class MeetingList( co2eq.meeting2.Meeting ):
                   ## labels are displayed when mouse is hand over the value.
                   labels={ 'value': "CO2eq (Kg)", 'index': "Meetings" },
                 )
-        subfig.update_xaxes(tickangle=90, tickvals=x, ticktext=x)
+        subfig.update_xaxes(tickangle=90 )#, tickvals=x, ticktext=x)
 #        subfig.update_traces(width=2)
         subfig_list.append( subfig )
+
+
+      html_file_name = self.image_file_name( suffix, 'html', \
+              mode, cabin=cabin, cluster_key=cluster_key,\
+              on_site=on_site )
+      svg_file_name=self.image_file_name( suffix, 'svg',\
+              mode, cabin=cabin, cluster_key=cluster_key,\
+              on_site=on_site )
 
       if on_site is True:
         title = f"CO2eq Distribution for On-Site Participants (Effective CO2eq)"
@@ -221,17 +308,17 @@ class MeetingList( co2eq.meeting2.Meeting ):
               cluster_key=cluster_key, on_site=on_site )
       svg_file_name=self.image_file_name( suffix, 'svg', mode, cabin=cabin,
               cluster_key=cluster_key, on_site=on_site )
-      print_grid=True 
+#      print_grid=True 
       fig = co2eq.fig.OneRowSubfig( \
         subfig_list,
         fig_title=title,
-        fig_width=int( 2 * self.fig_width ),
+        fig_width=int( 2.5 * self.fig_width ),
         fig_height=int( 1 * self.fig_height ),
         print_grid=print_grid,
         show=show,
         shared_xaxes=False,
         shared_yaxes=False,
-        legend_offset=[ -0.1, -0.2, -0.3 ],
+        legend_offset=[ -0.065, -0.133, -0.2 ],
         horizontal_spacing=0.1,
         html_file_name=html_file_name,
         svg_file_name=svg_file_name )
@@ -239,32 +326,34 @@ class MeetingList( co2eq.meeting2.Meeting ):
 
   def plot_attendee_distribution( self, on_site=None, show=False, print_grid=False ):
 
-    cluster_key_list = self.cluster_key_list[ : ]
+#    cluster_key_list = self.cluster_key_list[ : ]
 #    cluster_key_list.remove( 'co2eq' )
-    is_file_list = []
+#    is_file_list = []
     suffix = 'distribution'
     mode = 'attendee'
-    for cluster_key in cluster_key_list :
-      html_file_name = self.image_file_name( suffix, 'html', mode,\
-              cluster_key=cluster_key, on_site=on_site )
-      svg_file_name=self.image_file_name( suffix, 'svg', mode,\
-              cluster_key=cluster_key, on_site=on_site )
-      is_file_list.append( os.path.isfile( html_file_name ) and\
-              os.path.isfile( svg_file_name ) )
-    if False not in is_file_list :
+#    for cluster_key in cluster_key_list :
+#      html_file_name = self.image_file_name( suffix, 'html', mode,\
+#              cluster_key=cluster_key, on_site=on_site )
+#      svg_file_name=self.image_file_name( suffix, 'svg', mode,\
+#              cluster_key=cluster_key, on_site=on_site )
+#      is_file_list.append( os.path.isfile( html_file_name ) and\
+#              os.path.isfile( svg_file_name ) )
+#    if False not in is_file_list :
+#      return None
+    if self.is_fig_generated( suffix, mode, None, on_site ) :
       return None
 
-    df = self.build_data( mode='attendee' )
-    if on_site not in [ True, False, None ]:
-      raise ValueError( f"Unknown value {on_site} for on_site.\
-        Expecting True, False or None" )
+    df = self.build_data( mode=mode )
+#    if on_site not in [ True, False, None ]:
+#      raise ValueError( f"Unknown value {on_site} for on_site.\
+#        Expecting True, False or None" )
     if 'presence' not in df.columns and on_site is not None:
       raise ValueError( f"on_site is specified to {on_site} but "\
         f"'presence' is not specified in the data frame.\n"\
         f"{df.info}\ndf.columns: {df.columns}" )
     subfig_list = []
 
-    for cluster_key in cluster_key_list :
+    for cluster_key in self.cluster_key_list :
       ## with cluster_key set to presence, we plot the number
       ## of attendees. 
       ## associated to the presence, which includes remote,
@@ -282,17 +371,24 @@ class MeetingList( co2eq.meeting2.Meeting ):
         else:
           raise ValueError( f"unexpected value for on_site: {on_site}"\
                   f" on_site MUST be in True, False or None." )
+
+      fig_df = self.zero_fill_df( fig_df, cluster_key )
+      fig_df = fig_df.sort_values(by=[ 'meeting', 'count' ], ascending=[ True, False ] )
+
       if on_site is True:
         title = f"On-Site Attendee Distribution"
       elif on_site is False:
         title = f"Remote Attendee Distribution"
       elif on_site is None:
         title = f"Attendee Distribution (On-Site and Remote)"
-      fig = px.bar( fig_df, x='meeting',  y='count',
-                color=cluster_key,\
-                # text=d.index.name, 
-                title=title,
-                ## labels are displayed when mouse is hand over the value.
+#        subfig = px.bar( sub_df, x=self.meeting_axis( sub_df ),\
+#      fig = px.bar( fig_df, x='meeting',  y='count',
+      fig = px.bar( fig_df, x=self.meeting_axis( fig_df ),\
+              y='count',
+              color=cluster_key,\
+              # text=d.index.name, 
+              title=title,
+              ## labels are displayed when mouse is hand over the value.
                 labels={ 'count': "Number of Attendees", 'meeting': "Meetings" },
               )
       html_file_name = self.image_file_name( suffix, 'html', mode,\
@@ -300,12 +396,12 @@ class MeetingList( co2eq.meeting2.Meeting ):
       svg_file_name=self.image_file_name( suffix, 'svg', mode,\
               cluster_key=cluster_key, on_site=on_site )
       ## scaling figure to the distribution mode.
-      if len( self.co2eq_method_list ) != 0:
-        fig_width = self.fig_width / len( self.co2eq_method_list )
+#      if len( self.co2eq_method_list ) != 0:
+#        fig_width = self.fig_width / len( self.co2eq_method_list )
 
       fig.update_layout(
-        height=self.fig_height,
-        width=fig_width,
+        height=int( 0.6 * self.fig_height ),
+        width=int( 0.6 * self.fig_width ),
         barmode='relative',
         title= { 'text': title, 'automargin': True, 'xref': 'container', 'y':0.95 },
         margin={ 'l':0, 'r':0 },
@@ -313,10 +409,10 @@ class MeetingList( co2eq.meeting2.Meeting ):
         showlegend=True
             )
       fig.update_xaxes(tickangle=90)
-      if html_file_name is not None:
-        fig.write_html( html_file_name )
-      if svg_file_name is not None:
-        fig.write_image( svg_file_name )
+#      if html_file_name is not None:
+      fig.write_html( html_file_name )
+#      if svg_file_name is not None:
+      fig.write_image( svg_file_name )
       if show is True:
         fig.show()
 
