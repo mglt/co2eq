@@ -895,7 +895,25 @@ The CO2eq is estimated using various methodology. I this report the following me
             cluster_key=cluster_key, co2eq_method=None, on_site=on_site, 
             most_emitters=most_emitters, most_present=most_present, 
             no_path=no_path )
-    return f"\n\n<p><embed src='./{svg_file_name}'></p>\n<p><a href='./{html_file_name}'>View in HTML</a></p>\n\n"
+    return f"\n\n<img src='./{svg_file_name}'>\n<p><a href='./{html_file_name}'>View in HTML</a></p>\n\n"
+# mimicmicing banner
+#   return f"""
+#    <html>
+#    <body>
+#      <img src='./{svg_file_name}' style='height: 100%; width: 100%;'>
+#    <p><a href='./{html_file_name}'>View in HTML</a></p>\n
+#    </body>
+#    </html>
+#    """
+#    return f"""\n
+#    <div class="noborder" style="overflow: auto; width: {self.fig_width}px; height: {int( 0.6 * self.fig_height )}px;">
+#      <div class="noborder"> 
+#        <img src='./{svg_file_name}' style='height: 100%; width: 100%;'>
+#      </div>  
+#    </div>
+#    <p><a href='./{html_file_name}'>View in HTML</a></p>\n
+#    """
+#    return f"\n\n<html><p><embed src='./{svg_file_name}'></p>\n<p><a href='./{html_file_name}'>View in HTML</a></p></html>\n\n"
 #    return f"\n\n<p><embed src='./{svg_file_name}' height={int( 1.1 * self.height)} width={int( 1.1 * self.width )}></p>\n<p><a href='./{html_file_name}'>View in HTML</a></p>\n\n"
 #    return f"\n\n<img src='./{svg_file_name}'>\n<p><a href='./{html_file_name}'>View in HTML</a></p>\n\n"
 
