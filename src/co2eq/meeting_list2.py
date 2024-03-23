@@ -467,23 +467,9 @@ class MeetingList( co2eq.meeting2.Meeting ):
   def plot_co2eq_remote_ratio( self, mode='flight', cabin='AVERAGE', show=False, print_grid=False, most_emitters=None ):
     """ plots the ratio of remote/on-site """
 
-#    cluster_key_list = self.cluster_key_list[ : ]
-#    cluster_key_list.remove( 'co2eq' )
     suffix = 'remote_ratio'
     if self.is_fig_generated( suffix, mode, cabin, None, most_emitters=most_emitters ) :
       return None
-#    is_file_list = []
-#    for cluster_key in cluster_key_list :
-#      html_file_name = self.image_file_name( suffix, 'html', mode,\
-#              cabin=cabin, cluster_key=cluster_key, \
-#              most_emitters=most_emitters )
-#      svg_file_name=self.image_file_name( suffix, 'svg', mode,\
-#              cabin=cabin, cluster_key=cluster_key, \
-#              most_emitters=most_emitters )
-#      is_file_list.append( os.path.isfile( html_file_name ) and\
-#              os.path.isfile( svg_file_name ) )
-#    if False not in is_file_list:
-#      return    
 
     df = self.build_data( mode=mode, cabin=cabin )
     if 'presence' not in df.columns :
@@ -499,102 +485,39 @@ class MeetingList( co2eq.meeting2.Meeting ):
     title = f"Remote Ratio of CO2eq Distribution"
     for cluster_key in self.cluster_key_list :
       if cluster_key in [ 'presence' ] :
-        print( f"--> 1. df.head: {df.head}" )
         ## summinf emissions by presence type
         fig_df = df.groupby( by=[ 'meeting', 'presence' ], sort=False ).agg( agg_dict ).reset_index()
-        print( f"--> 2. fig_df.head: {fig_df.head}" )
-        print( f"--> 2. fig_df.info: {fig_df.info()}" )
         fig_remote = fig_df[ fig_df.presence != 'on-site' ].groupby( by=[ 'meeting' ], sort=True ).agg( agg_dict )
-       # .groupby( by=[ 'meeting', 'presence', ], sort=True )[ cluster_key ]
-        print( f"--> 3. fig_remote.head: {fig_remote}" )
-        print( f"--> 3. fig_remote.info: {fig_remote.info()}" )
         fig_df = fig_df.groupby( by=[ 'meeting'], sort=True ).agg( agg_dict )
-        print( f"--> 4. fig_df.head: {fig_df.head}" )
-        print( f"--> 4. fig_df.info: {fig_df.info()}" )
         fig_df = fig_df.reset_index()
-#        fig_df = self.zero_fill_df( fig_df, cluster_key )
 
       else:
-        pd.set_option("display.max_rows", None, "display.max_columns", None)
-        print( f"--> 1. df.head: {df.head(60)}" )
         ## counting the number of participants for each typ eof presence
         fig_df = df.groupby( by=[ 'meeting', cluster_key, 'presence' ], sort=False ).agg( agg_dict ).reset_index()
-        print( f"--> 2. fig_df.head: {fig_df}" )
         ## summing all possible values that are not on-site (in our case,
         ## it could be not-arrived, remote) per cluster_key
         fig_remote = df[ df.presence != 'on-site' ].groupby( by=[ 'meeting', cluster_key], sort=False ).agg( agg_dict )
-#[ [ 'meeting', cluster_key, 'presence','count' ] ].reset_index()
-       # .groupby( by=[ 'meeting', 'presence', ], sort=True )[ cluster_key ]
-        print( f"--> 3. fig_remote.head: {fig_remote}" )
-#        fig_remote = fig_remote.set_index( [ 'meeting', cluster_key ] )
         ## counting the total number of participants per cluster_key
         fig_df = fig_df.groupby( by=[ 'meeting', cluster_key, ], sort=False ).agg( agg_dict )
 
         if most_emitters is not None:
-          print( fig_df.columns )
-          ## computing the most emitters for the last meeting
-          ## using the fist co2eq_method
           co2eq_method = self.co2eq_method_list[ 0 ]
           m = len( self.meeting_list ) - 1
           fig_df = fig_df.reset_index()
-          print( f"fig_df: {fig_df.head( 15 )}" )
-          print( fig_df[ fig_df.meeting == m ].info() ) 
-          print( fig_df[ fig_df.meeting == m ].nlargest( n=most_emitters, columns=[ 'myclimate' ], keep='all' ) ) 
           most_emitters_list = fig_df[ fig_df.meeting == m ].nlargest( n=most_emitters, columns=[ co2eq_method ] )[ cluster_key ].to_list()
         
         
           fig_df = self.df_split( fig_df, cluster_key, most_emitters_list, agg_dict )
           fig_remote = self.df_split( fig_remote, cluster_key, most_emitters_list, agg_dict )
           
-        print( f"--> 4a. fig_df.head: {fig_df}" )
-        print( f"--> 4b. fig_remote.head: {fig_remote}" )
-        ## index is ( meeting, cluster_key )
-
-      ## check we have all meetings an fill with zeros otherwise 
-      ## computing ration for all co2eq_methods
-#      fig_df = fig_df.sort_values(by=[ 'meeting', cluster_key ], ascending=[ True, False ] )
-
       ## for cluster_key = presece index is set to meeting.
       ## for others index is meeting, cluster_key.
       for co2eq_method in self.co2eq_method_list:
         ratio = f"ratio_{co2eq_method}"
         fig_df[ ratio ] = fig_remote[ co2eq_method ] / fig_df[ co2eq_method ] * 100 
         fig_df[ ratio ] = fig_df[ ratio ].fillna( 0 )
-#      fig_df = fig_df.reset_index()
-#      else:
-#        fig_df = fig_df.sort_values(by=[ 'meeting', co2eq_method ], ascending=[ True, True ] )
-
-      ## getting the X most emitters
-      # flattening the fig_df and ordering according to meeting
-#      if cluster_key == 'presence':
       
       fig_df = fig_df.reset_index() 
-#      if cluster_key != 'presence' and most_emitters is not None:
-#        print( f"fig_df: {fig_df}" )
-#        print( f"fig_df.meeting: {fig_df.meeting}")
-#        print( len( self.meeting_list ))
-#        print( f"filetring :" )
-#        f1 = fig_df.query( f"meeting == {len( self.meeting_list ) - 1}" )
-#        f1 = fig_df[ fig_df.meeting == len( self.meeting_list ) - 1 ]
-#        print("f1" )  
-#        print(f1 )  
-####        most_emitter_list = fig_df[ fig_df.meeting == len( self.meeting_list ) - 1 ].nlargest( n=most_emitters, columns=[ co2eq_method ] )[ cluster_key ].to_list()
-#####        print( f"most_emitter_list: {type(most_emitter_list)}: {most_emitter_list}")
-#####        fig_df.reset_index()
-####        fig_most = fig_df[ fig_df[ cluster_key ].isin( most_emitter_list ) ].reset_index()
-#####        fig_less = fig_df[ ~fig_df[ cluster_key ].isin( most_emitter_list ) ]
-#####        fig_less = fig_less.groupby ( by=[ 'meeting' ], sort=False ).agg( agg_dict ).reset_index()
-####        fig_less = fig_df[ ~fig_df[ cluster_key ].isin( most_emitter_list ) ].groupby ( by=[ 'meeting' ], sort=False ).agg( agg_dict ).reset_index()
-####        fig_less [ cluster_key ] = "Others"
-####        print( f"fig_less: {fig_less}" )
-####        print( f"fig_more: {fig_most}" )
-####        fig_df = pd.concat( [ fig_most, fig_less ] )
-####        zero fill
-####        print( f"fig_df: {fig_df}" )
-####        raise ValueError
-####      ## ordering according to 'meeting'  
-####      fig_df = fig_df.sort_values(by=[ 'meeting' ], ascending=[ True] )
-####
 
       html_file_name = self.image_file_name( suffix, 'html', mode,\
               cabin=cabin, cluster_key=cluster_key, \
@@ -622,20 +545,6 @@ class MeetingList( co2eq.meeting2.Meeting ):
                 labels={ 'ratio': "CO2 Ratio Remote / (Remote  + On Site ) (%)", 'meeting': "Meetings" },
               )
         subfig.update_xaxes( tickangle=90 )
-##        subfig.update_layout(
-##          height=self.fig_height,
-##          width=self.fig_width,
-##          barmode='relative',
-##          title= { 'text': title, 'automargin': True, 'xref': 'container', 'y':0.95 },
-##          margin={ 'l':0, 'r':0 },
-##          font_family="Rockwell",
-##          showlegend=True
-##              )
-        print( ratio )
-        print( fig_df )
-        print( fig_df.info() )
-#        raise ValueError
-#        subfig.show()
         subfig_list.append( subfig )
 
       fig = co2eq.fig.OneRowSubfig( \
@@ -659,21 +568,6 @@ class MeetingList( co2eq.meeting2.Meeting ):
     mode = 'attendee'
     if self.is_fig_generated( suffix, mode, None, None, most_present=most_present ) :
       return None
-#    cluster_key_list = self.cluster_key_list[ : ]
-#    cluster_key_list.remove( 'co2eq' )
-##    suffix = 'remote_ratio'
-##    mode = 'attendee'
-##    is_file_list = []
-##    for cluster_key in cluster_key_list :
-##      html_file_name = self.image_file_name( suffix, 'html', mode,\
-##              cluster_key=cluster_key, most_present=most_present )
-##      svg_file_name=self.image_file_name( suffix, 'svg', mode,\
-##              cluster_key=cluster_key, most_present=most_present)
-##      is_file_list.append( os.path.isfile( html_file_name ) and\
-##              os.path.isfile( svg_file_name ) )
-##    if False not in is_file_list:
-##      return    
-
 
     df = self.build_data( mode='attendee' )
     if 'presence' not in df.columns :
@@ -685,81 +579,40 @@ class MeetingList( co2eq.meeting2.Meeting ):
     title = f"Remote Attendee Ratio Distribution"
     for cluster_key in self.cluster_key_list :
       if cluster_key in [ 'presence' ] :
-        print( f"--> 1. df.head: {df.head}" )
         fig_df = df.groupby( by=[ 'meeting', 'presence' ], sort=False )[ cluster_key ].agg( 'count' ).reset_index( name='count' )
-        print( f"--> 2. fig_df.head: {fig_df.head}" )
         fig_remote = fig_df[ fig_df.presence != 'on-site' ].groupby( by=[ 'meeting' ], sort=True ).agg( { 'count' : 'sum' } )
-       # .groupby( by=[ 'meeting', 'presence', ], sort=True )[ cluster_key ]
-        print( f"--> 3. fig_remote.head: {fig_remote}" )
-        print( f"--> 3. fig_remote.columns: {fig_remote.columns}" )
         fig_df = fig_df.groupby( by=[ 'meeting'], sort=False ).agg( { 'count' : 'sum' } )
-        print( f"--> 4. fig_df.head: {fig_df}" )
-
-#        fig_remote = fig_remote.set_index( 'meeting' )
-#        fig_df = fig_df.set_index(  'meeting'  )
       else:
-#        pd.set_option("display.max_rows", None, "display.max_columns", None)
-        print( f"--> 1. df.head: {df.head(60)}" )
-        ## counting the number of participants for each typ eof presence
         fig_df = df.groupby( by=[ 'meeting', cluster_key, 'presence' ], sort=False )[ cluster_key ].agg( 'count' ).reset_index( name='count' )
-        print( f"--> 2. fig_df.head: {fig_df}" )
         ## summing all possible values that are not on-site (in our case,
         ## it could be not-arrived, remote) per cluster_key
         fig_remote = fig_df[ fig_df.presence != 'on-site' ].groupby( by=[ 'meeting', cluster_key], sort=False ).agg( { 'count' : 'sum' } )
-#[ [ 'meeting', cluster_key, 'presence','count' ] ].reset_index()
-       # .groupby( by=[ 'meeting', 'presence', ], sort=True )[ cluster_key ]
-        print( f"--> 3. fig_remote: {fig_remote}" )
-        ## counting the total number of participants per cluster_key
         fig_df = fig_df.groupby( by=[ 'meeting', cluster_key, ], sort=True ).agg( { 'count' : 'sum' } )
 
-        print( f"--> 4. fig_df.head: {fig_df}" )
         ## index is ( meeting, cluster_key )
         if most_present is not None:
-          print( fig_df.columns )
           ## computing the most emitters for the last meeting
           ## using the fist co2eq_method
           m = len( self.meeting_list ) - 1
           fig_df = fig_df.reset_index()
-          print( f"fig_df: {fig_df.head( 15 )}" )
-          print( fig_df[ fig_df.meeting == m ].info() ) 
-          print( fig_df[ fig_df.meeting == m ].nlargest( n=most_present, columns=[ 'count' ], keep='all' ) ) 
           most_present_list = fig_df[ fig_df.meeting == m ].nlargest( n=most_present, columns=[ 'count' ] )[ cluster_key ].to_list()
-          print( f"most_present_list : [{type(most_present_list)}]{most_present_list}" )  
           agg_dict = { 'count' : 'sum' }
           fig_df = self.df_split( fig_df, cluster_key, most_present_list, agg_dict )
           fig_remote = self.df_split( fig_remote, cluster_key, most_present_list, agg_dict )
         
 
-        print( f"--> 4a. fig_df.head: {fig_df}" )
-        print( f"--> 4b. fig_remote.head: {fig_remote}" )
-        ## index is ( meeting, cluster_key )
       fig_df[ 'ratio' ] = fig_remote[ 'count' ] / fig_df[ 'count' ] * 100 
-
-
       ## flatering the index
       ## when remote is not defined a value set to nan is provided.
       ## we replace it by 0
       fig_df[ 'ratio' ] = fig_df[ 'ratio' ].fillna( 0 )
       fig_df = fig_df.reset_index()
-      print( f"--> 5. fig_df.head: {fig_df}" )
-      print( f"--> 5. fig_df.col: {fig_df.columns}" )
-#      if cluster_key == 'country' :
-#        raise ValueError
-#      if most_present is not None:
-#        fig_df = fig_df.nlargest( n=most_present, columns=['sum' ] )
-#      html_file_name = self.image_file_name( suffix, 'html', mode,\
-#              cluster_key=cluster_key, most_present=most_present )
-#      svg_file_name=self.image_file_name( suffix, 'svg', mode,\
-#              cluster_key=cluster_key, most_present=most_present)
-      ## scaling figure to the distribution mode.
-#      if len( self.co2eq_method_list ) != 0:
-#        fig_width = self.fig_width / len( self.co2eq_method_list )
+
       if cluster_key == "presence":
         color = None # no legend
       else:
         color = cluster_key # cluster_key is displayed in the legend
-      print( fig_df )
-#        subfig = px.bar( sub_df, x=self.meeting_axis( sub_df ),\
+
       fig = px.line( fig_df, x='meeting', #self.meeting_axis( fig_df ),\
               y='ratio',
               color=color,\
@@ -768,25 +621,6 @@ class MeetingList( co2eq.meeting2.Meeting ):
               ## labels are displayed when mouse is hand over the value.
               labels={ 'ratio': "Ratio Remote / ( Remote + On Site ) (%)", 'meeting': "Meetings" },
             )
-##      fig.update_xaxes(tickangle=90)
-##
-##      fig.update_layout(
-##        height=self.fig_height,
-##        width=fig_width,
-##        barmode='relative',
-##        title= { 'text': title, 'automargin': True, 'xref': 'container', 'y':0.95 },
-##        margin={ 'l':0, 'r':0 },
-##        font_family="Rockwell",
-##        showlegend=True
-##            )
-###    for legend_name in legend_name_list:
-###      self.fig[ 'layout' ][ legend_name ] = legend_layout[ legend_name ]
-##      if html_file_name is not None:
-##        fig.write_html( html_file_name )
-##      if svg_file_name is not None:
-##        fig.write_image( svg_file_name )
-##      if show is True:
-##        fig.show()
       fig.update_layout(
         height=int( 0.8 * self.fig_height ),
         width=int( 0.6 * self.fig_width ),
@@ -797,7 +631,6 @@ class MeetingList( co2eq.meeting2.Meeting ):
         showlegend=True
             )
       fig.update_xaxes(tickangle=90)
-#      if html_file_name is not None:
 
       html_file_name = self.image_file_name( suffix, 'html', mode,\
               cluster_key=cluster_key, most_present=most_present )
