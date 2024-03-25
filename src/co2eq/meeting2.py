@@ -12,6 +12,7 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import kaleido ## to be able to export
 import roman 
+from svgpathtools import svg2paths
 
 import requests
 from math import ceil
@@ -110,7 +111,7 @@ class Meeting:
     ## generating the figure (html and svg format) as well as 
     ## when the figure is included in the md file in an <embed/> 
     ## HTML command
-    self.fig_height=600
+    self.fig_height=int( 0.7 * 600 )
     self.fig_width=1500
 
   def init_DB( self, airportDB, cityDB, flightDB, goclimateDB ):
@@ -505,9 +506,14 @@ class Meeting:
       * we are doing now a lot of measurements and each time we retrieves
         the flights. We need to be able to comput ea attendee_flight_list once. 
     """
+
     ## return the df in cache is present
     if ( mode, cabin )  in self.df_data.keys():
       return self.df_data[ ( mode, cabin ) ]
+
+    pickle_file = self.image_file_name( 'data', 'pickle', mode, cabin=cabin )
+    if os.path.isfile( pickle_file ) :
+      return pd.read_pickle( pickle_file )
 
     ## read from json if already computed
     ## commenting to force the generation of the pd
@@ -567,6 +573,7 @@ class Meeting:
 ##        self.info[ ( mode, cabin ) ][ 'non_on_site' ] = self.df_to_co2eq_info( df[ df.presence != 'on-site' ] )
         self.info[ ( mode, cabin ) ][ 'remote' ] = self.df_to_co2eq_info( df[ df.presence == 'remote' ] )
 
+    df.to_pickle( pickle_file )
     return df
 
   def plot_co2eq_distribution( self, mode, cabin, on_site=None, show=False, print_grid=False):
@@ -812,7 +819,7 @@ class Meeting:
               self.plot_co2eq_distribution( mode, cabin, on_site=on_site )
    
 
-  def co2_info_txt( self ):
+  def co2eq_info_md( self ):
 
     md = f"""The estimation of the CO2eq emitted by {self.name} is estimated according to a 'mode' and a 'cabin' class. 
 
@@ -860,42 +867,76 @@ The CO2eq is estimated using various methodology. I this report the following me
 
     return md 
 
-  def fig_html_md( self, name, mode, cabin=None, cluster_key=None,
-          co2eq_method=None, on_site=None, no_path=True, most_present=None,
-          most_emitters=None, width=None, height=None ):
-    """includes the html in to the md file 
-
-    HTML files happens to be quite heavy as so the fig_svg_md 
-    is recommended to be used instead.
-    """
-
-    html_file_name = self.image_file_name( name, 'html', mode, 
-            cabin=cabin, cluster_key=cluster_key, co2eq_method=None,
-            on_site=on_site, most_emitters=most_emitters, 
-            most_present=most_present, no_path=no_path )
-    if height is None:
-      height = self.fig_height  
-    height = int( 1.1 * height )
-    if width is None:
-      width = self.fig_width  
-    width = int( 1.1 * width )    
-    return co2eq.md.embed_html( f"./{html_file_name}", 
-            height=1.1 * self.fig_height, 
-            width=1.1 * self.fig_width )
+##  def fig_html_md( self, name, mode, cabin=None, cluster_key=None,
+##          co2eq_method=None, on_site=None, no_path=True, most_present=None,
+##          most_emitters=None, width=None, height=None ):
+##    """includes the html in to the md file 
+##
+##    HTML files happens to be quite heavy as so the fig_svg_md 
+##    is recommended to be used instead.
+##    """
+##
+##    html_file_name = self.image_file_name( name, 'html', mode, 
+##            cabin=cabin, cluster_key=cluster_key, co2eq_method=None,
+##            on_site=on_site, most_emitters=most_emitters, 
+##            most_present=most_present, no_path=no_path )
+##    if height is None:
+##      height = self.fig_height  
+##    height = int( 1.1 * height )
+##    if width is None:
+##      width = self.fig_width  
+##    width = int( 1.1 * width )    
+##    return co2eq.md.embed_html( f"./{html_file_name}", 
+##            height=1.1 * self.fig_height, 
+##            width=1.1 * self.fig_width )
 
   def fig_svg_md( self, name, mode, cabin=None, cluster_key=None, 
-          co2eq_method=None, on_site=None, no_path=True, most_present=None,
-          most_emitters=None, html=True ):
+          co2eq_method=None, on_site=None, most_present=None,
+          most_emitters=None, html=True, no_path=True, width=None, height=None  ):
     """includes svg figure with link to html version of the figure"""  
     svg_file_name = self.image_file_name( name, 'svg', mode, cabin=cabin, 
             cluster_key=cluster_key, co2eq_method=None, on_site=on_site, 
             most_emitters=most_emitters, most_present=most_present, 
             no_path=no_path )
-    html_file_name = self.image_file_name( name, 'html', mode, cabin=cabin,
-            cluster_key=cluster_key, co2eq_method=None, on_site=on_site, 
-            most_emitters=most_emitters, most_present=most_present, 
-            no_path=no_path )
-    return f"\n\n<img src='./{svg_file_name}'>\n<p><a href='./{html_file_name}'>View in HTML</a></p>\n\n"
+#    ## we need to open the file, so the full path is needed here.
+#    if os.path.isfile( svg_file_name ) is False:
+#      raise ValueError( "Cannot find file {svg_file_name}" )   
+#    with open( svg_file_name, 'rt', encoding='utf8') as f:
+#      svg_content = f.read()
+#    paths, attributes = svg2paths( svg_file_name )
+#    mypath = paths[0]
+#    xmin, xmax, ymin, ymax = mypath.bbox()
+#    height = ymax - ymin
+#    width = xmax - xmin
+#    ## usually only the relative file is needed.
+#    svg_file_name = self.image_file_name( name, 'svg', mode, cabin=cabin, 
+#            cluster_key=cluster_key, co2eq_method=None, on_site=on_site, 
+#            most_emitters=most_emitters, most_present=most_present, 
+#            no_path=True )
+#    md = f"<img src='./{svg_file_name}' "
+    md = f"<embed src='./{svg_file_name}' "
+    if width is not None:
+      md += f"width='{width}' "
+    if height is not None:
+      md += f"height='{height}' "
+    md += "/>\n"
+#    print(f"md: {md}" )
+  
+    if html is True:
+      html_file_name = self.image_file_name( name, 'html', mode, cabin=cabin,
+              cluster_key=cluster_key, co2eq_method=None, on_site=on_site, 
+              most_emitters=most_emitters, most_present=most_present, 
+              no_path=no_path )
+#      if os.path.isfile( html_file_name ):
+#        html_file_name = self.image_file_name( name, 'html', mode, cabin=cabin,
+#                cluster_key=cluster_key, co2eq_method=None, on_site=on_site, 
+#                most_emitters=most_emitters, most_present=most_present, 
+#                no_path=True )
+      md += f"<p><a href='./{html_file_name}'>View in HTML</a></p>\n"
+    md += "\n"  
+    return md   
+#    return f"\n\n<img src='./{svg_file_name}'>\n<p><a href='./{html_file_name}'>View in HTML</a></p>\n\n"
+#    return f"\n\n<img src='./{svg_file_name}'>\n<p><a href='./{html_file_name}'>View in HTML</a></p>\n\n"
 # mimicmicing banner
 #   return f"""
 #    <html>
@@ -953,26 +994,26 @@ The CO2eq is estimated using various methodology. I this report the following me
     else: 
       raise ValueError( f"only ")
 
-    header = self.header_md( title, toc=toc, md_file=md_file)
+    header = self.header_md( title, toc=toc, banner=banner, md_file=md_file)
     if header is None:
       return None
 
     md_txt =f"{header}\n\n{txt}\n\n"
    
     
-    txt += self.co2_info_txt( ) 
+    txt += self.co2eq_info_md( ) 
     if txt is not None:
       md_txt += "## CO2 General Information\n\n"    
       md_txt += f"{txt}\n\n"
 
-    print( f"mode_list: {mode_list}" )
+#    print( f"mode_list: {mode_list}" )
     for mode in mode_list:  
       if mode in [ 'flight', 'distance' ]:
         for cabin in cabin_list :
-          md_txt += f"## CO2 Estimation for '{mode}' mode in cabin {cabin} for {self.name}\n\n"
+          md_txt += f"## CO2 Estimation for *{mode}* mode and *{cabin}* cabin\n\n"
           md_txt += self.dist_md_subsection_txt( mode, on_site_list, cabin=cabin )
       elif mode == 'attendee':
-        md_txt += f"## Attendee Distribution for {self.name}\n\n"
+        md_txt += f"## Attendee Distribution\n\n"
         md_txt += self.dist_md_subsection_txt( mode, on_site_list ) 
     md = co2eq.md.MdFile( md_txt )
     md.number_sections()
@@ -981,7 +1022,7 @@ The CO2eq is estimated using various methodology. I this report the following me
   def dist_md_subsection_txt( self, mode, on_site_list, cabin=None ): 
     md_txt = ""
     for on_site in on_site_list:
-      md_txt += self.fig_svg_md( 'distribution', mode, cabin=cabin, on_site=on_site )
+      md_txt += self.fig_svg_md( 'distribution', mode, cabin=cabin, on_site=on_site, width=self.fig_width, height=self.fig_height )
     return md_txt
 
 

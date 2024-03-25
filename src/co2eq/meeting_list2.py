@@ -55,6 +55,15 @@ class MeetingList( co2eq.meeting2.Meeting ):
     self.info = {}
     self.fig_height=600
     self.fig_width=1500
+    ### co2eq picture contains len( self.co2eq_method_list ) 
+    ## sub pictures in a row
+    self.fig_co2eq_width=int( 1.8 * self.fig_width )
+    self.fig_co2eq_height=int( 0.7 * self.fig_height )
+    self.fig_attendee_height= int( 0.7 * self.fig_height )
+    self.fig_attendee_width= int( 0.6 * self.fig_width )
+#        fig_width=int( 2.5 * self.fig_width ),
+#        fig_height=int( 1 * self.fig_height ),
+#    self.
     ## URL underwhich we have:
     ## self.meeting_list_url=
     ##   meeting_list.name
@@ -146,7 +155,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
     df = pd.concat( df_list, ignore_index=True, sort=False)
     self.df_data[ ( mode, cabin ) ] =  df
 
-    df.to_pickle( file_name )
+    df.to_pickle( pickle_file )
     return df
 
   def is_fig_generated( self, suffix, mode, cabin, on_site, most_emitters=None, most_present=None ):
@@ -225,7 +234,7 @@ class MeetingList( co2eq.meeting2.Meeting ):
 #    else: 
 #      m = meeting
     df = df.reset_index() 
-    print(df)
+#    print(df)
 #      if cluster_key != 'presence' and most_emitters is not None:
 #        print( f"fig_df: {fig_df}" )
 #        print( f"fig_df.meeting: {fig_df.meeting}")
@@ -243,15 +252,15 @@ class MeetingList( co2eq.meeting2.Meeting ):
 #      fig_less = fig_less.groupby ( by=[ 'meeting' ], sort=False ).agg( agg_dict ).reset_index()
     df_other = df[ ~df[ cluster_key ].isin( split_list ) ].groupby ( by=[ 'meeting' ], sort=False ).agg( agg_dict ).reset_index()
     df_other [ cluster_key ] = "Others"
-    print( f"df_other: {df_other}" )
-    print( f"df_more: {df_in_list}" )
+#    print( f"df_other: {df_other}" )
+#    print( f"df_more: {df_in_list}" )
     df = pd.concat( [ df_in_list, df_other ] )
 #    df.reset_index()
     df = df.sort_values(by=[ 'meeting' ], ascending=[ True] )
     df = df.set_index( [ 'meeting', cluster_key ] )
 #    df = self.zero_fill_df( df, cluster_key )
-    print( f"df: {df}" )
-    print( f"df,Col: {df.columns}" )
+#    print( f"df: {df}" )
+#    print( f"df,Col: {df.columns}" )
 #    raise ValueError
     ## ordering according to 'meeting'  
 #    df = df.sort_values(by=[ 'meeting' ], ascending=[ True] )
@@ -360,8 +369,10 @@ class MeetingList( co2eq.meeting2.Meeting ):
       fig = co2eq.fig.OneRowSubfig( \
         subfig_list,
         fig_title=title,
-        fig_width=int( 2.5 * self.fig_width ),
-        fig_height=int( 1 * self.fig_height ),
+#        fig_width=int( 2.5 * self.fig_width ),
+#        fig_height=int( 1 * self.fig_height ),
+        fig_width=self.fig_co2eq_width,
+        fig_height=self.fig_co2eq_height,
         print_grid=print_grid,
         show=show,
         shared_xaxes=False,
@@ -448,8 +459,10 @@ class MeetingList( co2eq.meeting2.Meeting ):
 #        fig_width = self.fig_width / len( self.co2eq_method_list )
 
       fig.update_layout(
-        height=int( 0.6 * self.fig_height ),
-        width=int( 0.6 * self.fig_width ),
+        height=self.fig_attendee_height,
+        width=self.fig_attendee_width,
+#        height=int( 0.6 * self.fig_height ),
+#        width=int( 0.6 * self.fig_width ),
         barmode='relative',
         title= { 'text': title, 'automargin': True, 'xref': 'container', 'y':0.95 },
         margin={ 'l':0, 'r':0 },
@@ -550,8 +563,10 @@ class MeetingList( co2eq.meeting2.Meeting ):
       fig = co2eq.fig.OneRowSubfig( \
         subfig_list,
         fig_title=title,
-        fig_width=int( 2.5 * self.fig_width ),
-        fig_height=int( 1 * self.fig_height ),
+        fig_width=self.fig_co2eq_width,
+        fig_height=self.fig_co2eq_height,
+#        fig_width=int( 2.5 * self.fig_width ),
+#        fig_height=int( 1 * self.fig_height ),
         print_grid=print_grid,
         show=show,
         shared_xaxes=False,
@@ -622,15 +637,31 @@ class MeetingList( co2eq.meeting2.Meeting ):
               labels={ 'ratio': "Ratio Remote / ( Remote + On Site ) (%)", 'meeting': "Meetings" },
             )
       fig.update_layout(
-        height=int( 0.8 * self.fig_height ),
-        width=int( 0.6 * self.fig_width ),
+        height=self.fig_attendee_height,
+        width=self.fig_attendee_width,
+#        height=int( 0.8 * self.fig_height ),
+#        width=int( 0.6 * self.fig_width ),
         barmode='relative',
         title= { 'text': title, 'automargin': True, 'xref': 'container', 'y':0.95 },
         margin={ 'l':0, 'r':0 },
         font_family="Rockwell",
         showlegend=True
             )
-      fig.update_xaxes(tickangle=90)
+      #fig.update_xaxes(tickangle=90)
+      x = self.meeting_axis( fig_df )
+      if cluster_key == "presence":
+        tickvals = list( range( len( x) ) )
+        ticktext = x    
+      else:
+        print( fig_df[ 'meeting' ] )  
+        tickvals = [ ] 
+        for v in range( len( x) ) :
+          tickvals.append( v )    
+          for j in range( most_present - 1 ):
+             tickvals.append( "" )
+        ticktext = x    
+      fig.update_xaxes(tickangle=90, tickmode='array', tickvals=tickvals, ticktext=ticktext )
+#      fig.update_xaxes(tickangle=90, tickmode='array',  categoryorder='array', categoryarray=x )
 
       html_file_name = self.image_file_name( suffix, 'html', mode,\
               cluster_key=cluster_key, most_present=most_present )
@@ -660,16 +691,21 @@ class MeetingList( co2eq.meeting2.Meeting ):
     md_txt = "" 
     for cluster_key in cluster_key_list:
       if mode in [ 'flight', 'distance' ]:  
+        height=self.fig_co2eq_height,
+        width=self.fig_co2eq_width,
         most_present=None  
-        subsection_title = f"CO2eq Distribution by `{cluster_key}` with {self.co2eq_method_list}"  
+        subsection_title = f"CO2eq Distribution by *{cluster_key}* with {self.co2eq_method_list}"  
       elif mode == 'attendee':  
+        height=self.fig_attendee_height,
+        width=self.fig_attendee_width,
         most_emitters=None  
-        subsection_title = f"Attendee Distribution by `{cluster_key}`"  
+        subsection_title = f"Attendee Distribution by *{cluster_key}*"  
       md_txt += f"\n\n### {subsection_title}\n\n" 
       for on_site in on_site_list:
         md_txt += self.fig_svg_md( suffix, mode, cabin=cabin, 
                 cluster_key=cluster_key, on_site=on_site,\
-                most_emitters=most_emitters, most_present=most_present )
+                most_emitters=most_emitters, most_present=most_present,
+                height=height, width=width)
     return md_txt 
 
 
@@ -852,11 +888,13 @@ Acceptance of Remote participation is probably what leadership should focus on t
 The CO2eq emissions are estimated using different methods ({self.co2eq_method_list}) for the flight cabin {cabin}. Please check [Distributions](./distributions.html) for additional CO2eq distributions.\n\n
 """
       md_txt += self.fig_svg_md( 'distribution', mode, cabin=cabin, 
-             cluster_key='presence' ) 
+             cluster_key='presence', width=self.fig_co2eq_width,
+             height=self.fig_co2eq_height ) 
 
       md_txt += """The Picture below depicts the Remote Ratio of the emissions being offset over the total emissions of the meeting. Please check [Remote Ratio](./remote_ratio.html) for additional CO2eq distributions.\n\n"""
       md_txt += self.fig_svg_md( 'remote_ratio', mode, cabin=cabin, 
-          cluster_key='presence', most_emitters=most_emitters )
+          cluster_key='presence', most_emitters=most_emitters, 
+          width=self.fig_co2eq_width, height=self.fig_co2eq_height )
 
       if 'organization' in self.cluster_key_list:
         cluster_key = 'organization' 
@@ -869,7 +907,8 @@ The CO2eq emissions are estimated using different methods ({self.co2eq_method_li
         md_txt += f"""The figure below depicts the Remote Ratio of the emissions being offset per {cluster_key}. The overall performance in term of offsetof a meeting may reflect the performance of its main participants or might be influenced by its participants. The figures shows the evolution of the offset Remote Ratio for the {most_emitters} most contributors."""
 
       md_txt += self.fig_svg_md( 'remote_ratio', mode, cabin=cabin, 
-          cluster_key=cluster_key, most_emitters=most_emitters )
+          cluster_key=cluster_key, most_emitters=most_emitters, 
+          width=self.fig_co2eq_width, height=self.fig_co2eq_height )
 
     if 'presence' in self.cluster_key_list and\
         cabin_list != [] and\
@@ -880,11 +919,12 @@ The CO2eq emissions are estimated using different methods ({self.co2eq_method_li
       md_txt += f"\n## Remote Participation\n\n"
 
       md_txt += f"The figure below depicts the distribution between 'remote' and 'on-site' participants. The graph here reflects the how participants are inclined to participate 'remotely' and thus avoids the emissions associated to flying. Please check [Distributions](./distributions.html) for additional Attendee distributions.\n\n"""
-      md_txt += self.fig_svg_md( 'distribution', mode, cluster_key='presence' ) 
+      md_txt += self.fig_svg_md( 'distribution', mode, cluster_key='presence', height=self.fig_attendee_height, width=self.fig_attendee_width ) 
     
       md_txt += """The Picture below depicts the Ratio of Remote participants  over the meeting total number of participants. Please check [Remote Ratio](./remote_ratio.html) for additional Remote Ratio distributions.\n\n"""
       md_txt += self.fig_svg_md( 'remote_ratio', mode, 
-          cluster_key='presence', most_present=most_present )
+          cluster_key='presence', most_present=most_present, 
+          height=self.fig_attendee_height, width=self.fig_attendee_width  )
 
       if 'organization' in self.cluster_key_list:
         cluster_key = 'organization' 
@@ -896,7 +936,8 @@ The CO2eq emissions are estimated using different methods ({self.co2eq_method_li
       if cluster_key is not None:
         md_txt += f"""The figure below depicts the Remote Ratio of the remote participants per {cluster_key}. The overall performance in term of offset of a meeting may reflect the performance of its main participants or might be influenced by its participants. The figures shows the evolution of the offset Remote Ratio for the {most_present} most contributors."""
         md_txt += self.fig_svg_md( 'remote_ratio', mode, 
-          cluster_key=cluster_key, most_present=most_present )
+          cluster_key=cluster_key, most_present=most_present,
+          height=self.fig_attendee_height, width=self.fig_attendee_width  )
 
     md = co2eq.md.MdFile( md_txt )
     md.number_sections()
